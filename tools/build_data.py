@@ -6,7 +6,7 @@ from scipy.spatial import cKDTree
 rng=np.random.default_rng(2026)
 A=np.load("/workspace/galaxy/v3/combined.npy").astype(np.float64)  # x,y,z,redshift,lookback,survey,ra,dec
 names=["2MRS","SDSS DR17","DESI DR1 BGS","DESI DR1 LRG","DESI DR1 ELG"]
-core_n={0:43105,1:50000,2:45000,3:40000,4:22000}; core=[];more=[]
+core_n={0:30000,1:25000,2:20000,3:16000,4:9000}; core=[];more=[]
 for s,n in core_n.items():
     i=np.where(A[:,5]==s)[0]; rng.shuffle(i); core.append(i[:n]); more.append(i[n:])
 core=np.concatenate(core); more=np.concatenate(more)
