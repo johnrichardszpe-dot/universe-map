@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interactive Universe Map - real galaxy surveys</title>
+<style>
+html,body{margin:0;height:100%;background:#000;color:#dde;font:14px/1.4 system-ui,Segoe UI,Arial,sans-serif;overflow:hidden}
+#c{position:fixed;inset:0}
+.panel{position:fixed;background:rgba(10,12,25,.88);border:1px solid #334;border-radius:8px;padding:10px 12px}
+#ui{top:10px;left:10px;width:300px;max-height:calc(100% - 40px);overflow:auto}
+#ui h1{font-size:17px;margin:0 0 6px} #ui label{display:block;margin:3px 0;cursor:pointer}
+.real{color:#8cf}.pred{color:#ff4fd8}.conc{color:#8fa0ff}.web{color:#ffc070}
+small{color:#99a} button{background:#223;color:#dde;border:1px solid #446;border-radius:5px;padding:4px 8px;margin:2px;cursor:pointer} button:hover{background:#335}
+input[type=range]{width:100%}
+#legend div{display:flex;align-items:center;gap:6px} #legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+#info{right:10px;top:10px;width:300px;display:none}
+#about{left:50%;top:50%;transform:translate(-50%,-50%);width:min(760px,92vw);max-height:85vh;overflow:auto;display:none;z-index:10}
+#scale{left:50%;bottom:14px;transform:translateX(-50%);text-align:center;padding:6px 10px}
+#bar{height:4px;background:#fff;margin:4px auto 2px}
+.lab{position:fixed;color:#9f9;font-size:12px;cursor:pointer;white-space:nowrap;transform:translate(8px,-50%);text-shadow:0 0 3px #000}
+.lab:before{content:"";position:absolute;left:-9px;top:50%;width:7px;height:7px;margin-top:-4px;border:1.5px solid #9f9;border-radius:50%}
+#mw{color:#fff} #mw:before{border-color:#fff;background:#fff}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:#000;z-index:20}
+#help{right:10px;bottom:14px;font-size:12px;color:#aab}
+</style></head><body>
+<div id="load">Loading galaxies...</div>
+<canvas id="c"></canvas>
+<div id="ui" class="panel">
+<h1>Interactive Universe Map</h1>
+<small>Each dot is a <b>real galaxy</b> whose distance was measured from its redshift. You are at the white Milky Way marker.</small>
+<hr style="border-color:#334">
+<b>Colour by</b><br>
+<label><input type="radio" name="col" value="0" checked> survey</label>
+<label><input type="radio" name="col" value="1"> lookback time (how long the light travelled)</label>
+<div id="legend"></div>
+<hr style="border-color:#334">
+<b>Lookback time shown</b>: <span id="tval"></span><br>
+<small>from</small><input type="range" id="tmin" min="0" max="100" value="0" step="1">
+<small>to</small><input type="range" id="tmax" min="0" max="100" value="100" step="1">
+<button id="play">&#9654; time sweep</button>
+<hr style="border-color:#334">
+<b>Surveys</b> <span class="real">(REAL data)</span>
+<div id="surveys"></div>
+<label><input type="checkbox" id="more"> load all <span id="moren"></span> galaxies (slower)</label>
+<label>dot size <input type="range" id="psize" min="1" max="12" value="4"></label>
+<hr style="border-color:#334">
+<b>Extra layers</b> <small>(off by default)</small>
+<label class="web"><input type="checkbox" id="Lfil"> Filament web <small>(computed from real SDSS data; nearby region only)</small></label>
+<label class="pred"><input type="checkbox" id="Lpred"> PREDICTED (model): statistical guess for unsurveyed sky, not real galaxies</label>
+<label class="conc"><input type="checkbox" id="Llat"> CONCEPTUAL lattice: an artistic idea, not physics</label>
+<label><input type="checkbox" id="Llab" checked> Named structures</label>
+<hr style="border-color:#334">
+<button id="home">Reset view</button><button id="local">Zoom to local universe</button><button id="aboutb">About this map</button>
+</div>
+<div id="info" class="panel"></div>
+<div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><br><small>(at the centre of the view)</small></div>
+<div id="help" class="panel">Drag: rotate &middot; Right-drag: pan &middot; Wheel: zoom &middot; W/A/S/D/Q/E: fly &middot; Click names for info</div>
+<div id="labels"></div>
+<div id="about" class="panel">
+<h2>About this map</h2>
+<p>This map shows the 3D positions of real galaxies from three public redshift surveys. Distances are worked out from each galaxy's redshift using the standard cosmological model (Planck 2018 parameters), as <i>comoving</i> distance in megaparsecs. 1 Mpc = 3.26 million light-years. The <b>lookback time</b> is how long the light took to reach us. The most distant galaxies here are seen as they were about 9.6 billion years ago.</p>
+<h3>Data sources (REAL data)</h3>
+<ul>
+<li><b>2MASS Redshift Survey (2MRS)</b>: Huchra et al. 2012, ApJS 199, 26, via VizieR (CDS) J/ApJS/199/26. Covers the whole sky out to about 300 Mpc (43,105 galaxies, cz &gt; 1000 km/s).</li>
+<li><b>SDSS DR17</b> main galaxy sample: RA 130-235&deg;, Dec 0-55&deg;, 0.01&lt;z&lt;0.09 (183,012 galaxies), via SkyServer (skyserver.sdss.org/dr17).</li>
+<li><b>DESI Data Release 1</b> large-scale-structure clustering catalogues v1.5, northern galactic cap only: BGS_BRIGHT-21.5 (z 0.1-0.4), LRG (z 0.4-1.1) and ELG_LOPnotqso (z 1.1-1.6), from data.desi.lbl.gov/public/dr1/. The map uses a subset: BGS 217,614, LRG 180,000, ELG 100,000.</li>
+</ul>
+<p>By default the map shows about 200,000 galaxies. Tick "load all" for about 724,000.</p>
+<h3>Credits and licences</h3>
+<p><b>DESI</b> data are licensed under CC BY 4.0. Positions were converted to 3D and subsampled for this map. Please cite: DESI Collaboration, "Data Release 1 of the Dark Energy Spectroscopic Instrument". <i>This research used data obtained with the Dark Energy Spectroscopic Instrument (DESI). DESI construction and operations is managed by the Lawrence Berkeley National Laboratory. This material is based upon work supported by the U.S. Department of Energy, Office of Science, Office of High-Energy Physics, under Contract No. DE-AC02-05CH11231, and by the National Energy Research Scientific Computing Center, a DOE Office of Science User Facility under the same contract. Additional support for DESI was provided by the U.S. National Science Foundation (NSF), Division of Astronomical Sciences under Contract No. AST-0950945 to the NSF's National Optical-Infrared Astronomy Research Laboratory; the Science and Technology Facilities Council of the United Kingdom; the Gordon and Betty Moore Foundation; the Heising-Simons Foundation; the French Alternative Energies and Atomic Energy Commission (CEA); the National Council of Humanities, Science and Technology of Mexico (CONAHCYT); the Ministry of Science and Innovation of Spain (MICINN), and by the DESI Member Institutions: www.desi.lbl.gov/collaborating-institutions. The DESI collaboration is honored to be permitted to conduct scientific research on I'oligam Du'ag (Kitt Peak), a mountain with particular significance to the Tohono O'odham Nation. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the U.S. National Science Foundation, the U.S. Department of Energy, or any of the listed funding agencies.</i></p>
+<p><b>SDSS</b>: <i>Funding for the Sloan Digital Sky Survey IV has been provided by the Alfred P. Sloan Foundation, the U.S. Department of Energy Office of Science, and the Participating Institutions. SDSS-IV acknowledges support and resources from the Center for High Performance Computing at the University of Utah. The SDSS website is www.sdss4.org.</i> (The main galaxy sample spectra are from SDSS-I/II. Funding for SDSS and SDSS-II was provided by the Alfred P. Sloan Foundation, the Participating Institutions, the National Science Foundation, the U.S. Department of Energy, NASA, the Japanese Monbukagakusho, the Max Planck Society, and the Higher Education Funding Council for England.)</p>
+<p><b>2MASS / 2MRS</b>: <i>This publication makes use of data products from the Two Micron All Sky Survey, which is a joint project of the University of Massachusetts and the Infrared Processing and Analysis Center/California Institute of Technology, funded by the National Aeronautics and Space Administration and the National Science Foundation.</i> 2MRS: Huchra, J. P. et al. 2012, ApJS 199, 26. This research has made use of the VizieR catalogue access tool, CDS, Strasbourg, France.</p>
+<p>3D viewer: three.js r128 (MIT licence, included in assets/LICENSE_three.txt). Cosmology: Astropy (Planck18).</p>
+<h3>Accuracy notes - please read</h3>
+<ul>
+<li><b>Redshift-space distortions</b>: distances come from redshift, which includes each galaxy's own motion. Galaxy clusters therefore look stretched along our line of sight ("Fingers of God"), and walls look slightly squashed.</li>
+<li><b>Survey footprints</b>: the surveys cover only parts of the sky. The empty regions are areas that weren't observed, not empty space. The band of sky behind our own Milky Way is also hidden by dust (the "Zone of Avoidance").</li>
+<li><b>Selection</b>: each survey picks particular galaxy types and brightness limits. Distant galaxies appear sparser because only the brightest are seen, so dot density does not equal true density.</li>
+<li><b>Downsampling</b>: only a random subset of each survey is drawn. Counts are listed above.</li>
+<li><b>Named structures</b>: cluster centres come from published positions (NED and literature). The "Great Wall" markers show only rough centres of very large, extended structures. We checked that every marker sits on a real overdensity of galaxies in this data.</li>
+<li><b>Extra layers</b>: the filament web is computed from real SDSS data with a tidal-field (Hessian) method. The PREDICTED layer is a statistical model (a fractal mock) and does not show real galaxies. The CONCEPTUAL lattice is art, not science.</li>
+<li>The scale bar is correct at the centre of the view; perspective changes it nearer or further away.</li>
+</ul>
+<h3>Author</h3>
+<p>Map by <b>John Richards, Manjimup WA</b> &middot;</p>
+<button onclick="document.getElementById('about').style.display='none'">Close</button>
+</div>
+<script src="assets/three.min.js"></script>
+<script src="assets/OrbitControls.js"></script>
+<script src="assets/data_core.js"></script>
+<script src="assets/layers.js"></script>
+<script src="assets/structures.js"></script>
+<script>
+"use strict";
+const SURV=[["2MRS (whole sky, nearby)","#7fd4ff"],["SDSS DR17","#ffffff"],["DESI DR1 BGS","#9dff7a"],["DESI DR1 LRG","#ffb347"],["DESI DR1 ELG","#ff6b6b"]];
+const Q=7; // positions stored in 1/7 Mpc steps
+const canvas=document.getElementById("c");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene(); const camera=new THREE.PerspectiveCamera(55,1,0.1,40000);
+const controls=new THREE.OrbitControls(camera,canvas); controls.enableDamping=true; controls.dampingFactor=0.08; controls.zoomSpeed=1.2;
+// equatorial (x,y,z) -> three (x, z, -y): celestial north is up
+function dec(b64){const s=atob(b64),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u.buffer;}
+function makeGeom(G){
+  const buf=dec(G.b64),dv=new DataView(buf),n=G.n,pos=new Float32Array(3*n),sv=new Float32Array(n),tl=new Float32Array(n);
+  for(let i=0;i<n;i++){const o=i*8;const x=dv.getInt16(o,true)/Q,y=dv.getInt16(o+2,true)/Q,z=dv.getInt16(o+4,true)/Q;
+    pos[3*i]=x;pos[3*i+1]=z;pos[3*i+2]=-y;sv[i]=dv.getUint8(o+6);tl[i]=dv.getUint8(o+7)/25;}
+  const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(pos,3));g.setAttribute("sv",new THREE.BufferAttribute(sv,1));g.setAttribute("tl",new THREE.BufferAttribute(tl,1));return g;}
+const U={tmin:{value:0},tmax:{value:10},mode:{value:0},psize:{value:4},on:{value:[1,1,1,1,1]},cols:{value:SURV.map(s=>new THREE.Color(s[1]))},pr:{value:renderer.getPixelRatio()}};
+const mat=new THREE.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`attribute float sv;attribute float tl;uniform float tmin,tmax,psize,pr;uniform float on[5];uniform int mode;uniform vec3 cols[5];varying vec3 vc;varying float vis;
+vec3 plasma(float t){t=clamp(t,0.,1.);return vec3(0.05+0.95*smoothstep(0.,.75,t),pow(t,1.6)*0.9,0.53+0.45*sin(3.1*t+0.2)*(1.-t));}
+void main(){int s=int(sv+0.5);float o=0.;vec3 c=vec3(1.);
+ for(int k=0;k<5;k++){if(k==s){o=on[k];c=cols[k];}}
+ vis=o*step(tmin,tl)*step(tl,tmax); vc=mode==0?c:plasma(tl/9.7);
+ vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
+ gl_PointSize=vis>0.?clamp(psize*pr*120./-mv.z,1.,psize*pr*1.5)+0.6:0.;}`,
+fragmentShader:`varying vec3 vc;varying float vis;void main(){if(vis<.5)discard;vec2 d=gl_PointCoord-.5;float r=dot(d,d);if(r>.25)discard;gl_FragColor=vec4(vc,0.75*(1.-4.*r));}`});
+const pts=new THREE.Points(makeGeom(window.GAL_CORE),mat); scene.add(pts); let morePts=null;
+// --- optional layers
+function segGeom(arr,col,op){const p=new Float32Array(arr.length);for(let i=0;i<arr.length;i+=3){p[i]=arr[i]/Q;p[i+1]=arr[i+2]/Q;p[i+2]=-arr[i+1]/Q;}
+ const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(p,3));return g;}
+const fil=new THREE.LineSegments(segGeom(window.FIL),new THREE.LineBasicMaterial({color:0xffc070,transparent:true,opacity:.35,depthWrite:false,blending:THREE.AdditiveBlending}));fil.visible=false;scene.add(fil);
+const pred=new THREE.Points(segGeom(window.PRED),new THREE.PointsMaterial({color:0xff4fd8,size:1.5,sizeAttenuation:false,transparent:true,opacity:.7}));pred.visible=false;scene.add(pred);
+const lat=(()=>{const L=600,N=7,a=[];for(let i=-N;i<=N;i++)for(let j=-N;j<=N;j++){a.push(i*L,j*L,-N*L,i*L,j*L,N*L,i*L,-N*L,j*L,i*L,N*L,j*L,-N*L,i*L,j*L,N*L,i*L,j*L);}
+ const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.Float32BufferAttribute(a,3));return new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x6070ff,transparent:true,opacity:.12}));})();lat.visible=false;scene.add(lat);
+// Milky Way marker
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(1,12,12),new THREE.MeshBasicMaterial({color:0xffffff})));
+// --- UI
+const $=id=>document.getElementById(id);
+$("surveys").innerHTML=SURV.map((s,i)=>`<label><input type="checkbox" data-s="${i}" checked> <i style="background:${s[1]};width:9px;height:9px;border-radius:50%;display:inline-block"></i> ${s[0]}</label>`).join("");
+document.querySelectorAll("[data-s]").forEach(cb=>cb.onchange=()=>{U.on.value[+cb.dataset.s]=cb.checked?1:0;});
+function legend(){const m=U.mode.value;$("legend").innerHTML=m==0?SURV.map(s=>`<div><i style="background:${s[1]}"></i>${s[0]}</div>`).join(""):
+ `<div style="height:10px;background:linear-gradient(90deg,#0d0887,#7e03a8,#cc4778,#f89540,#f0f921);margin-top:4px"></div><small>0 &larr; billion years ago &rarr; 9.7</small>`;}
+document.querySelectorAll("[name=col]").forEach(r=>r.onchange=()=>{U.mode.value=+r.value;legend();});legend();
+function tupd(){let a=+$("tmin").value/10,b=+$("tmax").value/10;if(a>b){[a,b]=[b,a];}U.tmin.value=a;U.tmax.value=b+0.02;$("tval").textContent=`${a.toFixed(1)} to ${b.toFixed(1)} billion years ago`;}
+$("tmin").oninput=$("tmax").oninput=tupd;tupd();
+let playing=null;$("play").onclick=()=>{if(playing){clearInterval(playing);playing=null;$("play").innerHTML="&#9654; time sweep";return;}
+ let t=0;$("play").innerHTML="&#9632; stop";playing=setInterval(()=>{t+=1;if(t>97)t=0;$("tmin").value=Math.max(0,t-8);$("tmax").value=t+3;tupd();},120);};
+$("psize").oninput=()=>U.psize.value=+$("psize").value;
+$("moren").textContent="";
+$("more").onchange=()=>{if($("more").checked){if(morePts){morePts.visible=true;return;}$("load").style.display="flex";$("load").textContent="Loading ~524,000 more galaxies...";
+  const s=document.createElement("script");s.src="assets/data_more.js";s.onload=()=>{morePts=new THREE.Points(makeGeom(window.GAL_MORE),mat);scene.add(morePts);$("load").style.display="none";};
+  s.onerror=()=>{$("load").textContent="Could not load assets/data_more.js";};document.body.appendChild(s);}else if(morePts)morePts.visible=false;};
+$("Lfil").onchange=e=>fil.visible=e.target.checked;$("Lpred").onchange=e=>pred.visible=e.target.checked;$("Llat").onchange=e=>lat.visible=e.target.checked;
+$("aboutb").onclick=()=>$("about").style.display="block";
+function view(d){camera.position.set(d*0.55,d*0.45,d*0.7);controls.target.set(0,0,0);controls.update();}
+$("home").onclick=()=>view(5200);$("local").onclick=()=>view(260);
+// labels
+const labels=[{name:"Milky Way (you are here)",x:[0,0,0],info:"Our home galaxy. Every other dot is seen as it was when its light left it: the further away, the further back in time.",id:"mw"}].concat(window.STRUCT);
+labels.forEach(l=>{const e=document.createElement("div");e.className="lab";if(l.id)e.id=l.id;e.textContent=l.name;l.el=e;$("labels").appendChild(e);
+ l.v=new THREE.Vector3(l.x[0],l.x[2],-l.x[1]);e.onclick=()=>{const I=$("info");I.style.display="block";
+ I.innerHTML=`<b>${l.name}</b><br>${l.info}<br>`+(l.d?`<small>RA ${l.ra}&deg;, Dec ${l.dec}&deg;, redshift z = ${l.z}<br>Distance &asymp; ${l.d.toFixed(0)} Mpc (${(l.ly/1e6).toFixed(0)} million light-years). Light left it ${(l.lt*1000).toFixed(0)} million years ago.</small><br>`:"")+`<button onclick="this.parentNode.style.display='none'">close</button>`;};});
+$("Llab").onchange=e=>labels.forEach(l=>l.el.style.display=e.target.checked?"":"none");
+// keyboard fly
+const keys={};addEventListener("keydown",e=>{if(e.target.tagName!="INPUT")keys[e.key.toLowerCase()]=1;});addEventListener("keyup",e=>keys[e.key.toLowerCase()]=0);
+function fly(){const d=camera.position.distanceTo(controls.target)*0.015,f=new THREE.Vector3();camera.getWorldDirection(f);const r=new THREE.Vector3().crossVectors(f,camera.up).normalize();const m=new THREE.Vector3();
+ if(keys.w)m.add(f);if(keys.s)m.sub(f);if(keys.d)m.add(r);if(keys.a)m.sub(r);if(keys.e)m.y+=1;if(keys.q)m.y-=1;if(m.lengthSq()){m.normalize().multiplyScalar(d);camera.position.add(m);controls.target.add(m);}}
+// scale bar
+function scalebar(){const d=camera.position.distanceTo(controls.target),H=innerHeight,wh=2*d*Math.tan(camera.fov*Math.PI/360),ppm=H/wh;
+ const want=160/ppm,p=Math.pow(10,Math.floor(Math.log10(want)));let L=[1,2,5,10].map(k=>k*p).filter(v=>v<=want).pop()||p;
+ $("bar").style.width=(L*ppm).toFixed(0)+"px";const ly=L*3.2616;$("stxt").textContent=`${L>=1?L:L.toFixed(1)} Mpc  =  ${ly>=1000?(ly/1000).toFixed(ly>=10000?0:1)+" billion":ly.toFixed(ly<10?1:0)+" million"} light-years`;}
+function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+addEventListener("resize",resize);resize();view(5200);
+const tmp=new THREE.Vector3();
+function loop(){requestAnimationFrame(loop);fly();controls.update();renderer.render(scene,camera);scalebar();
+ for(const l of labels){tmp.copy(l.v).project(camera);const vis=tmp.z<1&&Math.abs(tmp.x)<1.05&&Math.abs(tmp.y)<1.05;
+  if(!vis){l.el.style.visibility="hidden";continue;}l.el.style.visibility="visible";l.el.style.left=((tmp.x+1)/2*innerWidth)+"px";l.el.style.top=((1-tmp.y)/2*innerHeight)+"px";}}
+loop();$("load").style.display="none";window.MAP_READY=true;
+</script></body></html>

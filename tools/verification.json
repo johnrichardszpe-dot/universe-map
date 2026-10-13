@@ -1,0 +1,50 @@
+[
+ {
+  "name": "Virgo Cluster",
+  "conv_err_Mpc": 6.386146179061584e-05,
+  "dist_Mpc": 18.945087545459337,
+  "n_within_8Mpc": 188,
+  "median_elsewhere": 17.0,
+  "overdensity": 11.058823529411764
+ },
+ {
+  "name": "Coma Cluster",
+  "conv_err_Mpc": 4.1904918355650475e-05,
+  "dist_Mpc": 101.79870692594065,
+  "n_within_8Mpc": 581,
+  "median_elsewhere": 5.0,
+  "overdensity": 116.2
+ },
+ {
+  "name": "Perseus Cluster",
+  "conv_err_Mpc": 4.1785205690849235e-05,
+  "dist_Mpc": 78.97998273336883,
+  "n_within_8Mpc": 141,
+  "median_elsewhere": 8.0,
+  "overdensity": 17.625
+ },
+ {
+  "name": "Shapley Supercluster",
+  "conv_err_Mpc": 1.4210854715202004e-14,
+  "dist_Mpc": 210.2776078042045,
+  "n_within_8Mpc": 19,
+  "median_elsewhere": 2.0,
+  "overdensity": 9.5
+ },
+ {
+  "name": "CfA2 Great Wall (approx.)",
+  "conv_err_Mpc": 0.0,
+  "dist_Mpc": 114.49997842787019,
+  "n_within_8Mpc": 391,
+  "median_elsewhere": 4.5,
+  "overdensity": 86.88888888888889
+ },
+ {
+  "name": "Sloan Great Wall (approx.)",
+  "conv_err_Mpc": 3.552713678800501e-15,
+  "dist_Mpc": 339.2279645000548,
+  "n_within_8Mpc": 14,
+  "median_elsewhere": 4.0,
+  "overdensity": 3.5
+ }
+]
