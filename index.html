@@ -28,9 +28,11 @@ input[type=range]{width:100%}
 #about{left:50%;top:50%;transform:translate(-50%,-50%);width:min(760px,92vw);max-height:85vh;overflow:auto;display:none;z-index:10}
 #scale{left:50%;bottom:14px;transform:translateX(-50%);text-align:center;padding:6px 10px}
 #bar{height:4px;background:#fff;margin:4px auto 2px}
-.lab{position:fixed;color:#9f9;font-size:12px;cursor:pointer;white-space:nowrap;transform:translate(8px,-50%);text-shadow:0 0 3px #000}
-.lab:before{content:"";position:absolute;left:-9px;top:50%;width:7px;height:7px;margin-top:-4px;border:1.5px solid #9f9;border-radius:50%}
-#mw{color:#fff} #mw:before{border-color:#fff;background:#fff}
+.lab{position:fixed;left:0;top:0;color:#9f9;font-size:12px;cursor:pointer;white-space:nowrap;text-shadow:0 0 3px #000,0 0 2px #000;padding:1px 3px;border-radius:3px;background:rgba(0,0,0,.35)}
+.ldot{position:fixed;left:0;top:0;width:7px;height:7px;margin:-5px 0 0 -5px;border:1.5px solid #9f9;border-radius:50%;pointer-events:none}
+#mw{color:#fff} .ldot.mw{border-color:#fff;background:#fff}
+#leaders{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
+@media (max-width:700px){.lab{font-size:10.5px;padding:0 2px}}
 #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:#000;z-index:20}
 #help{right:10px;bottom:14px;font-size:12px;color:#aab}
 </style></head><body>
@@ -75,7 +77,7 @@ input[type=range]{width:100%}
 <div id="info" class="panel"></div>
 <div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><span class="q" data-tip="The bar's length on screen equals this distance at the centre of the view. 1 Mpc = 3.26 million light-years.">?</span><br><small>(at centre of view)</small></div>
 <div id="help" class="panel">Drag: rotate &middot; Right-drag: pan &middot; Wheel/pinch: zoom &middot; W/A/S/D/Q/E: fly &middot; Click names for info</div>
-<div id="labels"></div>
+<div id="labels"><svg id="leaders"></svg></div>
 <div id="about" class="panel">
 <h2>About this map</h2>
 <p>This map shows the 3D positions of real galaxies from three public redshift surveys. Distances are worked out from each galaxy's redshift using the standard cosmological model (Planck 2018 parameters), as <i>comoving</i> distance in megaparsecs. 1 Mpc = 3.26 million light-years. The <b>lookback time</b> is how long the light took to reach us. The most distant galaxies here are seen as they were about 9.6 billion years ago.</p>
@@ -173,9 +175,11 @@ $("home").onclick=()=>view(5200);$("local").onclick=()=>view(260);
 // labels
 const labels=[{name:"Milky Way (you are here)",x:[0,0,0],info:"Our home galaxy. Every other dot is seen as it was when its light left it: the further away, the further back in time.",id:"mw"}].concat(window.STRUCT);
 labels.forEach(l=>{const e=document.createElement("div");e.className="lab";if(l.id)e.id=l.id;e.textContent=l.name;l.el=e;$("labels").appendChild(e);
+ const dt=document.createElement("div");dt.className="ldot"+(l.id?" mw":"");l.dot=dt;$("labels").appendChild(dt);
+ const ln=document.createElementNS("http://www.w3.org/2000/svg","line");ln.setAttribute("stroke",l.id?"#fff":"#9f9");ln.setAttribute("stroke-width","1");ln.setAttribute("opacity",".7");l.ln=ln;$("leaders").appendChild(ln);
  l.v=new THREE.Vector3(l.x[0],l.x[2],-l.x[1]);e.onclick=()=>{const I=$("info");I.style.display="block";
  I.innerHTML=`<b>${l.name}</b><br>${l.info}<br>`+(l.d?`<small>Sky position: RA ${l.ra}&deg;, Dec ${l.dec}&deg;<span class='q' data-tip='Right ascension and declination: longitude and latitude on the sky.'>?</span><br>Redshift z = ${l.z}<span class='q' data-tip='Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).'>?</span><br>Distance &asymp; ${l.d.toFixed(0)} Mpc<span class='q' data-tip='Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).'>?</span> = ${(l.ly/1e6).toFixed(0)} million light-years (comoving<span class='q' data-tip='Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.'>?</span>)<br>Light left it ${(l.lt*1000).toFixed(0)} million years ago<span class='q' data-tip='Lookback time: how long the light took to reach us. A galaxy with lookback time 5 billion years is seen as it was 5 billion years ago.'>?</span></small><br><button onclick='flyTo("${l.name}")'>&#9992; fly here</button> `:"")+`<button onclick="this.parentNode.style.display='none'">close</button>`;};});
-$("Llab").onchange=e=>labels.forEach(l=>l.el.style.display=e.target.checked?"":"none");
+$("Llab").onchange=e=>{$("labels").style.display=e.target.checked?"":"none";};
 // keyboard fly
 const keys={};addEventListener("keydown",e=>{if(e.target.tagName!="INPUT")keys[e.key.toLowerCase()]=1;});addEventListener("keyup",e=>keys[e.key.toLowerCase()]=0);
 function fly(){const d=camera.position.distanceTo(controls.target)*0.015,f=new THREE.Vector3();camera.getWorldDirection(f);const r=new THREE.Vector3().crossVectors(f,camera.up).normalize();const m=new THREE.Vector3();
@@ -188,8 +192,21 @@ function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=i
 addEventListener("resize",resize);resize();view(5200);
 const tmp=new THREE.Vector3();
 function loop(){requestAnimationFrame(loop);fly();controls.update();renderer.render(scene,camera);scalebar();
- for(const l of labels){tmp.copy(l.v).project(camera);const vis=tmp.z<1&&Math.abs(tmp.x)<1.05&&Math.abs(tmp.y)<1.05;
-  if(!vis){l.el.style.visibility="hidden";continue;}l.el.style.visibility="visible";l.el.style.left=((tmp.x+1)/2*innerWidth)+"px";l.el.style.top=((1-tmp.y)/2*innerHeight)+"px";}}
+ placeLabels();}
+// ---- label declutter: priority order = array order; try several offsets (with leader line), else hide the text (dot stays)
+function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
+function placeLabels(){const placed=[],W=innerWidth,H=innerHeight;
+ for(const id of ["nav","flyto","tog","scale","help"]){const r=$(id).getBoundingClientRect();if(r.width)placed.push({x:r.left-3,y:r.top-3,w:r.width+6,h:r.height+6});}
+ for(const l of labels){tmp.copy(l.v).project(camera);const on=tmp.z<1&&Math.abs(tmp.x)<1.02&&Math.abs(tmp.y)<1.02;
+  if(!on){l.el.style.visibility=l.dot.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");continue;}
+  const px=(tmp.x+1)/2*W,py=(1-tmp.y)/2*H;l.dot.style.visibility="visible";l.dot.style.transform=`translate(${px}px,${py}px)`;
+  if(!l.w){l.w=l.el.offsetWidth;l.h=l.el.offsetHeight;}const w=l.w,h=l.h,g=Math.round(h*1.15);
+  const cands=[[8,-h/2],[-w-8,-h/2],[8,-h-6],[8,6],[-w-8,-h-6],[-w-8,6],[14,-h/2-g*2],[14,-h/2+g*2],[-w-14,-h/2-g*2],[-w-14,-h/2+g*2],[14,-h/2-g*3],[14,-h/2+g*3]];
+  let best=null;for(const c of cands){const r={x:px+c[0],y:py+c[1],w:w,h:h};if(r.x<2||r.y<2||r.x+w>W-2||r.y+h>H-2)continue;if(!placed.some(p=>hit(r,p))){best=r;break;}}
+  if(!best){l.el.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");placed.push({x:px-4,y:py-4,w:8,h:8});continue;}
+  placed.push(best,{x:px-4,y:py-4,w:8,h:8});l.el.style.visibility="visible";l.el.style.transform=`translate(${best.x}px,${best.y}px)`;
+  const far=Math.abs(best.y+h/2-py)>h*0.6;l.ln.setAttribute("visibility",far?"visible":"hidden");
+  if(far){const ex=best.x<px?best.x+w:best.x,ey=best.y+h/2;l.ln.setAttribute("x1",px);l.ln.setAttribute("y1",py);l.ln.setAttribute("x2",ex);l.ln.setAttribute("y2",ey);}}}
 
 // ---- UX: panel toggle, nav buttons, fly-to, tooltips, help overlay
 const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
