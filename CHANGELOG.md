@@ -8,7 +8,8 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
-## v1.5-beta - 14 Oct 2026 (BETA only, not yet stable)
+## v1.5 - 14 Oct 2026
+Promoted from v1.5-beta after owner approval (live beta re-tested desktop + phone, zero JS errors, ~60 fps). Also: compact 2-row phone bar; star taps near the Sun pick whichever target is closest on screen.
 Rule: only real, known data; sources cited in About/README.
 - Tap any galaxy dot (tap vs drag threshold, so rotating still works): highlight, smooth fly-to, info box with survey, redshift, comoving distance (Mpc + light-years), lookback time, RA/Dec, and the closest named index object. Redshift/lookback are worked back from the stored position with Planck 2018; catalogue IDs are not stored in the compressed data, so none is shown.
 - Enter the Milky Way (button, Milky Way info box, or a prompt when zoomed right in): Sun, 8 planets, Pluto and Ceres at real heliocentric positions for 14 Oct 2026 (JPL Horizons), facts from the NASA Planetary Fact Sheet (NSSDCA, updated 18 Mar 2025) and per-planet sheets; Earth: life, ~8.7 million estimated eukaryote species (Mora et al. 2011, PLoS Biol 9(8):e1001127). 4,814 exoplanet host stars / 6,417 confirmed planets with known distance from the NASA Exoplanet Archive pscomppars table (TAP, 14 Oct 2026; 6,445 planets total), at true RA/Dec/distance, coloured by size class; missing values shown as 'unknown'. Solar System drawn enlarged (not to scale), labelled. Back to universe button. Data lazy-loaded (beta/solar.js, beta/exoplanets.js).

@@ -55,24 +55,33 @@ body.simple #simple{display:flex} body.simple #ui,body.simple #tog,body.simple #
 body.simple #scale{bottom:4px;padding:3px 8px;font-size:12px}
 #advsw{font-size:13px} #nav button{transition:background .2s}
 @media (max-width:700px){#simple{bottom:6px;gap:6px;padding:8px} #simple .big{font-size:14px;padding:7px 11px} #simple .tt{order:3;flex-basis:100%} #beta{top:56px;left:auto;right:8px;transform:none;font-size:11px} body.simple #scale{bottom:auto;top:88px;left:auto;right:8px;transform:none} body.simple #scale small{display:none} body:not(.collapsed):not(.simple) #beta{display:none}}
+
+body.ss #flyto,body.ss #findb,body.ss #simple .tt,body.ss #sNames,body.ss #sAdv,body.ss #ui,body.ss #tog,body.ss #labels,body.ss #sMW,body.ss #help{display:none!important}
+body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none} body.ss #mwback{display:block} body.ss #slegend{display:block} body.ss #slabels{display:block}
+#mwback{position:fixed;left:10px;top:10px;z-index:7;font-size:15px;padding:9px 14px;border-radius:22px;background:#2a4f9a;border-color:#7af}
+#slegend{right:10px;bottom:60px;width:250px;font-size:12px;z-index:5} #slegend i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}
+.slab{color:#ffe9a8}
+#route{left:64px;top:56px;width:310px;max-height:45vh;overflow:auto;display:none;z-index:8;font-size:13px} #route #wpl div{border-bottom:1px solid #223;padding:2px 0}
+#route select{max-width:140px;background:#223;color:#dde;border:1px solid #446}
+@media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:12.5px;padding:6px 8px;white-space:nowrap} #simple{gap:5px;padding:6px}}
 </style></head><body>
 <div id="load">Loading galaxies...</div>
 <canvas id="c"></canvas>
-<div id="simple" class="panel"><button class="big on" id="sNames">&#127991; Show names</button><div class="tt">&#9203; Time travel: <span id="sTv"></span><input type="range" id="sT" min="1" max="100" value="100"></div><button class="big" id="sAdv" title="Show all options: layers, surveys, colours, point counts">&#9881; Advanced</button></div>
+<div id="simple" class="panel"><button class="big on" id="sNames">&#127991; Show names</button><div class="tt">&#9203; Time travel: <span id="sTv"></span><input type="range" id="sT" min="1" max="100" value="100"></div><button class="big" id="sMeas" title="Measure distances between points; build a route">&#128207; Measure</button><button class="big" id="sMW" title="Zoom into our own galaxy: Solar System and known exoplanets">&#127756; Milky Way</button><button class="big" id="sAdv" title="Show all options: layers, surveys, colours, point counts">&#9881; Advanced</button></div>
 <button id="tog" title="Show / hide controls" aria-label="toggle controls">&#10005;</button>
 <select id="flyto" aria-label="Fly to"><option value="">&#9992; Fly to...</option></select>
 <button id="findb" title="Search 4,000+ named galaxies, clusters and superclusters">&#128269; Find</button>
 <div id="gidx"><div style="display:flex;gap:6px"><input id="gq" type="search" placeholder="Type a name: Andromeda, M87, Coma, NGC 253..." autocomplete="off"><button id="gclose" aria-label="close">&#10005;</button></div>
 <div id="gcount" class="gn"></div><div id="gres"></div><div id="gbrowse"></div></div>
-<div id="ver" title="What's new">v1.4</div><div id="toast"></div>
+<div id="ver" title="What's new">v1.5</div><div id="toast"></div>
 <div id="news" class="panel"></div>
 <div id="nav"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="rst" title="Home: glide back to the Milky Way">&#8962;</button><button id="hlp" title="How to use">?</button></div>
 <div id="tip"></div>
 <div id="helpov"><div class="box"><h3 style="margin-top:0">How to explore</h3><ul>
 <li><b>Rotate:</b> drag with mouse or one finger</li><li><b>Zoom:</b> scroll wheel, pinch, or the + / &minus; buttons</li>
 <li><b>Move sideways:</b> right-drag or two-finger drag</li><li><b>Fly to</b> a famous cluster with the menu at top left, or tap <b>&#128269; Find</b> to search 4,000+ named galaxies</li>
-<li><b>Simple mode</b> (default): names on/off and a time-travel slider at the bottom. Tap <b>&#9881; Advanced</b> for all options (colours, surveys, layers, 724k points)</li><li><b>&#8962; Home</b> glides back to the Milky Way</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
-<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.4</button></div></div>
+<li><b>Simple mode</b> (default): names on/off and a time-travel slider at the bottom. Tap <b>&#9881; Advanced</b> for all options (colours, surveys, layers, 724k points)</li><li><b>&#8962; Home</b> glides back to the Milky Way</li><li><b>Tap a dot</b> for that galaxy's facts; <b>&#128207; Measure</b> to measure distances; <b>&#127756; Milky Way</b> for the Solar System and exoplanets</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
+<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.5</button></div></div>
 <div id="ui" class="panel">
 <h1>Interactive Universe Map</h1><button id="advoff" title="Back to the simple, clean screen">&#8592; Simple mode</button><br>
 <small>Units: Mpc<span class="q" data-tip="Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).">?</span> &middot; redshift z<span class="q" data-tip="Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).">?</span> &middot; comoving distance<span class="q" data-tip="Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.">?</span></small><br><small>Each dot is a <b>real galaxy</b> whose distance was measured from its redshift. You are at the white Milky Way marker.</small>
@@ -98,9 +107,9 @@ body.simple #scale{bottom:4px;padding:3px 8px;font-size:12px}
 <label class="conc"><input type="checkbox" id="Llat"> CONCEPTUAL lattice: art, not physics<span class="q" data-tip="An artistic regular grid, included only to illustrate an idea. Real galaxies do not sit on a grid.">?</span></label>
 <label><input type="checkbox" id="Llab" checked> Named structures</label>
 <hr style="border-color:#334">
-<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.4)</button>
+<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="measp">&#128207; Measure / route</button><button id="mwp">&#127756; Enter the Milky Way</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.5)</button>
 </div>
-<div id="info" class="panel"></div>
+<div id="info" class="panel"></div><div id="route" class="panel"></div><button id="mwback">&#9664; Back to universe</button><div id="slegend" class="panel"></div><div id="slabels"></div>
 <div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><span class="q" data-tip="The bar's length on screen equals this distance at the centre of the view. 1 Mpc = 3.26 million light-years.">?</span><br><small>(at centre of view)</small></div>
 <div id="help" class="panel">Drag: rotate &middot; Right-drag: pan &middot; Wheel/pinch: zoom &middot; W/A/S/D/Q/E: fly &middot; Click names for info</div>
 <div id="labels"><svg id="leaders"></svg></div>
@@ -114,6 +123,7 @@ body.simple #scale{bottom:4px;padding:3px 8px;font-size:12px}
 <li><b>DESI Data Release 1</b> large-scale-structure clustering catalogues v1.5, northern galactic cap only: BGS_BRIGHT-21.5 (z 0.1-0.4), LRG (z 0.4-1.1) and ELG_LOPnotqso (z 1.1-1.6), from data.desi.lbl.gov/public/dr1/. The map uses a subset: BGS 217,614, LRG 180,000, ELG 100,000.</li>
 </ul>
 <p>By default the map shows 100,000 galaxies (for speed on phones). Tick "load all" for about 724,000.</p>
+<h3>Milky Way view (v1.5)</h3><p>Planet facts: NASA Planetary Fact Sheet, NSSDCA/Goddard (D. R. Williams, updated 18 Mar 2025), nssdc.gsfc.nasa.gov/planetary/factsheet/, and the per-planet fact sheets for atmospheres. Ceres: NASA Dawn mission results and JPL Horizons (radius 469.7 km, rotation 9.074 h). Planet positions: JPL Horizons heliocentric vectors (ICRF) for 14 Oct 2026. Earth's species estimate: Mora et al. 2011, PLoS Biology 9(8): e1001127 (about 8.7 million eukaryote species). Exoplanets: NASA Exoplanet Archive, Planetary Systems Composite Parameters table (pscomppars), downloaded via TAP on 14 Oct 2026: 6,445 confirmed planets, 6,417 with a known host distance, around 4,814 host stars. This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology under contract with NASA under the Exoplanet Exploration Program. Planet colours are size classes from the measured radius. Dot info (redshift, lookback time) is worked back from each galaxy's stored 3D position with the Planck 2018 model.</p>
 <h3>Galaxy name index (search)</h3><p>The searchable index has 4,326 entries. Local Group and nearby galaxies, with measured distances, come from the Updated Nearby Galaxy Catalog (Karachentsev, Makarov &amp; Kaisina 2013, AJ 145, 101; VizieR J/AJ/145/101). Common names, Messier and bright NGC/IC galaxies, Abell and named clusters, and published distance measurements come from SIMBAD (CDS, Strasbourg; Wenger et al. 2000), queried in October 2026. For galaxies beyond about 40 Mpc (cz &gt; 3000 km/s), distances come from redshift (Planck18). A handful of superclusters, walls and voids use approximate literature positions and are marked "approx.". <i>This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</i></p>
 <h3>Credits and licences</h3>
 <p><b>DESI</b> data are licensed under CC BY 4.0. Positions were converted to 3D and subsampled for this map. Please cite: DESI Collaboration, "Data Release 1 of the Dark Energy Spectroscopic Instrument". <i>This research used data obtained with the Dark Energy Spectroscopic Instrument (DESI). DESI construction and operations is managed by the Lawrence Berkeley National Laboratory. This material is based upon work supported by the U.S. Department of Energy, Office of Science, Office of High-Energy Physics, under Contract No. DE-AC02-05CH11231, and by the National Energy Research Scientific Computing Center, a DOE Office of Science User Facility under the same contract. Additional support for DESI was provided by the U.S. National Science Foundation (NSF), Division of Astronomical Sciences under Contract No. AST-0950945 to the NSF's National Optical-Infrared Astronomy Research Laboratory; the Science and Technology Facilities Council of the United Kingdom; the Gordon and Betty Moore Foundation; the Heising-Simons Foundation; the French Alternative Energies and Atomic Energy Commission (CEA); the National Council of Humanities, Science and Technology of Mexico (CONAHCYT); the Ministry of Science and Innovation of Spain (MICINN), and by the DESI Member Institutions: www.desi.lbl.gov/collaborating-institutions. The DESI collaboration is honored to be permitted to conduct scientific research on I'oligam Du'ag (Kitt Peak), a mountain with particular significance to the Tohono O'odham Nation. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the U.S. National Science Foundation, the U.S. Department of Energy, or any of the listed funding agencies.</i></p>
@@ -205,7 +215,7 @@ const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
 function glide(tv,d,dir,ms){const t0=controls.target.clone(),p0=camera.position.clone(),d0=Math.max(1e-6,p0.distanceTo(t0)),u0=p0.clone().sub(t0).normalize(),t1=tv.clone(),u1=(dir||u0).clone().normalize();
  const T0=performance.now();ms=ms||1500;anim={step(now){const k=Math.min(1,(now-T0)/ms),e=ease(k);controls.target.lerpVectors(t0,t1,e);
   const lg=Math.exp(Math.log(d0)*(1-e)+Math.log(d)*e);_a.copy(u0).lerp(u1,e);if(_a.lengthSq()<1e-8)_a.copy(u1);_a.normalize();camera.position.copy(controls.target).addScaledVector(_a,lg);if(k>=1)anim=null;}};}
-function goHome(){glide(_e.set(0,0,0),5200*1.0524,HOMEDIR,1500);}
+function goHome(){if(MODE==='S')return glide(_e.set(0,0,0),1.4,new THREE.Vector3(0.4,0.6,1.2),1500);glide(_e.set(0,0,0),5200*1.0524,HOMEDIR,1500);}
 window.goHome=goHome;
 $("home").onclick=goHome;$("local").onclick=()=>glide(_e.set(0,0,0),260*1.0524,HOMEDIR,1500);
 // labels
@@ -224,6 +234,7 @@ function fly(){if(!(keys.w||keys.s||keys.a||keys.d||keys.q||keys.e))return;anim=
 // scale bar
 const SB={w:'',L:0};function scalebar(){const d=camera.position.distanceTo(controls.target),H=innerHeight,wh=2*d*Math.tan(camera.fov*Math.PI/360),ppm=H/wh;
  const want=160/ppm,p=Math.pow(10,Math.floor(Math.log10(want)));let L=[1,2,5,10].map(k=>k*p).filter(v=>v<=want).pop()||p;
+ if(MODE==='S'){const bw=(L*ppm).toFixed(0)+'px',key=bw+L+(camera.position.length()<4);if(SB.w===key)return;SB.w=key;$('bar').style.width=bw;const ly=L*3.26156;$('stxt').textContent=(ly<10?+ly.toPrecision(2):Math.round(ly).toLocaleString())+' light-years ('+(+L.toPrecision(2))+' pc)'+(camera.position.length()<4?' - Solar System NOT to scale':'');return;}
  const bw=(L*ppm).toFixed(0)+"px";if(bw===SB.w&&L===SB.L)return;SB.w=bw;SB.L=L;$("bar").style.width=bw;const ly=L*3.2616;$("stxt").textContent=(L<0.5?`${+(L*1000).toPrecision(3)} kpc`:`${L>=1?L:+L.toPrecision(2)} Mpc`)+"  =  "+(ly<1?`${+(ly*1000).toPrecision(3)} thousand`:ly>=1000?`${(ly/1000).toFixed(ly>=10000?0:1)} billion`:`${ly.toFixed(ly<10?1:0)} million`)+" light-years";}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
 addEventListener("resize",resize);resize();view(5200);
@@ -236,11 +247,11 @@ function loop(now){requestAnimationFrame(loop);now=now||performance.now();FR.n++
  const key=camera.position.x.toFixed(5)+camera.position.y.toFixed(5)+camera.position.z.toFixed(5)+camera.quaternion.x.toFixed(6)+camera.quaternion.y.toFixed(6)+camera.quaternion.z.toFixed(6);
  const moved=key!==camKey;camKey=key;if(!moved&&!DIRTY)return; if(DIRTY)DIRTY--;
  mwMesh.scale.setScalar(Math.min(1,Math.max(0.0004,Math.min(cd,cm)*0.004)));const nr=Math.max(0.00005,Math.min(0.1,cd*0.01));if(Math.abs(camera.near-nr)>nr*0.1){camera.near=nr;camera.updateProjectionMatrix();}
- renderer.render(scene,camera);FR.r++;scalebar();
+ renderer.render(MODE==='S'?SS.scene:scene,camera);FR.r++;scalebar();if(MODE==='S'){SS.labels();return;}
  // declutter: full collision pass at most every 120 ms while moving; otherwise just re-position placed labels
  if(!moved||now-lastLab>120){lastLab=now;placeLabels(true);}else placeLabels(false);}
 function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
-const LBOX=["nav","flyto","tog","scale","help","findb","ver","toast","simple","beta"];
+const LBOX=["nav","flyto","tog","scale","help","findb","ver","toast","simple","beta","route"];
 function placeLabels(full){const W=innerWidth,H=innerHeight;
  if(!full){for(const l of labels){if(!l.vis)continue;tmp.copy(l.v).project(camera);if(!(tmp.z<1&&Math.abs(tmp.x)<1.02&&Math.abs(tmp.y)<1.02))continue;const px=(tmp.x+1)/2*W,py=(1-tmp.y)/2*H;
    l.dot.style.transform=`translate(${px|0}px,${py|0}px)`;l.el.style.transform=`translate(${(px+l.ox)|0}px,${(py+l.oy)|0}px)`;if(l.far){l.ln.setAttribute("x1",px|0);l.ln.setAttribute("y1",py|0);l.ln.setAttribute("x2",(l.ox<0?px+l.ox+l.w:px+l.ox)|0);l.ln.setAttribute("y2",(py+l.oy+l.h/2)|0);}}return;}
@@ -314,7 +325,11 @@ function pick(o){$("gidx").style.display="none";SEL.name=o.n;SEL.v.copy(o.v);SEL
  flyToVec(o.v,o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d);showInfo(o);}
 // ---- versioning: tag, What's new, one-time toast
 const NEWS=`<h2>What's new</h2>
-<h3>v1.4 &middot; 14 Oct 2026</h3><ul><li><b>Simple mode</b> is now the default: a clean screen with Find, Fly to, zoom, Home, help, a big <i>Names on/off</i> button and a <i>Time travel</i> slider. Tap <b>&#9881; Advanced</b> for every option (colours, surveys, layers, 724k points). Your choice is remembered.</li>
+<h3>v1.5 &middot; 14 Oct 2026</h3><ul>
+<li><b>Tap any galaxy dot</b>: it is highlighted, the view glides to it, and an info box shows its survey, redshift, distance (Mpc and light-years), lookback time and sky position, plus the closest named object in the index. (A quick tap selects; dragging still rotates.)</li>
+<li><b>&#127756; Enter the Milky Way</b>: the Sun, 8 planets and dwarf planets Pluto and Ceres at their real positions on 14 Oct 2026 (JPL Horizons), with facts from the NASA Planetary Fact Sheet. Around them, 4,814 real stars hosting 6,417 confirmed exoplanets from the NASA Exoplanet Archive, at their true sky positions and distances. Tap a planet or star for its known facts ('unknown' where not measured). The Solar System is enlarged so you can see it (not to scale).</li>
+<li><b>&#128207; Measure</b>: tap points in order to see each leg and the total distance (Mpc and light-years; AU and light-years in the Milky Way view). Undo, clear, save routes on this device, and fly the route.</li></ul>
+<h3>v1.5 &middot; 14 Oct 2026</h3><ul><li><b>Simple mode</b> is now the default: a clean screen with Find, Fly to, zoom, Home, help, a big <i>Names on/off</i> button and a <i>Time travel</i> slider. Tap <b>&#9881; Advanced</b> for every option (colours, surveys, layers, 724k points). Your choice is remembered.</li>
 <li><b>Home</b> now glides smoothly back to the Milky Way instead of jumping. Zoom buttons, Fly-to and search also glide; touching the map stops a glide straight away.</li>
 <li><b>Smoother</b>: the map only redraws when something changes, labels are rearranged less often while moving, and phones use a lighter pixel density.</li>
 <li>Fixes: zoom buttons stopped working very close in (Local Group); keys could get stuck after switching windows; time sweep was jerky.</li></ul>
@@ -323,10 +338,132 @@ const NEWS=`<h2>What's new</h2>
 <h3>v1.1 &middot; 13 Oct 2026</h3><ul><li>Easier navigation: collapsible side panel, zoom/reset/help buttons, a "Fly to" menu, touch and pinch support, and a first-visit help screen.</li><li>Plain-English "?" explanations, with distances in both Mpc and light-years.</li><li>Lighter default of 100,000 galaxies for phones (all 724,000 optional).</li></ul>
 <h3>v1.0 &middot; 13 Oct 2026</h3><ul><li>First release: 724,000 real galaxies from 2MRS, SDSS DR17 and DESI DR1 in 3D, with a lookback-time (4D) slider and colouring, and optional filament, model and concept layers.</li></ul>
 <p><small>Going forward, monthly "living universe" data updates will bump the version number.</small></p><button onclick="document.getElementById('news').style.display='none'">Close</button>`;
-$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.4");};
+$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.5");};
 $("ver").onclick=$("newsb").onclick=openNews;$("helpnews").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");openNews();};
-if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.4"){const t=$("toast");t.innerHTML="New in v1.4: smoother, simpler screen, Home glides back. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.4");},9000);}
+if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.5"){const t=$("toast");t.innerHTML="New in v1.5: tap any galaxy, enter the Milky Way (Solar System + 6,400 exoplanets), measure distances. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.5");},9000);}
 function placeFind(){const f=$("flyto").getBoundingClientRect();$("findb").style.left=(f.right+6)+"px";}placeFind();addEventListener("resize",placeFind);
+// ===================== v1.5: dot picking, Milky Way mode, ruler/waypoints =====================
+const COS={"z": [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012, 0.014, 0.016, 0.018, 0.02, 0.022, 0.024, 0.026, 0.028, 0.03, 0.032, 0.034, 0.036, 0.038, 0.04, 0.042, 0.044, 0.046, 0.048, 0.05, 0.052, 0.054, 0.056, 0.058, 0.06, 0.062, 0.064, 0.066, 0.068, 0.07, 0.072, 0.074, 0.076, 0.078, 0.08, 0.082, 0.084, 0.086, 0.088, 0.09, 0.092, 0.094, 0.096, 0.098, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34, 0.36, 0.38, 0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52, 0.54, 0.56, 0.58, 0.6, 0.62, 0.64, 0.66, 0.68, 0.7, 0.72, 0.74, 0.76, 0.78, 0.8, 0.82, 0.84, 0.86, 0.88, 0.9, 0.92, 0.94, 0.96, 0.98, 1.0, 1.02, 1.04, 1.06, 1.08, 1.1, 1.12, 1.14, 1.16, 1.18, 1.2, 1.22, 1.24, 1.26, 1.28, 1.3, 1.32, 1.34, 1.36, 1.38, 1.4, 1.42, 1.44, 1.46, 1.48, 1.5, 1.52, 1.54, 1.56, 1.58, 1.6, 1.62, 1.64, 1.66, 1.68, 1.7, 1.72, 1.74, 1.76, 1.78, 1.8, 1.82, 1.84, 1.86, 1.88, 1.9, 1.92, 1.94, 1.96, 1.98, 2.0], "d": [0.0, 8.86, 17.71, 26.55, 35.38, 44.21, 53.02, 61.83, 70.63, 79.42, 88.2, 96.98, 105.74, 114.5, 123.25, 131.99, 140.72, 149.45, 158.16, 166.87, 175.57, 184.26, 192.94, 201.61, 210.28, 218.93, 227.58, 236.22, 244.85, 253.47, 262.09, 270.69, 279.29, 287.88, 296.46, 305.03, 313.59, 322.15, 330.69, 339.23, 347.76, 356.28, 364.79, 373.29, 381.78, 390.27, 398.75, 407.21, 415.67, 424.12, 432.57, 516.51, 599.59, 681.79, 763.12, 843.58, 923.16, 1001.86, 1079.68, 1156.63, 1232.71, 1307.91, 1382.26, 1455.74, 1528.36, 1600.13, 1671.05, 1741.14, 1810.39, 1878.81, 1946.42, 2013.21, 2079.2, 2144.39, 2208.8, 2272.43, 2335.28, 2397.38, 2458.73, 2519.33, 2579.2, 2638.34, 2696.77, 2754.5, 2811.53, 2867.87, 2923.54, 2978.54, 3032.88, 3086.57, 3139.62, 3192.05, 3243.85, 3295.05, 3345.64, 3395.63, 3445.05, 3493.89, 3542.16, 3589.87, 3637.04, 3683.66, 3729.75, 3775.32, 3820.37, 3864.92, 3908.96, 3952.51, 3995.58, 4038.16, 4080.28, 4121.94, 4163.14, 4203.9, 4244.21, 4284.09, 4323.54, 4362.57, 4401.18, 4439.39, 4477.2, 4514.61, 4551.63, 4588.27, 4624.53, 4660.42, 4695.94, 4731.1, 4765.91, 4800.37, 4834.48, 4868.26, 4901.7, 4934.81, 4967.6, 5000.07, 5032.22, 5064.06, 5095.6, 5126.84, 5157.78, 5188.43, 5218.79, 5248.87, 5278.67, 5308.19], "t": [0.0, 0.0289, 0.0576, 0.0863, 0.1149, 0.1435, 0.1719, 0.2003, 0.2285, 0.2567, 0.2848, 0.3129, 0.3408, 0.3687, 0.3965, 0.4242, 0.4518, 0.4793, 0.5068, 0.5342, 0.5615, 0.5887, 0.6159, 0.643, 0.6699, 0.6969, 0.7237, 0.7505, 0.7771, 0.8037, 0.8303, 0.8567, 0.8831, 0.9094, 0.9356, 0.9618, 0.9879, 1.0139, 1.0398, 1.0656, 1.0914, 1.1171, 1.1428, 1.1683, 1.1938, 1.2192, 1.2446, 1.2698, 1.295, 1.3201, 1.3452, 1.5919, 1.8317, 2.0648, 2.2916, 2.5121, 2.7266, 2.9353, 3.1383, 3.336, 3.5283, 3.7156, 3.8979, 4.0754, 4.2483, 4.4167, 4.5808, 4.7407, 4.8964, 5.0483, 5.1962, 5.3405, 5.4812, 5.6184, 5.7522, 5.8827, 6.01, 6.1343, 6.2556, 6.3739, 6.4895, 6.6023, 6.7124, 6.82, 6.9251, 7.0278, 7.1281, 7.2261, 7.3219, 7.4156, 7.5071, 7.5967, 7.6842, 7.7698, 7.8536, 7.9355, 8.0157, 8.0942, 8.171, 8.2462, 8.3198, 8.3919, 8.4624, 8.5316, 8.5993, 8.6656, 8.7306, 8.7943, 8.8567, 8.9179, 8.9779, 9.0367, 9.0944, 9.151, 9.2065, 9.2609, 9.3143, 9.3667, 9.4181, 9.4685, 9.518, 9.5667, 9.6144, 9.6612, 9.7073, 9.7525, 9.7969, 9.8405, 9.8833, 9.9254, 9.9668, 10.0074, 10.0474, 10.0866, 10.1252, 10.1632, 10.2005, 10.2372, 10.2733, 10.3088, 10.3437, 10.3781, 10.4119, 10.4451, 10.4779, 10.5101]};
+function interp(xs,ys,x){if(x<=xs[0])return ys[0];for(let i=1;i<xs.length;i++)if(x<=xs[i]){const f=(x-xs[i-1])/(xs[i]-xs[i-1]);return ys[i-1]+f*(ys[i]-ys[i-1]);}return ys[ys.length-1];}
+let MODE="U";window.getMode=()=>MODE;
+const isTouch=()=>matchMedia("(pointer:coarse)").matches;
+const _pv=new THREE.Matrix4(),_q=new THREE.Vector3();
+// nearest visible point on screen (array of three-space coords), returns index or -1
+function screenPick(arr,n,x,y,rad,filt){_pv.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);const m=_pv.elements,W=innerWidth,H=innerHeight;let best=-1,bd=rad*rad;
+ for(let i=0;i<n;i++){if(filt&&!filt(i))continue;const px=arr[3*i],py=arr[3*i+1],pz=arr[3*i+2];const w=m[3]*px+m[7]*py+m[11]*pz+m[15];if(w<=0)continue;
+  const sx=((m[0]*px+m[4]*py+m[8]*pz+m[12])/w+1)/2*W-x,sy=(1-(m[1]*px+m[5]*py+m[9]*pz+m[13])/w)/2*H-y;const d2=sx*sx+sy*sy;if(d2<bd){bd=d2;best=i;}}screenPick.d2=bd;return best;}
+// ---- tap vs drag
+let pd=null,npt=0;
+canvas.addEventListener("pointerdown",e=>{npt++;pd=npt===1?{x:e.clientX,y:e.clientY,t:performance.now()}:null;});
+addEventListener("pointerup",e=>{npt=Math.max(0,npt-1);if(!pd||e.target!==canvas)return;const mv=Math.hypot(e.clientX-pd.x,e.clientY-pd.y),dt=performance.now()-pd.t;pd=null;
+ if(mv<(e.pointerType==="touch"?10:5)&&dt<600)onTap(e.clientX,e.clientY,e.pointerType==="touch"?24:12);});
+addEventListener("pointercancel",()=>{npt=0;pd=null;});
+function onTap(x,y,rad){if(MODE==="S")return SS.tap(x,y,rad);
+ const sets=[[pts,0]];if(morePts&&morePts.visible)sets.push([morePts,1]);let hit=null;
+ for(const [P] of sets){const g=P.geometry,a=g.attributes.position.array,sv=g.attributes.sv.array,tl=g.attributes.tl.array;
+  const i=screenPick(a,g.attributes.position.count,x,y,rad,i=>U.on.value[sv[i]|0]>0&&tl[i]>=U.tmin.value&&tl[i]<=U.tmax.value);
+  if(i>=0){_q.set(a[3*i],a[3*i+1],a[3*i+2]);const sd=_q.clone().project(camera);const d2=Math.hypot((sd.x+1)/2*innerWidth-x,(1-sd.y)/2*innerHeight-y);if(!hit||d2<hit.d2)hit={v:_q.clone(),sv:sv[i]|0,d2};}}
+ if(hit)pickDot(hit);}
+function eqOf(v){const x=v.x,y=-v.z,z=v.y,d=Math.hypot(x,y,z);return {d,ra:((Math.atan2(y,x)*180/Math.PI)+360)%360,dec:Math.asin(z/Math.max(d,1e-9))*180/Math.PI};}
+function pickDot(h){const q=eqOf(h.v),zz=interp(COS.d,COS.z,q.d),lt=interp(COS.d,COS.t,q.d);
+ const o={n:"Galaxy ("+SURV[h.sv][0].replace(/ \(.*\)/,"")+" dot)",v:h.v,d:q.d,dot:1};
+ const fin=near=>{const I=$("info");I.style.display="block";
+  I.innerHTML=`<b>${o.n}</b><br><small>A single real galaxy measured by <b>${SURV[h.sv][0]}</b>. Its catalogue ID is not stored in this map's compressed data.</small><br>`+
+  `<small>Redshift z &asymp; ${zz.toFixed(4)}<span class='q' data-tip='Worked back from the stored distance with the Planck 2018 model; the map stores positions to about &plusmn;0.07 Mpc.'>?</span><br>Distance &asymp; ${fmtD(q.d)} (comoving)<span class='q' data-tip='Comoving distance: where the galaxy is now, allowing for expansion. 1 Mpc = 3.26 million light-years.'>?</span><br>`+
+  `Lookback time &asymp; ${lt.toFixed(2)} billion years<span class='q' data-tip='How long its light has been travelling to us.'>?</span><br>Sky position: RA ${q.ra.toFixed(3)}&deg;, Dec ${q.dec.toFixed(3)}&deg;</small><br>`+
+  `<small>${lt<0.05?"Very nearby: we see it almost as it is today.":`We see it as it was ${lt.toFixed(1)} billion years ago, when the universe was about ${(13.8-lt).toFixed(1)} billion years old.`}</small><br>`+
+  (near?`<small>Closest entry in the name index: <b>${near.e.n}</b>, ${near.s.toFixed(2)} Mpc from this dot (may or may not be this same galaxy).</small><br>`:"")+
+  `<button onclick="this.parentNode.style.display='none'">close</button>`;};
+ SEL.name=o.n;SEL.v.copy(o.v);SEL.el.textContent="\u25CE galaxy";SEL.w=0;SEL.el.onclick=()=>fin(o.near);if(labels[0]!==SEL)labels.unshift(SEL);DIRTY=2;
+ if(MEAS)addWP({n:"Galaxy at "+q.d.toFixed(0)+" Mpc",v:o.v.clone(),sc:"U"});
+ else{const cur=camera.position.distanceTo(controls.target);flyToVec(o.v,Math.max(1,Math.min(cur*0.6,Math.max(8,q.d*0.15))));}
+ fin(null);loadIndex(()=>{let b=null,bs=1.5;for(const e of GI){const s=e.v.distanceTo(o.v);if(s<bs){bs=s;b=e;}}o.near=b?{e:b,s:bs}:null;if(SEL.v.equals(o.v)&&$("info").style.display==="block")fin(o.near);});}
+// ---- Ruler & waypoints
+let MEAS=false,WP=[],routeLine=null;
+function legStr(a,b){if(a.sc==="U")return fmtD(a.v.distanceTo(b.v));const pc=_q.copy(a.t).distanceTo(b.t),ly=pc*3.26156;return ly<0.1?(pc*206265).toFixed(pc*206265<10?2:1)+" AU":(ly<10?ly.toFixed(2):ly.toLocaleString(undefined,{maximumFractionDigits:0}))+" light-years ("+(pc<10?pc.toFixed(2):pc.toFixed(0))+" pc)";}
+function totStr(){if(WP.length<2)return "";if(WP[0].sc==="U"){let s=0;for(let i=1;i<WP.length;i++)s+=WP[i].v.distanceTo(WP[i-1].v);return fmtD(s);}let s=0;for(let i=1;i<WP.length;i++)s+=WP[i].t.distanceTo(WP[i-1].t);return legStr({sc:"S",t:new THREE.Vector3()},{sc:"S",t:new THREE.Vector3(s,0,0)});}
+function addWP(w){if(WP.length&&WP[0].sc!==w.sc)WP=[];if(!w.t)w.t=w.v.clone();WP.push(w);drawRoute();}
+function drawRoute(){const sc=MODE==="S"?SS.scene:scene;if(routeLine){routeLine.parent&&routeLine.parent.remove(routeLine);routeLine.geometry.dispose();routeLine=null;}
+ if(WP.length>1&&WP[0].sc===MODE){const g=new THREE.BufferGeometry().setFromPoints(WP.map(w=>w.v));routeLine=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xffd27f,transparent:true,opacity:.9,depthTest:false}));routeLine.renderOrder=9;sc.add(routeLine);}
+ const R=$("route");R.style.display=MEAS?"block":"none";const sv=JSON.parse(LS.get("umap_routes")||"{}");
+ R.innerHTML=`<b>&#128207; Measure</b> <small>${WP.length?"":"Tap dots, names or planets/stars in order."}</small><div id="wpl">`+WP.map((w,i)=>`<div>${i+1}. ${w.n}${i?` <small>&#8592; ${legStr(WP[i-1],w)}</small>`:""}</div>`).join("")+`</div>`+
+ (WP.length>1?`<div><b>Total: ${totStr()}</b></div>`:"")+`<div><button id="wpU">Undo</button><button id="wpC">Clear</button><button id="wpF">&#9992; Fly the route</button><button id="wpS">Save</button>`+
+ (Object.keys(sv).length?`<select id="wpL"><option value="">Saved routes...</option>${Object.keys(sv).map(k=>`<option>${k.replace(/</g,"&lt;")}</option>`).join("")}</select>`:"")+`<button id="wpX">Done</button></div>`;
+ $("wpU").onclick=()=>{WP.pop();drawRoute();};$("wpC").onclick=()=>{WP=[];drawRoute();};$("wpX").onclick=()=>setMeas(false);$("wpF").onclick=flyRoute;
+ $("wpS").onclick=()=>{if(WP.length<2)return;const nm=prompt("Name this route:",WP[0].n+" to "+WP[WP.length-1].n);if(!nm)return;const s=JSON.parse(LS.get("umap_routes")||"{}");s[nm]=WP.map(w=>({n:w.n,sc:w.sc,v:w.v.toArray(),t:w.t.toArray()}));LS.set("umap_routes",JSON.stringify(s));drawRoute();};
+ if($("wpL"))$("wpL").onchange=e=>{const s=JSON.parse(LS.get("umap_routes")||"{}")[e.target.value];if(!s)return;const go=()=>{WP=s.map(w=>({n:w.n,sc:w.sc,v:new THREE.Vector3().fromArray(w.v),t:new THREE.Vector3().fromArray(w.t)}));drawRoute();};
+  if(s[0].sc!==MODE){if(s[0].sc==="S")enterMW(go);else exitMW(go);}else go();};
+ UIR=null;DIRTY=2;}
+function flyRoute(){if(WP.length<1||WP[0].sc!==MODE)return;let i=0;const step=()=>{if(i>=WP.length)return;const w=WP[i++];const d=MODE==="U"?Math.max(5,Math.min(150,w.v.length()*0.2+3)):Math.max(0.15,w.v.length()*0.3);flyToVec(w.v,d);setTimeout(()=>{if(anim||i<=WP.length)step();},1900);};step();}
+function setMeas(on){MEAS=on;$("sMeas").classList.toggle("on",on);if(!on){}drawRoute();}
+// ---- Milky Way / Solar neighbourhood scene (units: parsecs; equatorial x,y,z -> three x,z,-y)
+const SS={scene:new THREE.Scene(),ready:false,lab:[]};let saveU=null;
+const OBL=0;// Horizons vectors already in ICRF (equatorial) frame
+function e2t(x,y,z,s){return new THREE.Vector3(x*s,z*s,-y*s);}
+function buildSS(){if(SS.ready)return;SS.ready=true;const S=SS.scene;const AU=1/206264.8;
+ const sun=new THREE.Mesh(new THREE.SphereGeometry(0.018,20,14),new THREE.MeshBasicMaterial({color:0xffdd55}));S.add(sun);
+ SS.bod=[{n:"Sun",v:new THREE.Vector3(),t:new THREE.Vector3(),sun:1}];
+ const cols={Mercury:0xb0a090,Venus:0xf0d090,Earth:0x4f9cff,Mars:0xff6a3d,Jupiter:0xe0b080,Saturn:0xf0d8a0,Uranus:0x9fe8ff,Neptune:0x5a7dff,Pluto:0xd8c0a8,Ceres:0xa0a0a0};
+ // orbit circles in the ecliptic plane (equatorial frame tilt 23.44 deg), compressed radius
+ const ob=23.44*Math.PI/180;
+ for(const [n,p] of Object.entries(window.SOLAR)){const r=Math.hypot(...p.au),cr=0.1*Math.sqrt(r),s=cr/r;const v=e2t(p.au[0],p.au[1],p.au[2],s);
+  const m=new THREE.Mesh(new THREE.SphereGeometry(Math.max(0.0035,0.0035*Math.log10(p.dia/300)*2),14,10),new THREE.MeshBasicMaterial({color:cols[n]}));m.position.copy(v);S.add(m);
+  const pts=[];for(let k=0;k<=96;k++){const a=k/96*2*Math.PI,x=Math.cos(a),yE=Math.sin(a);pts.push(e2t(x*cr,yE*cr*Math.cos(ob),yE*cr*Math.sin(ob),1));}
+  S.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x334466,transparent:true,opacity:.6})));
+  SS.bod.push({n,v,t:e2t(p.au[0],p.au[1],p.au[2],AU),f:p});}
+ // exoplanet host stars
+ const E=window.EXO,a=new Float32Array(E.length*3),c=new Float32Array(E.length*3);
+ const CL=[["rocky (under 1.6 Earth radii)","#ff9a5a"],["super-Earth / sub-Neptune (1.6-4)","#7dff8a"],["Neptune-size (4-10)","#59c8ff"],["giant (over 10 Earth radii)","#ff6be0"],["size unknown","#9999aa"]];SS.CL=CL;
+ E.forEach((h,i)=>{const r=h.ra*Math.PI/180,d=h.dec*Math.PI/180,v=e2t(Math.cos(d)*Math.cos(r)*h.d,Math.cos(d)*Math.sin(r)*h.d,Math.sin(d)*h.d,1);a.set([v.x,v.y,v.z],3*i);
+  const R=Math.max(...h.p.map(p=>p[1]||0));const k=R===0?4:R<1.6?0:R<4?1:R<10?2:3;h.k=k;const col=new THREE.Color(CL[k][1]);c.set([col.r,col.g,col.b],3*i);});
+ const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(a,3));g.setAttribute("color",new THREE.BufferAttribute(c,3));
+ S.add(new THREE.Points(g,new THREE.PointsMaterial({size:4,sizeAttenuation:false,vertexColors:true,transparent:true,opacity:.9})));SS.hp=a;
+ // labels for solar bodies
+ SS.bod.forEach(b=>{const e=document.createElement("div");e.className="lab slab";e.textContent=b.n;e.onclick=()=>SS.info(b);$("slabels").appendChild(e);b.el=e;});
+ SS.sel=document.createElement("div");SS.sel.className="lab slab selmk";SS.sel.style.visibility="hidden";$("slabels").appendChild(SS.sel);
+ $("slegend").innerHTML="<b>Exoplanet host stars</b> <small>(colour = largest known planet)</small>"+CL.map(x=>`<div><i style="background:${x[1]}"></i>${x[0]}</div>`).join("")+
+  `<small>${E.length.toLocaleString()} stars with ${E.reduce((s,h)=>s+h.p.length,0).toLocaleString()} confirmed planets, real positions (NASA Exoplanet Archive). The Solar System in the middle is <b>not to scale</b>: planet sizes and orbits are enlarged (square-root scale) so you can see them.</small>`;}
+SS.labels=function(){const W=innerWidth,H=innerHeight,cd=camera.position.length();const showP=cd<4;for(const b of SS.bod){tmp.copy(b.v).project(camera);const on=showP&&tmp.z<1&&Math.abs(tmp.x)<1&&Math.abs(tmp.y)<1;b.el.style.visibility=on?"visible":"hidden";if(on)b.el.style.transform=`translate(${((tmp.x+1)/2*W+6)|0}px,${((1-tmp.y)/2*H-8)|0}px)`;}
+ if(SS.sv){tmp.copy(SS.sv).project(camera);const on=tmp.z<1&&Math.abs(tmp.x)<1&&Math.abs(tmp.y)<1;SS.sel.style.visibility=on?"visible":"hidden";if(on)SS.sel.style.transform=`translate(${((tmp.x+1)/2*W+6)|0}px,${((1-tmp.y)/2*H-8)|0}px)`;}};
+const fmtN=(v,u,dg)=>v==null?"unknown":(+v).toLocaleString(undefined,{maximumFractionDigits:dg==null?2:dg})+(u?" "+u:"");
+SS.info=function(b){const I=$("info");I.style.display="block";if(MEAS){addWP({n:b.n,v:b.v.clone(),t:b.t.clone(),sc:"S"});}
+ SS.sv=b.v;SS.sel.textContent="\u25CE "+b.n;DIRTY=2;
+ if(b.sun){I.innerHTML=`<b>The Sun</b><br><small>Our star. Diameter 1,392,700 km (109 Earths); mass 1.989&times;10<sup>30</sup> kg (NASA Sun Fact Sheet). Light takes 8.3 minutes to reach Earth.</small><br><button onclick="this.parentNode.style.display='none'">close</button>`;return;}
+ const f=b.f,au=Math.hypot(...f.au);
+ I.innerHTML=`<b>${b.n}</b>${f.dwarf?" <small>(dwarf planet)</small>":""}<br><small>`+
+ `Diameter: ${f.dia.toLocaleString()} km<br>Mass: ${f.mass} &times; 10<sup>24</sup> kg<br>Surface gravity: ${f.g} m/s&sup2; (${(f.g/9.8).toFixed(2)} &times; Earth)<br>`+
+ `Length of day: ${fmtN(f.day,"hours",1)}${f.day>48?" ("+(f.day/24).toFixed(1)+" Earth days)":""}<br>Year: ${fmtN(f.yr,"Earth days",1)}${f.yr>700?" ("+(f.yr/365.25).toFixed(1)+" years)":""}<br>`+
+ `Mean temperature: ${f.T} &deg;C<br>Moons: ${f.moons}<br>Atmosphere: ${f.atm}<br>Water: ${f.water}<br>${f.life?"<b>Life:</b> "+f.life+"<br>":"Life: none known<br>"}`+
+ `Distance from the Sun today (14 Oct 2026): ${au.toFixed(2)} AU<span class='q' data-tip='AU = astronomical unit, the average Earth-Sun distance, 149.6 million km.'>?</span> = ${(au*8.317).toFixed(au<2?1:0)} light-minutes</small><br>`+
+ `<small style="color:#778">Source: ${f.src||"NASA Planetary Fact Sheet (NSSDCA, 2025)"}; position: JPL Horizons.</small><br><button onclick="this.parentNode.style.display='none'">close</button>`;};
+SS.star=function(i){const h=window.EXO[i];const v=new THREE.Vector3(SS.hp[3*i],SS.hp[3*i+1],SS.hp[3*i+2]);const ly=h.d*3.26156;
+ if(MEAS)addWP({n:h.h,v:v.clone(),t:v.clone(),sc:"S"});SS.sv=v;SS.sel.textContent="\u25CE "+h.h;DIRTY=2;
+ const I=$("info");I.style.display="block";
+ I.innerHTML=`<b>${h.h}</b><br><small>Star${h.sp?" (type "+h.sp+")":""} &middot; ${h.d.toFixed(1)} pc = ${ly.toLocaleString(undefined,{maximumFractionDigits:1})} light-years<span class='q' data-tip='pc = parsec = 3.26 light-years.'>?</span> &middot; RA ${h.ra.toFixed(3)}&deg;, Dec ${h.dec.toFixed(3)}&deg;<br>Its light left about ${ly.toFixed(0)} years ago.</small><br>`+
+ h.p.map(p=>`<div style="margin-top:5px"><b>${p[0]}</b><br><small>Radius: ${fmtN(p[1],"Earth radii")} &middot; Mass: ${fmtN(p[2],"Earth masses")}<br>Orbit: ${fmtN(p[3],"days",p[3]>100?0:2)} &middot; Equilibrium temp: ${p[4]==null?"unknown":fmtN(p[4],"K",0)+" ("+(p[4]-273).toFixed(0)+" &deg;C)"}<br>Discovered ${p[5]||"unknown"} by ${p[6]||"unknown"}</small></div>`).join("")+
+ `<small style="color:#778">Source: NASA Exoplanet Archive, Planetary Systems Composite Parameters (pscomppars).</small><br><button onclick="this.parentNode.style.display='none'">close</button>`;
+ if(!MEAS)flyToVec(v,Math.max(0.3,h.d*0.12));};
+SS.tap=function(x,y,rad){const n=SS.bod.length,a=new Float32Array(n*3);SS.bod.forEach((b,i)=>a.set([b.v.x,b.v.y,b.v.z],3*i));
+ const showP=camera.position.length()<4;const bi=showP?screenPick(a,n,x,y,Math.min(rad,14)):-1,bd=screenPick.d2;
+ const si=screenPick(SS.hp,window.EXO.length,x,y,rad),sd=screenPick.d2;if(si>=0&&(bi<0||sd<bd))return SS.star(si);if(bi>=0)SS.info(SS.bod[bi]);};
+function loadScript(src,cb){const s=document.createElement("script");s.src=src;s.onload=cb;s.onerror=()=>{$("load").textContent="Could not load "+src;};document.body.appendChild(s);}
+function enterMW(cb){if(MODE==="S")return cb&&cb();$("load").style.display="flex";$("load").textContent="Loading the Solar System and 6,400 exoplanets...";
+ const go=()=>{buildSS();$("load").style.display="none";saveU={p:camera.position.clone(),t:controls.target.clone()};anim=null;MODE="S";document.body.classList.add("ss");$("info").style.display="none";
+  if(routeLine)routeLine.parent&&routeLine.parent.remove(routeLine);controls.minDistance=0.01;controls.maxDistance=12000;controls.target.set(0,0,0);camera.position.set(0.4,0.6,1.2).multiplyScalar(40);
+  glide(_e.set(0,0,0),1.4,new THREE.Vector3(0.4,0.6,1.2),1800);UIR=null;DIRTY=2;drawRoute();cb&&cb();};
+ if(window.SOLAR&&window.EXO)go();else loadScript("solar.js",()=>loadScript("exoplanets.js",go));}
+function exitMW(cb){if(MODE!=="S")return cb&&cb();MODE="U";document.body.classList.remove("ss");$("info").style.display="none";if(routeLine)routeLine.parent&&routeLine.parent.remove(routeLine);
+ controls.minDistance=0.002;controls.maxDistance=20000;camera.position.set(0.01,0.008,0.012);controls.target.set(0,0,0);const t=saveU?saveU.t:_e.set(0,0,0);glide(t,saveU?saveU.p.distanceTo(saveU.t):60,saveU?saveU.p.clone().sub(saveU.t):HOMEDIR,1600);UIR=null;DIRTY=2;drawRoute();cb&&cb();}
+window.enterMW=enterMW;window.exitMW=exitMW;
+$("sMW").onclick=$("mwp").onclick=()=>enterMW();$("mwback").onclick=()=>exitMW();$("sMeas").onclick=$("measp").onclick=()=>setMeas(!MEAS);
+// MW label / index "Milky Way" info -> enter button; measure via label clicks
+labels.forEach(l=>{const o=l.el.onclick;l.el.onclick=ev=>{o&&o(ev);if(l.id==="mw")$("info").insertAdjacentHTML("beforeend","<br><button class='big' onclick='enterMW()'>&#127756; Enter the Milky Way</button>");if(MEAS)addWP({n:l.name,v:l.v.clone(),sc:"U"});};});
+{const so=showInfo;showInfo=function(o){so(o);if(o.d===0)$("info").insertAdjacentHTML("beforeend","<br><button onclick='enterMW()'>&#127756; Enter the Milky Way</button>");if(MEAS)addWP({n:o.n,v:o.v.clone(),sc:"U"});};}
+// prompt when zooming very close to the Milky Way
+let mwPrompted=false;setInterval(()=>{if(MODE!=="U")return;const c=camera.position.length();if(c<0.03&&controls.target.length()<0.05&&!mwPrompted){mwPrompted=true;const t=$("toast");t.innerHTML="You're at the Milky Way. <u style='cursor:pointer'>&#127756; Enter the Milky Way</u> to see the Solar System and exoplanets.";t.style.display="block";t.onclick=()=>{t.style.display="none";enterMW();};setTimeout(()=>t.style.display="none",8000);}if(c>0.2)mwPrompted=false;},500);
+
+if(innerWidth<=700){$('sAdv').innerHTML='&#9881;';$('sAdv').setAttribute('aria-label','Advanced options');}
+
 // ---- v1.4 Simple / Advanced mode
 function setMode(adv,user){document.body.classList.toggle("simple",!adv);LS.set("umap_mode",adv?"adv":"simple");if(adv&&user)setPanel(true);UIR=null;DIRTY=2;}
 $("sAdv").onclick=()=>setMode(true,1);$("advoff").onclick=()=>setMode(false,1);
