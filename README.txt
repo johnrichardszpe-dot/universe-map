@@ -11,3 +11,7 @@ Galaxy name index (v1.3, assets/galaxy_index.js, 4,326 entries):
 - SIMBAD astronomical database (CDS, Strasbourg; Wenger et al. 2000, A&AS 143, 9), queried October 2026 via TAP: common names, Messier and bright (B<13) NGC/IC galaxies, Abell and named clusters and groups, and published distance measurements (median of non-redshift distances, used when cz < 3000 km/s).
 - Beyond that, distances come from redshift (Planck18 comoving). Several superclusters, walls and voids use approximate literature positions (marked "approx.").
 - Built by tools/build_index.py. Positions use the same conversion as the map; checked: Virgo, Coma, Perseus, Shapley and the Great Walls match the existing labels to within 0.01 Mpc.
+
+
+BETA WORKFLOW
+All changes are published first at https://johnrichardszpe-dot.github.io/universe-map/beta/ (folder beta/, shares ../assets/). The stable map at the site root is only updated after the owner approves the beta. See CHANGELOG.md for the promotion steps.
