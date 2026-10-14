@@ -15,3 +15,6 @@ Galaxy name index (v1.3, assets/galaxy_index.js, 4,326 entries):
 
 BETA WORKFLOW
 All changes are published first at https://johnrichardszpe-dot.github.io/universe-map/beta/ (folder beta/, shares ../assets/). The stable map at the site root is only updated after the owner approves the beta. See CHANGELOG.md for the promotion steps.
+
+v1.5-beta MILKY WAY VIEW SOURCES
+NASA Planetary Fact Sheet (nssdc.gsfc.nasa.gov/planetary/factsheet/); JPL Horizons (ssd.jpl.nasa.gov/horizons) planet positions for 2026-10-14; Ceres: NASA Dawn / JPL Horizons; Mora et al. 2011 PLoS Biology 9(8): e1001127 (8.7 million species); NASA Exoplanet Archive pscomppars (exoplanetarchive.ipac.caltech.edu), 6,445 planets / 6,417 with distance / 4,814 hosts, downloaded 2026-10-14. This research has made use of the NASA Exoplanet Archive, operated by Caltech under contract with NASA under the Exoplanet Exploration Program.
