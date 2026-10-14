@@ -8,7 +8,9 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
-## v1.4-beta - 14 Oct 2026 (BETA only, not yet stable)
+## v1.4 - 14 Oct 2026
+Promoted from v1.4-beta after owner approval (beta tested live, desktop + phone, zero JS errors).
+
 - Simple mode (default): clean screen with Fly to, Find, zoom +/-, Home, help, a big Names on/off button and a Time-travel slider. "Advanced" reveals the full panel (colours, surveys, lookback range, 724k points, dot size, filament/predicted/conceptual layers). Choice remembered.
 - Home glides smoothly (ease in/out, 1.5 s) back to the default Milky Way-centred view; zoom buttons, Fly-to and search also glide; touching the map cancels a glide.
 - Smoothness: render on demand (only when the camera or settings change), label decluttering throttled to every 120 ms while moving (cheap re-positioning in between), cached UI rectangles (no per-frame layout reads), scale bar only updates the DOM when it changes, no per-frame vector allocations, pixel ratio capped at 1.5 on phones, time sweep animated per-frame instead of 120 ms steps.

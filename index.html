@@ -45,25 +45,36 @@ input[type=range]{width:100%}
 @media (max-width:700px){#flyto{max-width:46vw} #ver{bottom:auto;top:56px} #findb{font-size:14px} .lab{font-size:10.5px;padding:0 2px}}
 #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:#000;z-index:20}
 #help{right:10px;bottom:14px;font-size:12px;color:#aab}
+
+#beta{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:9;background:#b8860b;color:#000;font-weight:700;font-size:12px;padding:3px 10px;border-radius:12px;white-space:nowrap}
+#beta a{color:#001a66;margin-left:6px}
+#simple{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);z-index:6;display:none;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;width:min(640px,94vw);box-sizing:border-box}
+body.simple #simple{display:flex} body.simple #ui,body.simple #tog,body.simple #help,body.simple #legendS{display:none!important}
+#simple .big{font-size:15px;padding:9px 14px;border-radius:22px;background:rgba(20,24,45,.95)} #simple .big.on{background:#2a4f9a;border-color:#7af}
+#simple .tt{flex:1 1 220px;min-width:200px;font-size:13px} #simple .tt input{width:100%}
+body.simple #scale{bottom:4px;padding:3px 8px;font-size:12px}
+#advsw{font-size:13px} #nav button{transition:background .2s}
+@media (max-width:700px){#simple{bottom:6px;gap:6px;padding:8px} #simple .big{font-size:14px;padding:7px 11px} #simple .tt{order:3;flex-basis:100%} #beta{top:56px;left:auto;right:8px;transform:none;font-size:11px} body.simple #scale{bottom:auto;top:88px;left:auto;right:8px;transform:none} body.simple #scale small{display:none} body:not(.collapsed):not(.simple) #beta{display:none}}
 </style></head><body>
 <div id="load">Loading galaxies...</div>
 <canvas id="c"></canvas>
+<div id="simple" class="panel"><button class="big on" id="sNames">&#127991; Show names</button><div class="tt">&#9203; Time travel: <span id="sTv"></span><input type="range" id="sT" min="1" max="100" value="100"></div><button class="big" id="sAdv" title="Show all options: layers, surveys, colours, point counts">&#9881; Advanced</button></div>
 <button id="tog" title="Show / hide controls" aria-label="toggle controls">&#10005;</button>
 <select id="flyto" aria-label="Fly to"><option value="">&#9992; Fly to...</option></select>
 <button id="findb" title="Search 4,000+ named galaxies, clusters and superclusters">&#128269; Find</button>
 <div id="gidx"><div style="display:flex;gap:6px"><input id="gq" type="search" placeholder="Type a name: Andromeda, M87, Coma, NGC 253..." autocomplete="off"><button id="gclose" aria-label="close">&#10005;</button></div>
 <div id="gcount" class="gn"></div><div id="gres"></div><div id="gbrowse"></div></div>
-<div id="ver" title="What's new">v1.3</div><div id="toast"></div>
+<div id="ver" title="What's new">v1.4</div><div id="toast"></div>
 <div id="news" class="panel"></div>
-<div id="nav"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="rst" title="Reset view">&#8962;</button><button id="hlp" title="How to use">?</button></div>
+<div id="nav"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="rst" title="Home: glide back to the Milky Way">&#8962;</button><button id="hlp" title="How to use">?</button></div>
 <div id="tip"></div>
 <div id="helpov"><div class="box"><h3 style="margin-top:0">How to explore</h3><ul>
 <li><b>Rotate:</b> drag with mouse or one finger</li><li><b>Zoom:</b> scroll wheel, pinch, or the + / &minus; buttons</li>
 <li><b>Move sideways:</b> right-drag or two-finger drag</li><li><b>Fly to</b> a famous cluster with the menu at top left, or tap <b>&#128269; Find</b> to search 4,000+ named galaxies</li>
-<li><b>Controls</b> (colours, time, layers): the &#9776; button at top right</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
-<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.3</button></div></div>
+<li><b>Simple mode</b> (default): names on/off and a time-travel slider at the bottom. Tap <b>&#9881; Advanced</b> for all options (colours, surveys, layers, 724k points)</li><li><b>&#8962; Home</b> glides back to the Milky Way</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
+<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.4</button></div></div>
 <div id="ui" class="panel">
-<h1>Interactive Universe Map</h1>
+<h1>Interactive Universe Map</h1><button id="advoff" title="Back to the simple, clean screen">&#8592; Simple mode</button><br>
 <small>Units: Mpc<span class="q" data-tip="Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).">?</span> &middot; redshift z<span class="q" data-tip="Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).">?</span> &middot; comoving distance<span class="q" data-tip="Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.">?</span></small><br><small>Each dot is a <b>real galaxy</b> whose distance was measured from its redshift. You are at the white Milky Way marker.</small>
 <hr style="border-color:#334">
 <b>Colour by</b><br>
@@ -72,8 +83,8 @@ input[type=range]{width:100%}
 <div id="legend"></div>
 <hr style="border-color:#334">
 <b>Lookback time shown</b><span class="q" data-tip="Lookback time: how long the light took to reach us. A galaxy with lookback time 5 billion years is seen as it was 5 billion years ago.">?</span>: <span id="tval"></span><br>
-<small>from</small><input type="range" id="tmin" min="0" max="100" value="0" step="1">
-<small>to</small><input type="range" id="tmax" min="0" max="100" value="100" step="1">
+<small>from</small><input type="range" id="tmin" min="0" max="100" value="0" step="any">
+<small>to</small><input type="range" id="tmax" min="0" max="100" value="100" step="any">
 <button id="play">&#9654; time sweep</button>
 <hr style="border-color:#334">
 <b>Surveys</b><span class="q" data-tip="A redshift survey measures the spectrum of each galaxy to get its redshift (distance). Each survey covers a different part of the sky and depth.">?</span> <span class="real">(REAL data)</span>
@@ -87,7 +98,7 @@ input[type=range]{width:100%}
 <label class="conc"><input type="checkbox" id="Llat"> CONCEPTUAL lattice: art, not physics<span class="q" data-tip="An artistic regular grid, included only to illustrate an idea. Real galaxies do not sit on a grid.">?</span></label>
 <label><input type="checkbox" id="Llab" checked> Named structures</label>
 <hr style="border-color:#334">
-<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.3)</button>
+<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.4)</button>
 </div>
 <div id="info" class="panel"></div>
 <div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><span class="q" data-tip="The bar's length on screen equals this distance at the centre of the view. 1 Mpc = 3.26 million light-years.">?</span><br><small>(at centre of view)</small></div>
@@ -138,9 +149,9 @@ function LB2D(t){for(let i=1;i<LBT.length;i++)if(t<=LBT[i][0]){const a=LBT[i-1],
 const SURV=[["2MRS (whole sky, nearby)","#7fd4ff"],["SDSS DR17","#ffffff"],["DESI DR1 BGS","#9dff7a"],["DESI DR1 LRG","#ffb347"],["DESI DR1 ELG","#ff6b6b"]];
 const Q=7; // positions stored in 1/7 Mpc steps
 const canvas=document.getElementById("c");
-const renderer=new THREE.WebGLRenderer({canvas,antialias:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const renderer=new THREE.WebGLRenderer({canvas,antialias:false}); const PHONE=matchMedia('(pointer:coarse)').matches||Math.min(screen.width,screen.height)<700;renderer.setPixelRatio(Math.min(devicePixelRatio,PHONE?1.5:2));
 const scene=new THREE.Scene(); const camera=new THREE.PerspectiveCamera(55,1,0.1,40000);
-const controls=new THREE.OrbitControls(camera,canvas); controls.enableDamping=true; controls.dampingFactor=0.08; controls.zoomSpeed=1.2;controls.minDistance=0.002;
+const controls=new THREE.OrbitControls(camera,canvas); controls.enableDamping=true; controls.dampingFactor=0.1;controls.rotateSpeed=0.8;controls.panSpeed=0.8;controls.maxDistance=20000; controls.zoomSpeed=1.2;controls.minDistance=0.002;
 // equatorial (x,y,z) -> three (x, z, -y): celestial north is up
 function dec(b64){const s=atob(b64),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u.buffer;}
 function makeGeom(G){
@@ -177,8 +188,8 @@ function legend(){const m=U.mode.value;$("legend").innerHTML=m==0?SURV.map(s=>`<
 document.querySelectorAll("[name=col]").forEach(r=>r.onchange=()=>{U.mode.value=+r.value;legend();});legend();
 function tupd(){let a=+$("tmin").value/10,b=+$("tmax").value/10;if(a>b){[a,b]=[b,a];}U.tmin.value=a;U.tmax.value=b+0.02;$("tval").textContent=`${a.toFixed(1)} to ${b.toFixed(1)} billion years ago (distance up to ~${(b<0.1?0:Math.round(LB2D(b))).toLocaleString()} Mpc = ${(LB2D(b)*3.2616/1000).toFixed(1)} billion light-years)`;}
 $("tmin").oninput=$("tmax").oninput=tupd;tupd();
-let playing=null;$("play").onclick=()=>{if(playing){clearInterval(playing);playing=null;$("play").innerHTML="&#9654; time sweep";return;}
- let t=0;$("play").innerHTML="&#9632; stop";playing=setInterval(()=>{t+=1;if(t>97)t=0;$("tmin").value=Math.max(0,t-8);$("tmax").value=t+3;tupd();},120);};
+let playing=null;$("play").onclick=()=>{if(playing){playing=null;$("play").innerHTML="&#9654; time sweep";return;}
+ let T0=performance.now();$("play").innerHTML="&#9632; stop";playing=1;(function sw(now){if(!playing)return;const t=((now-T0)/1000*8)%97;$("tmin").value=Math.max(0,t-8);$("tmax").value=t+3;tupd();DIRTY=2;requestAnimationFrame(sw);})(T0);};
 $("psize").oninput=()=>U.psize.value=+$("psize").value;
 
 $("more").onchange=()=>{if($("more").checked){if(morePts){morePts.visible=true;return;}$("load").style.display="flex";$("load").textContent="Loading ~524,000 more galaxies...";
@@ -186,8 +197,17 @@ $("more").onchange=()=>{if($("more").checked){if(morePts){morePts.visible=true;r
   s.onerror=()=>{$("load").textContent="Could not load assets/data_more.js";};document.body.appendChild(s);}else if(morePts)morePts.visible=false;};
 $("Lfil").onchange=e=>fil.visible=e.target.checked;$("Lpred").onchange=e=>pred.visible=e.target.checked;$("Llat").onchange=e=>lat.visible=e.target.checked;
 $("aboutb").onclick=()=>$("about").style.display="block";
-function view(d){camera.position.set(d*0.55,d*0.45,d*0.7);controls.target.set(0,0,0);controls.update();}
-$("home").onclick=()=>view(5200);$("local").onclick=()=>view(260);
+const HOMEDIR=new THREE.Vector3(0.55,0.45,0.7).normalize();
+function view(d){camera.position.copy(HOMEDIR).multiplyScalar(d*1.0524);controls.target.set(0,0,0);controls.update();}
+let anim=null;const _a=new THREE.Vector3(),_b=new THREE.Vector3(),_c=new THREE.Vector3(),_d=new THREE.Vector3(),_e=new THREE.Vector3();
+const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+// glide camera to target tv at distance d along direction dir (default: keep current viewing direction)
+function glide(tv,d,dir,ms){const t0=controls.target.clone(),p0=camera.position.clone(),d0=Math.max(1e-6,p0.distanceTo(t0)),u0=p0.clone().sub(t0).normalize(),t1=tv.clone(),u1=(dir||u0).clone().normalize();
+ const T0=performance.now();ms=ms||1500;anim={step(now){const k=Math.min(1,(now-T0)/ms),e=ease(k);controls.target.lerpVectors(t0,t1,e);
+  const lg=Math.exp(Math.log(d0)*(1-e)+Math.log(d)*e);_a.copy(u0).lerp(u1,e);if(_a.lengthSq()<1e-8)_a.copy(u1);_a.normalize();camera.position.copy(controls.target).addScaledVector(_a,lg);if(k>=1)anim=null;}};}
+function goHome(){glide(_e.set(0,0,0),5200*1.0524,HOMEDIR,1500);}
+window.goHome=goHome;
+$("home").onclick=goHome;$("local").onclick=()=>glide(_e.set(0,0,0),260*1.0524,HOMEDIR,1500);
 // labels
 const labels=[{name:"Milky Way (you are here)",x:[0,0,0],info:"Our home galaxy. Every other dot is seen as it was when its light left it: the further away, the further back in time.",id:"mw"}].concat(window.STRUCT);
 labels.forEach(l=>{const e=document.createElement("div");e.className="lab";if(l.id)e.id=l.id;e.textContent=l.name;l.el=e;$("labels").appendChild(e);
@@ -197,31 +217,45 @@ labels.forEach(l=>{const e=document.createElement("div");e.className="lab";if(l.
  I.innerHTML=`<b>${l.name}</b><br>${l.info}<br>`+(l.d?`<small>Sky position: RA ${l.ra}&deg;, Dec ${l.dec}&deg;<span class='q' data-tip='Right ascension and declination: longitude and latitude on the sky.'>?</span><br>Redshift z = ${l.z}<span class='q' data-tip='Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).'>?</span><br>Distance &asymp; ${l.d.toFixed(0)} Mpc<span class='q' data-tip='Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).'>?</span> = ${(l.ly/1e6).toFixed(0)} million light-years (comoving<span class='q' data-tip='Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.'>?</span>)<br>Light left it ${(l.lt*1000).toFixed(0)} million years ago<span class='q' data-tip='Lookback time: how long the light took to reach us. A galaxy with lookback time 5 billion years is seen as it was 5 billion years ago.'>?</span></small><br><button onclick='flyTo("${l.name}")'>&#9992; fly here</button> `:"")+`<button onclick="this.parentNode.style.display='none'">close</button>`;};});
 $("Llab").onchange=e=>{$("labels").style.display=e.target.checked?"":"none";};
 // keyboard fly
-const keys={};addEventListener("keydown",e=>{if(e.target.tagName!="INPUT")keys[e.key.toLowerCase()]=1;});addEventListener("keyup",e=>keys[e.key.toLowerCase()]=0);
-function fly(){const d=camera.position.distanceTo(controls.target)*0.015,f=new THREE.Vector3();camera.getWorldDirection(f);const r=new THREE.Vector3().crossVectors(f,camera.up).normalize();const m=new THREE.Vector3();
+const keys={};addEventListener("keydown",e=>{if(e.target.tagName!="INPUT"&&!e.ctrlKey&&!e.metaKey)keys[e.key.toLowerCase()]=1;});addEventListener("keyup",e=>keys[e.key.toLowerCase()]=0);
+const _f=new THREE.Vector3(),_r=new THREE.Vector3(),_m=new THREE.Vector3();addEventListener('blur',()=>{for(const k in keys)keys[k]=0;});
+function fly(){if(!(keys.w||keys.s||keys.a||keys.d||keys.q||keys.e))return;anim=null;const d=camera.position.distanceTo(controls.target)*0.015,f=_f;camera.getWorldDirection(f);const r=_r.crossVectors(f,camera.up).normalize();const m=_m.set(0,0,0);
  if(keys.w)m.add(f);if(keys.s)m.sub(f);if(keys.d)m.add(r);if(keys.a)m.sub(r);if(keys.e)m.y+=1;if(keys.q)m.y-=1;if(m.lengthSq()){m.normalize().multiplyScalar(d);camera.position.add(m);controls.target.add(m);}}
 // scale bar
-function scalebar(){const d=camera.position.distanceTo(controls.target),H=innerHeight,wh=2*d*Math.tan(camera.fov*Math.PI/360),ppm=H/wh;
+const SB={w:'',L:0};function scalebar(){const d=camera.position.distanceTo(controls.target),H=innerHeight,wh=2*d*Math.tan(camera.fov*Math.PI/360),ppm=H/wh;
  const want=160/ppm,p=Math.pow(10,Math.floor(Math.log10(want)));let L=[1,2,5,10].map(k=>k*p).filter(v=>v<=want).pop()||p;
- $("bar").style.width=(L*ppm).toFixed(0)+"px";const ly=L*3.2616;$("stxt").textContent=(L<0.5?`${+(L*1000).toPrecision(3)} kpc`:`${L>=1?L:+L.toPrecision(2)} Mpc`)+"  =  "+(ly<1?`${+(ly*1000).toPrecision(3)} thousand`:ly>=1000?`${(ly/1000).toFixed(ly>=10000?0:1)} billion`:`${ly.toFixed(ly<10?1:0)} million`)+" light-years";}
+ const bw=(L*ppm).toFixed(0)+"px";if(bw===SB.w&&L===SB.L)return;SB.w=bw;SB.L=L;$("bar").style.width=bw;const ly=L*3.2616;$("stxt").textContent=(L<0.5?`${+(L*1000).toPrecision(3)} kpc`:`${L>=1?L:+L.toPrecision(2)} Mpc`)+"  =  "+(ly<1?`${+(ly*1000).toPrecision(3)} thousand`:ly>=1000?`${(ly/1000).toFixed(ly>=10000?0:1)} billion`:`${ly.toFixed(ly<10?1:0)} million`)+" light-years";}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
 addEventListener("resize",resize);resize();view(5200);
 const tmp=new THREE.Vector3();
-function loop(){requestAnimationFrame(loop);fly();controls.update();{const cd=camera.position.distanceTo(controls.target),cm=camera.position.length();mwMesh.scale.setScalar(Math.min(1,Math.max(0.0004,Math.min(cd,cm)*0.004)));const nr=Math.max(0.00005,Math.min(0.1,cd*0.01));if(Math.abs(camera.near-nr)>nr*0.1){camera.near=nr;camera.updateProjectionMatrix();}}renderer.render(scene,camera);scalebar();
- placeLabels();}
-// ---- label declutter: priority order = array order; try several offsets (with leader line), else hide the text (dot stays)
+let DIRTY=2,lastLab=0,camKey="",UIR=null;const _pm=new THREE.Matrix4();window.markDirty=()=>{DIRTY=2;};
+['input','change','click','keydown','resize'].forEach(ev=>addEventListener(ev,()=>{DIRTY=2;UIR=null;},true));
+window.FR={n:0,r:0};
+function loop(now){requestAnimationFrame(loop);now=now||performance.now();FR.n++;if(anim)anim.step(now);fly();controls.update();
+ const cd=camera.position.distanceTo(controls.target),cm=camera.position.length();
+ const key=camera.position.x.toFixed(5)+camera.position.y.toFixed(5)+camera.position.z.toFixed(5)+camera.quaternion.x.toFixed(6)+camera.quaternion.y.toFixed(6)+camera.quaternion.z.toFixed(6);
+ const moved=key!==camKey;camKey=key;if(!moved&&!DIRTY)return; if(DIRTY)DIRTY--;
+ mwMesh.scale.setScalar(Math.min(1,Math.max(0.0004,Math.min(cd,cm)*0.004)));const nr=Math.max(0.00005,Math.min(0.1,cd*0.01));if(Math.abs(camera.near-nr)>nr*0.1){camera.near=nr;camera.updateProjectionMatrix();}
+ renderer.render(scene,camera);FR.r++;scalebar();
+ // declutter: full collision pass at most every 120 ms while moving; otherwise just re-position placed labels
+ if(!moved||now-lastLab>120){lastLab=now;placeLabels(true);}else placeLabels(false);}
 function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
-function placeLabels(){const placed=[],W=innerWidth,H=innerHeight;
- for(const id of ["nav","flyto","tog","scale","help","findb","ver","toast"]){const r=$(id).getBoundingClientRect();if(r.width)placed.push({x:r.left-3,y:r.top-3,w:r.width+6,h:r.height+6});}
+const LBOX=["nav","flyto","tog","scale","help","findb","ver","toast","simple","beta"];
+function placeLabels(full){const W=innerWidth,H=innerHeight;
+ if(!full){for(const l of labels){if(!l.vis)continue;tmp.copy(l.v).project(camera);if(!(tmp.z<1&&Math.abs(tmp.x)<1.02&&Math.abs(tmp.y)<1.02))continue;const px=(tmp.x+1)/2*W,py=(1-tmp.y)/2*H;
+   l.dot.style.transform=`translate(${px|0}px,${py|0}px)`;l.el.style.transform=`translate(${(px+l.ox)|0}px,${(py+l.oy)|0}px)`;if(l.far){l.ln.setAttribute("x1",px|0);l.ln.setAttribute("y1",py|0);l.ln.setAttribute("x2",(l.ox<0?px+l.ox+l.w:px+l.ox)|0);l.ln.setAttribute("y2",(py+l.oy+l.h/2)|0);}}return;}
+ if(!UIR){UIR=[];for(const id of LBOX){const el=$(id);if(!el)continue;const r=el.getBoundingClientRect();if(r.width)UIR.push({x:r.left-3,y:r.top-3,w:r.width+6,h:r.height+6});}}
+ const placed=UIR.slice();if($("labels").style.display==="none")return;
  for(const l of labels){tmp.copy(l.v).project(camera);const on=tmp.z<1&&Math.abs(tmp.x)<1.02&&Math.abs(tmp.y)<1.02;
-  if(!on){l.el.style.visibility=l.dot.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");continue;}
+  if(!on){if(l.vis!==0){l.el.style.visibility=l.dot.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");}l.vis=0;continue;}
   const px=(tmp.x+1)/2*W,py=(1-tmp.y)/2*H;l.dot.style.visibility="visible";l.dot.style.transform=`translate(${px}px,${py}px)`;
   if(!l.w){l.w=l.el.offsetWidth;l.h=l.el.offsetHeight;}const w=l.w,h=l.h,g=Math.round(h*1.15);
   const cands=[[8,-h/2],[-w-8,-h/2],[8,-h-6],[8,6],[-w-8,-h-6],[-w-8,6],[14,-h/2-g*2],[14,-h/2+g*2],[-w-14,-h/2-g*2],[-w-14,-h/2+g*2],[14,-h/2-g*3],[14,-h/2+g*3]];
   let best=null;for(const c of cands){const r={x:px+c[0],y:py+c[1],w:w,h:h};if(r.x<2||r.y<2||r.x+w>W-2||r.y+h>H-2)continue;if(!placed.some(p=>hit(r,p))){best=r;break;}}
-  if(!best){l.el.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");placed.push({x:px-4,y:py-4,w:8,h:8});continue;}
+  if(!best){l.el.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");l.vis=0;placed.push({x:px-4,y:py-4,w:8,h:8});continue;}
+  l.vis=1;l.ox=best.x-px;l.oy=best.y-py;
   placed.push(best,{x:px-4,y:py-4,w:8,h:8});l.el.style.visibility="visible";l.el.style.transform=`translate(${best.x}px,${best.y}px)`;
-  const far=Math.abs(best.y+h/2-py)>h*0.6;l.ln.setAttribute("visibility",far?"visible":"hidden");
+  const far=Math.abs(best.y+h/2-py)>h*0.6;l.far=far;l.ln.setAttribute("visibility",far?"visible":"hidden");
   if(far){const ex=best.x<px?best.x+w:best.x,ey=best.y+h/2;l.ln.setAttribute("x1",px);l.ln.setAttribute("y1",py);l.ln.setAttribute("x2",ex);l.ln.setAttribute("y2",ey);}}}
 
 // ---- UX: panel toggle, nav buttons, fly-to, tooltips, help overlay
@@ -229,15 +263,10 @@ const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:
 function setPanel(open){document.body.classList.toggle("collapsed",!open);$("tog").innerHTML=open?"&#10005;":"&#9776;";LS.set("umap_panel",open?"1":"0");}
 const saved=LS.get("umap_panel");setPanel(saved?saved==="1":innerWidth>700);
 $("tog").onclick=()=>setPanel(document.body.classList.contains("collapsed"));
-function zoomBy(f){const off=camera.position.clone().sub(controls.target).multiplyScalar(f);if(off.length()<0.5||off.length()>20000)return;camera.position.copy(controls.target).add(off);}
-$("zin").onclick=()=>zoomBy(0.6);$("zout").onclick=()=>zoomBy(1/0.6);$("rst").onclick=()=>view(5200);
-let anim=null;
+function zoomBy(f){const cur=camera.position.distanceTo(controls.target);const d=Math.min(controls.maxDistance,Math.max(controls.minDistance,(anim&&anim.zd||cur)*f));glide(controls.target,d,null,450);anim.zd=d;}
+$("zin").onclick=()=>zoomBy(0.6);$("zout").onclick=()=>zoomBy(1/0.6);$("rst").onclick=goHome;
 window.flyTo=function(name){const l=labels.find(x=>x.name===name);if(!l)return;const d=name.indexOf("Wall")>=0||name.indexOf("Shapley")>=0?160:(l.id?260:45);flyToVec(l.v,d);};
-function flyToVec(tv,d){
- const t0=controls.target.clone(),p0=camera.position.clone(),t1=tv.clone(),dir=p0.clone().sub(t0).normalize(),p1=t1.clone().add(dir.multiplyScalar(d));const T0=performance.now();
- if(anim)cancelAnimationFrame(anim);(function step(){const k=Math.min(1,(performance.now()-T0)/1600);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;controls.target.lerpVectors(t0,t1,e);
- const lg=Math.exp(Math.log(p0.distanceTo(t0))*(1-e)+Math.log(d)*e);const dd=p0.clone().sub(t0).normalize().lerp(dir,e).normalize();camera.position.copy(controls.target).add(dd.multiplyScalar(lg));
- if(k<1)anim=requestAnimationFrame(step);})();}
+function flyToVec(tv,d){glide(tv,d,null,1600);}
 labels.forEach(l=>{const o=document.createElement("option");o.value=l.name;o.textContent=l.name+(l.d?` (${l.d.toFixed(0)} Mpc / ${(l.ly/1e6).toFixed(0)} Mly)`:"");$("flyto").appendChild(o);});
 $("flyto").onchange=e=>{if(e.target.value){flyTo(e.target.value);const l=labels.find(x=>x.name===e.target.value);l.el.click();}e.target.value="";};
 const tip=$("tip");document.addEventListener("click",e=>{const q=e.target.closest(".q");if(q){e.preventDefault();e.stopPropagation();tip.innerHTML=q.dataset.tip;tip.style.display="block";
@@ -246,6 +275,7 @@ document.addEventListener("mouseover",e=>{const q=e.target.closest&&e.target.clo
 function showHelp(){$("helpov").style.display="flex";}$("helpok").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");};
 $("hlp").onclick=$("helpb").onclick=showHelp;if(!LS.get("umap_help"))showHelp();
 controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};
+controls.addEventListener('start',()=>{anim=null;});canvas.addEventListener('wheel',()=>{anim=null;},{passive:true});
 
 // ---- v1.3: galaxy name index (lazy-loaded), search + browse, selected marker
 const GROUPS=[["Local Group","Our own small family of about 80 galaxies within about 1.5 Mpc (5 million light-years). At full map scale they sit inside the Milky Way marker, so the map flies in very close."],
@@ -284,14 +314,26 @@ function pick(o){$("gidx").style.display="none";SEL.name=o.n;SEL.v.copy(o.v);SEL
  flyToVec(o.v,o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d);showInfo(o);}
 // ---- versioning: tag, What's new, one-time toast
 const NEWS=`<h2>What's new</h2>
+<h3>v1.4 &middot; 14 Oct 2026</h3><ul><li><b>Simple mode</b> is now the default: a clean screen with Find, Fly to, zoom, Home, help, a big <i>Names on/off</i> button and a <i>Time travel</i> slider. Tap <b>&#9881; Advanced</b> for every option (colours, surveys, layers, 724k points). Your choice is remembered.</li>
+<li><b>Home</b> now glides smoothly back to the Milky Way instead of jumping. Zoom buttons, Fly-to and search also glide; touching the map stops a glide straight away.</li>
+<li><b>Smoother</b>: the map only redraws when something changes, labels are rearranged less often while moving, and phones use a lighter pixel density.</li>
+<li>Fixes: zoom buttons stopped working very close in (Local Group); keys could get stuck after switching windows; time sweep was jerky.</li></ul>
 <h3>v1.3 &middot; 14 Oct 2026</h3><ul><li><b>Galaxy name index + search</b>: tap &#128269; Find to search 4,326 named galaxies, clusters, superclusters and voids (Andromeda, M87, Whirlpool, Centaurus A, Coma...). You can also browse by group. Pick one to fly there and see its distance in Mpc and light-years.</li><li>Very close Local Group galaxies (Magellanic Clouds, Andromeda...) get a close-up fly-in and their own marker.</li><li>A version tag and this "What's new" page.</li></ul>
 <h3>v1.2 &middot; 13 Oct 2026</h3><ul><li>Structure labels no longer pile up on phones: they spread out with leader lines, and less important ones hide until you zoom in.</li></ul>
 <h3>v1.1 &middot; 13 Oct 2026</h3><ul><li>Easier navigation: collapsible side panel, zoom/reset/help buttons, a "Fly to" menu, touch and pinch support, and a first-visit help screen.</li><li>Plain-English "?" explanations, with distances in both Mpc and light-years.</li><li>Lighter default of 100,000 galaxies for phones (all 724,000 optional).</li></ul>
 <h3>v1.0 &middot; 13 Oct 2026</h3><ul><li>First release: 724,000 real galaxies from 2MRS, SDSS DR17 and DESI DR1 in 3D, with a lookback-time (4D) slider and colouring, and optional filament, model and concept layers.</li></ul>
 <p><small>Going forward, monthly "living universe" data updates will bump the version number.</small></p><button onclick="document.getElementById('news').style.display='none'">Close</button>`;
-$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.3");};
+$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.4");};
 $("ver").onclick=$("newsb").onclick=openNews;$("helpnews").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");openNews();};
-if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.3"){const t=$("toast");t.innerHTML="New in v1.3: search 4,000+ named galaxies with &#128269; Find. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.3");},9000);}
+if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.4"){const t=$("toast");t.innerHTML="New in v1.4: smoother, simpler screen, Home glides back. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.4");},9000);}
 function placeFind(){const f=$("flyto").getBoundingClientRect();$("findb").style.left=(f.right+6)+"px";}placeFind();addEventListener("resize",placeFind);
-loop();$("load").style.display="none";window.MAP_READY=true;window.CAM=camera;window.CTL=controls;
+// ---- v1.4 Simple / Advanced mode
+function setMode(adv,user){document.body.classList.toggle("simple",!adv);LS.set("umap_mode",adv?"adv":"simple");if(adv&&user)setPanel(true);UIR=null;DIRTY=2;}
+$("sAdv").onclick=()=>setMode(true,1);$("advoff").onclick=()=>setMode(false,1);
+function syncNames(){const on=$("Llab").checked;$("sNames").classList.toggle("on",on);$("sNames").innerHTML=(on?"&#127991; Names: on":"&#127991; Names: off");}
+$("sNames").onclick=()=>{$("Llab").checked=!$("Llab").checked;$("Llab").dispatchEvent(new Event("change"));syncNames();};$("Llab").addEventListener("change",syncNames);syncNames();
+function sTupd(){const v=+$("sT").value;$("tmin").value=0;$("tmax").value=v;tupd();const b=v/10;$("sTv").textContent=v>=100?"everything (up to 10 billion years ago)":b<0.15?"just our neighbourhood":"up to "+b.toFixed(1)+" billion years ago";}
+$("sT").oninput=sTupd;$("tmax").addEventListener("input",()=>{$("sT").value=Math.max(1,+$("tmax").value);});sTupd();
+setMode(LS.get("umap_mode")==="adv");
+requestAnimationFrame(loop);$("load").style.display="none";window.MAP_READY=true;window.CAM=camera;window.CTL=controls;
 </script></body></html>
