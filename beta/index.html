@@ -63,7 +63,7 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 .slab{color:#ffe9a8}
 #route{left:64px;top:56px;width:310px;max-height:45vh;overflow:auto;display:none;z-index:8;font-size:13px} #route #wpl div{border-bottom:1px solid #223;padding:2px 0}
 #route select{max-width:140px;background:#223;color:#dde;border:1px solid #446}
-@media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:13px;padding:7px 9px}}
+@media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:12.5px;padding:6px 8px;white-space:nowrap} #simple{gap:5px;padding:6px}}
 </style></head><body>
 <div id="load">Loading galaxies...</div>
 <canvas id="c"></canvas>
@@ -352,7 +352,7 @@ const _pv=new THREE.Matrix4(),_q=new THREE.Vector3();
 // nearest visible point on screen (array of three-space coords), returns index or -1
 function screenPick(arr,n,x,y,rad,filt){_pv.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);const m=_pv.elements,W=innerWidth,H=innerHeight;let best=-1,bd=rad*rad;
  for(let i=0;i<n;i++){if(filt&&!filt(i))continue;const px=arr[3*i],py=arr[3*i+1],pz=arr[3*i+2];const w=m[3]*px+m[7]*py+m[11]*pz+m[15];if(w<=0)continue;
-  const sx=((m[0]*px+m[4]*py+m[8]*pz+m[12])/w+1)/2*W-x,sy=(1-(m[1]*px+m[5]*py+m[9]*pz+m[13])/w)/2*H-y;const d2=sx*sx+sy*sy;if(d2<bd){bd=d2;best=i;}}return best;}
+  const sx=((m[0]*px+m[4]*py+m[8]*pz+m[12])/w+1)/2*W-x,sy=(1-(m[1]*px+m[5]*py+m[9]*pz+m[13])/w)/2*H-y;const d2=sx*sx+sy*sy;if(d2<bd){bd=d2;best=i;}}screenPick.d2=bd;return best;}
 // ---- tap vs drag
 let pd=null,npt=0;
 canvas.addEventListener("pointerdown",e=>{npt++;pd=npt===1?{x:e.clientX,y:e.clientY,t:performance.now()}:null;});
@@ -445,8 +445,8 @@ SS.star=function(i){const h=window.EXO[i];const v=new THREE.Vector3(SS.hp[3*i],S
  `<small style="color:#778">Source: NASA Exoplanet Archive, Planetary Systems Composite Parameters (pscomppars).</small><br><button onclick="this.parentNode.style.display='none'">close</button>`;
  if(!MEAS)flyToVec(v,Math.max(0.3,h.d*0.12));};
 SS.tap=function(x,y,rad){const n=SS.bod.length,a=new Float32Array(n*3);SS.bod.forEach((b,i)=>a.set([b.v.x,b.v.y,b.v.z],3*i));
- const showP=camera.position.length()<4;const bi=showP?screenPick(a,n,x,y,rad+6):-1;if(bi>=0)return SS.info(SS.bod[bi]);
- const si=screenPick(SS.hp,window.EXO.length,x,y,rad);if(si>=0)SS.star(si);};
+ const showP=camera.position.length()<4;const bi=showP?screenPick(a,n,x,y,Math.min(rad,14)):-1,bd=screenPick.d2;
+ const si=screenPick(SS.hp,window.EXO.length,x,y,rad),sd=screenPick.d2;if(si>=0&&(bi<0||sd<bd))return SS.star(si);if(bi>=0)SS.info(SS.bod[bi]);};
 function loadScript(src,cb){const s=document.createElement("script");s.src=src;s.onload=cb;s.onerror=()=>{$("load").textContent="Could not load "+src;};document.body.appendChild(s);}
 function enterMW(cb){if(MODE==="S")return cb&&cb();$("load").style.display="flex";$("load").textContent="Loading the Solar System and 6,400 exoplanets...";
  const go=()=>{buildSS();$("load").style.display="none";saveU={p:camera.position.clone(),t:controls.target.clone()};anim=null;MODE="S";document.body.classList.add("ss");$("info").style.display="none";
@@ -462,6 +462,8 @@ labels.forEach(l=>{const o=l.el.onclick;l.el.onclick=ev=>{o&&o(ev);if(l.id==="mw
 {const so=showInfo;showInfo=function(o){so(o);if(o.d===0)$("info").insertAdjacentHTML("beforeend","<br><button onclick='enterMW()'>&#127756; Enter the Milky Way</button>");if(MEAS)addWP({n:o.n,v:o.v.clone(),sc:"U"});};}
 // prompt when zooming very close to the Milky Way
 let mwPrompted=false;setInterval(()=>{if(MODE!=="U")return;const c=camera.position.length();if(c<0.03&&controls.target.length()<0.05&&!mwPrompted){mwPrompted=true;const t=$("toast");t.innerHTML="You're at the Milky Way. <u style='cursor:pointer'>&#127756; Enter the Milky Way</u> to see the Solar System and exoplanets.";t.style.display="block";t.onclick=()=>{t.style.display="none";enterMW();};setTimeout(()=>t.style.display="none",8000);}if(c>0.2)mwPrompted=false;},500);
+
+if(innerWidth<=700){$('sAdv').innerHTML='&#9881;';$('sAdv').setAttribute('aria-label','Advanced options');}
 
 // ---- v1.4 Simple / Advanced mode
 function setMode(adv,user){document.body.classList.toggle("simple",!adv);LS.set("umap_mode",adv?"adv":"simple");if(adv&&user)setPanel(true);UIR=null;DIRTY=2;}

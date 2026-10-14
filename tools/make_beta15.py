@@ -15,7 +15,7 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 .slab{color:#ffe9a8}
 #route{left:64px;top:56px;width:310px;max-height:45vh;overflow:auto;display:none;z-index:8;font-size:13px} #route #wpl div{border-bottom:1px solid #223;padding:2px 0}
 #route select{max-width:140px;background:#223;color:#dde;border:1px solid #446}
-@media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:13px;padding:7px 9px}}
+@media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:12.5px;padding:6px 8px;white-space:nowrap} #simple{gap:5px;padding:6px}}
 </style>""")
 R('<button class="big" id="sAdv"','<button class="big" id="sMeas" title="Measure distances between points; build a route">&#128207; Measure</button><button class="big" id="sMW" title="Zoom into our own galaxy: Solar System and known exoplanets">&#127756; Milky Way</button><button class="big" id="sAdv"')
 R('<button id="aboutb">','<button id="measp">&#128207; Measure / route</button><button id="mwp">&#127756; Enter the Milky Way</button><button id="aboutb">')
