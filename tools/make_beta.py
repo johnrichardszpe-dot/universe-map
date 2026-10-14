@@ -118,4 +118,6 @@ R("<h2>What's new</h2>\n","""<h2>What's new</h2>
 <li><b>Smoother</b>: the map only redraws when something changes, labels are rearranged less often while moving, and phones use a lighter pixel density.</li>
 <li>Fixes: zoom buttons stopped working very close in (Local Group); keys could get stuck after switching windows; time sweep was jerky.</li></ul>
 """)
+GC='<script data-goatcounter="https://universemap.goatcounter.com/count"\n        async src="//gc.zgo.at/count.js"></script>\n'
+if "gc.zgo.at" not in s: s=s.replace("</body>",GC+"</body>",1)
 open("/workspace/pub/beta/index.html","w").write(s); print("ok",len(s))

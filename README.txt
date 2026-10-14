@@ -18,3 +18,6 @@ All changes are published first at https://johnrichardszpe-dot.github.io/univers
 
 v1.5-beta MILKY WAY VIEW SOURCES
 NASA Planetary Fact Sheet (nssdc.gsfc.nasa.gov/planetary/factsheet/); JPL Horizons (ssd.jpl.nasa.gov/horizons) planet positions for 2026-10-14; Ceres: NASA Dawn / JPL Horizons; Mora et al. 2011 PLoS Biology 9(8): e1001127 (8.7 million species); NASA Exoplanet Archive pscomppars (exoplanetarchive.ipac.caltech.edu), 6,445 planets / 6,417 with distance / 4,814 hosts, downloaded 2026-10-14. This research has made use of the NASA Exoplanet Archive, operated by Caltech under contract with NASA under the Exoplanet Exploration Program.
+
+VISIT COUNTING
+The site uses GoatCounter (https://www.goatcounter.com), a privacy-friendly open-source visit counter: no cookies, no personal tracking. Dashboard: https://universemap.goatcounter.com

@@ -67,7 +67,7 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 </style></head><body>
 <div id="load">Loading galaxies...</div>
 <canvas id="c"></canvas>
-<div id="beta">BETA (same as stable v1.5 - no beta changes yet) <a href="../">back to stable</a></div>
+<div id="beta">BETA (same as stable v1.5.1 - no beta changes yet) <a href="../">back to stable</a></div>
 <div id="simple" class="panel"><button class="big on" id="sNames">&#127991; Show names</button><div class="tt">&#9203; Time travel: <span id="sTv"></span><input type="range" id="sT" min="1" max="100" value="100"></div><button class="big" id="sMeas" title="Measure distances between points; build a route">&#128207; Measure</button><button class="big" id="sMW" title="Zoom into our own galaxy: Solar System and known exoplanets">&#127756; Milky Way</button><button class="big" id="sAdv" title="Show all options: layers, surveys, colours, point counts">&#9881; Advanced</button></div>
 <button id="tog" title="Show / hide controls" aria-label="toggle controls">&#10005;</button>
 <select id="flyto" aria-label="Fly to"><option value="">&#9992; Fly to...</option></select>
@@ -141,6 +141,7 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 <li><b>Extra layers</b>: the filament web is computed from real SDSS data with a tidal-field (Hessian) method. The PREDICTED layer is a statistical model (a fractal mock) and does not show real galaxies. The CONCEPTUAL lattice is art, not science.</li>
 <li>The scale bar is correct at the centre of the view; perspective changes it nearer or further away.</li>
 </ul>
+<h3>Visit counting</h3><p>This site counts visits with GoatCounter (goatcounter.com), a privacy-friendly, open-source counter: no cookies, no personal tracking, no ads. It only records page views (page, referrer, browser/screen size and country), never who you are.</p>
 <h3>Author</h3>
 <p>Map by <b>John Richards, Manjimup WA</b> &middot;</p>
 <button onclick="document.getElementById('about').style.display='none'">Close</button>
@@ -474,4 +475,6 @@ function sTupd(){const v=+$("sT").value;$("tmin").value=0;$("tmax").value=v;tupd
 $("sT").oninput=sTupd;$("tmax").addEventListener("input",()=>{$("sT").value=Math.max(1,+$("tmax").value);});sTupd();
 setMode(LS.get("umap_mode")==="adv");
 requestAnimationFrame(loop);$("load").style.display="none";window.MAP_READY=true;window.CAM=camera;window.CTL=controls;
-</script></body></html>
+</script><script data-goatcounter="https://universemap.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body></html>

@@ -5,8 +5,11 @@ Dates are in Perth time (AWST, UTC+8).
 
 ## Release workflow (beta first)
 Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github.io/universe-map/beta/ (folder `beta/` on `main`; it shares the stable `assets/` data files via `../assets/`). Beta shows an orange "BETA vX.Y-beta" badge with a link back to stable.
-The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, tag `vX.Y`, publish a GitHub release.
+The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
+
+## v1.5.1 - 15 Oct 2026
+- Added privacy-friendly GoatCounter visit counting (no cookies, no personal tracking) to stable and beta. Stats-only change, pushed straight to stable at the owner's request.
 
 ## v1.5 - 14 Oct 2026
 Promoted from v1.5-beta after owner approval (live beta re-tested desktop + phone, zero JS errors, ~60 fps). Also: compact 2-row phone bar; star taps near the Sun pick whichever target is closest on screen.
