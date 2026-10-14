@@ -18,7 +18,17 @@ body:not(.collapsed) #tog{right:330px}
 #helpov .box{background:#111a33;border:1px solid #446;border-radius:10px;padding:18px 22px;max-width:420px;font-size:15px}
 #helpov li{margin:6px 0}
 canvas{touch-action:none}
-@media (max-width:700px){body:not(.collapsed) #nav,body:not(.collapsed) #labels,body:not(.collapsed) #info,body:not(.collapsed) #scale{display:none !important} #ui{z-index:8;background:rgba(10,12,25,.97);width:calc(100vw - 30px);top:62px;max-height:calc(100% - 140px)} body:not(.collapsed) #tog{right:10px} #help{display:none} #info{left:10px !important;right:10px;width:auto !important;top:auto !important;bottom:70px;max-height:45vh;overflow:auto} #scale{bottom:8px}}
+#findb{position:fixed;top:10px;z-index:5;height:37px;padding:0 10px;font-size:15px;background:rgba(20,24,45,.95)}
+#gidx{position:fixed;z-index:12;left:50%;top:60px;transform:translateX(-50%);width:min(560px,94vw);max-height:calc(100% - 90px);display:none;flex-direction:column;background:rgba(10,12,25,.97);border:1px solid #446;border-radius:10px;padding:10px}
+#gq{width:100%;box-sizing:border-box;font-size:16px;padding:9px 10px;border-radius:6px;border:1px solid #557;background:#0b1022;color:#fff}
+#gres,#gbrowse{overflow:auto;margin-top:6px} .gi{padding:7px 6px;border-bottom:1px solid #223;cursor:pointer} .gi:hover,.gi.sel{background:#223a66}
+.gi small{color:#9ab} #gidx details{margin:4px 0} #gidx summary{cursor:pointer;padding:6px;background:#162040;border-radius:5px;font-weight:600}
+#gidx .gn{font-size:12px;color:#aab;padding:4px 6px}
+#ver{position:fixed;left:8px;bottom:6px;z-index:5;font-size:11px;color:#8899bb;background:rgba(10,12,25,.7);padding:2px 6px;border-radius:4px;cursor:pointer;border:1px solid #334}
+#news{background:#0a0c19 !important;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,92vw);max-height:80vh;overflow:auto;display:none;z-index:13}
+#toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:14;background:#1d2b55;border:1px solid #58f;color:#fff;padding:9px 14px;border-radius:8px;display:none;font-size:14px;max-width:90vw}
+.selmk{border-color:#ffd27f!important} .lab.selmk{color:#ffd27f}
+@media (max-width:700px){#flyto{max-width:46vw} #ver{bottom:auto;top:56px} #findb{font-size:14px} body:not(.collapsed) #nav,body:not(.collapsed) #labels,body:not(.collapsed) #info,body:not(.collapsed) #scale{display:none !important} #ui{z-index:8;background:rgba(10,12,25,.97);width:calc(100vw - 30px);top:62px;max-height:calc(100% - 140px)} body:not(.collapsed) #tog{right:10px} #help{display:none} #info{left:10px !important;right:10px;width:auto !important;top:auto !important;bottom:118px;max-height:45vh;overflow:auto} #scale{bottom:8px}}
 #ui h1{font-size:17px;margin:0 0 6px} #ui label{display:block;margin:3px 0;cursor:pointer}
 .real{color:#8cf}.pred{color:#ff4fd8}.conc{color:#8fa0ff}.web{color:#ffc070}
 small{color:#99a} button{background:#223;color:#dde;border:1px solid #446;border-radius:5px;padding:4px 8px;margin:2px;cursor:pointer} button:hover{background:#335}
@@ -32,7 +42,7 @@ input[type=range]{width:100%}
 .ldot{position:fixed;left:0;top:0;width:7px;height:7px;margin:-5px 0 0 -5px;border:1.5px solid #9f9;border-radius:50%;pointer-events:none}
 #mw{color:#fff} .ldot.mw{border-color:#fff;background:#fff}
 #leaders{position:fixed;inset:0;pointer-events:none;width:100%;height:100%}
-@media (max-width:700px){.lab{font-size:10.5px;padding:0 2px}}
+@media (max-width:700px){#flyto{max-width:46vw} #ver{bottom:auto;top:56px} #findb{font-size:14px} .lab{font-size:10.5px;padding:0 2px}}
 #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:#000;z-index:20}
 #help{right:10px;bottom:14px;font-size:12px;color:#aab}
 </style></head><body>
@@ -40,13 +50,18 @@ input[type=range]{width:100%}
 <canvas id="c"></canvas>
 <button id="tog" title="Show / hide controls" aria-label="toggle controls">&#10005;</button>
 <select id="flyto" aria-label="Fly to"><option value="">&#9992; Fly to...</option></select>
+<button id="findb" title="Search 4,000+ named galaxies, clusters and superclusters">&#128269; Find</button>
+<div id="gidx"><div style="display:flex;gap:6px"><input id="gq" type="search" placeholder="Type a name: Andromeda, M87, Coma, NGC 253..." autocomplete="off"><button id="gclose" aria-label="close">&#10005;</button></div>
+<div id="gcount" class="gn"></div><div id="gres"></div><div id="gbrowse"></div></div>
+<div id="ver" title="What's new">v1.3</div><div id="toast"></div>
+<div id="news" class="panel"></div>
 <div id="nav"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="rst" title="Reset view">&#8962;</button><button id="hlp" title="How to use">?</button></div>
 <div id="tip"></div>
 <div id="helpov"><div class="box"><h3 style="margin-top:0">How to explore</h3><ul>
 <li><b>Rotate:</b> drag with mouse or one finger</li><li><b>Zoom:</b> scroll wheel, pinch, or the + / &minus; buttons</li>
-<li><b>Move sideways:</b> right-drag or two-finger drag</li><li><b>Fly to</b> a famous cluster with the menu at top left</li>
+<li><b>Move sideways:</b> right-drag or two-finger drag</li><li><b>Fly to</b> a famous cluster with the menu at top left, or tap <b>&#128269; Find</b> to search 4,000+ named galaxies</li>
 <li><b>Controls</b> (colours, time, layers): the &#9776; button at top right</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
-<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button></div></div>
+<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.3</button></div></div>
 <div id="ui" class="panel">
 <h1>Interactive Universe Map</h1>
 <small>Units: Mpc<span class="q" data-tip="Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).">?</span> &middot; redshift z<span class="q" data-tip="Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).">?</span> &middot; comoving distance<span class="q" data-tip="Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.">?</span></small><br><small>Each dot is a <b>real galaxy</b> whose distance was measured from its redshift. You are at the white Milky Way marker.</small>
@@ -72,7 +87,7 @@ input[type=range]{width:100%}
 <label class="conc"><input type="checkbox" id="Llat"> CONCEPTUAL lattice: art, not physics<span class="q" data-tip="An artistic regular grid, included only to illustrate an idea. Real galaxies do not sit on a grid.">?</span></label>
 <label><input type="checkbox" id="Llab" checked> Named structures</label>
 <hr style="border-color:#334">
-<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="aboutb">About this map</button>
+<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.3)</button>
 </div>
 <div id="info" class="panel"></div>
 <div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><span class="q" data-tip="The bar's length on screen equals this distance at the centre of the view. 1 Mpc = 3.26 million light-years.">?</span><br><small>(at centre of view)</small></div>
@@ -88,6 +103,7 @@ input[type=range]{width:100%}
 <li><b>DESI Data Release 1</b> large-scale-structure clustering catalogues v1.5, northern galactic cap only: BGS_BRIGHT-21.5 (z 0.1-0.4), LRG (z 0.4-1.1) and ELG_LOPnotqso (z 1.1-1.6), from data.desi.lbl.gov/public/dr1/. The map uses a subset: BGS 217,614, LRG 180,000, ELG 100,000.</li>
 </ul>
 <p>By default the map shows 100,000 galaxies (for speed on phones). Tick "load all" for about 724,000.</p>
+<h3>Galaxy name index (search)</h3><p>The searchable index has 4,326 entries. Local Group and nearby galaxies, with measured distances, come from the Updated Nearby Galaxy Catalog (Karachentsev, Makarov &amp; Kaisina 2013, AJ 145, 101; VizieR J/AJ/145/101). Common names, Messier and bright NGC/IC galaxies, Abell and named clusters, and published distance measurements come from SIMBAD (CDS, Strasbourg; Wenger et al. 2000), queried in October 2026. For galaxies beyond about 40 Mpc (cz &gt; 3000 km/s), distances come from redshift (Planck18). A handful of superclusters, walls and voids use approximate literature positions and are marked "approx.". <i>This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.</i></p>
 <h3>Credits and licences</h3>
 <p><b>DESI</b> data are licensed under CC BY 4.0. Positions were converted to 3D and subsampled for this map. Please cite: DESI Collaboration, "Data Release 1 of the Dark Energy Spectroscopic Instrument". <i>This research used data obtained with the Dark Energy Spectroscopic Instrument (DESI). DESI construction and operations is managed by the Lawrence Berkeley National Laboratory. This material is based upon work supported by the U.S. Department of Energy, Office of Science, Office of High-Energy Physics, under Contract No. DE-AC02-05CH11231, and by the National Energy Research Scientific Computing Center, a DOE Office of Science User Facility under the same contract. Additional support for DESI was provided by the U.S. National Science Foundation (NSF), Division of Astronomical Sciences under Contract No. AST-0950945 to the NSF's National Optical-Infrared Astronomy Research Laboratory; the Science and Technology Facilities Council of the United Kingdom; the Gordon and Betty Moore Foundation; the Heising-Simons Foundation; the French Alternative Energies and Atomic Energy Commission (CEA); the National Council of Humanities, Science and Technology of Mexico (CONAHCYT); the Ministry of Science and Innovation of Spain (MICINN), and by the DESI Member Institutions: www.desi.lbl.gov/collaborating-institutions. The DESI collaboration is honored to be permitted to conduct scientific research on I'oligam Du'ag (Kitt Peak), a mountain with particular significance to the Tohono O'odham Nation. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the U.S. National Science Foundation, the U.S. Department of Energy, or any of the listed funding agencies.</i></p>
 <p><b>SDSS</b>: <i>Funding for the Sloan Digital Sky Survey IV has been provided by the Alfred P. Sloan Foundation, the U.S. Department of Energy Office of Science, and the Participating Institutions. SDSS-IV acknowledges support and resources from the Center for High Performance Computing at the University of Utah. The SDSS website is www.sdss4.org.</i> (The main galaxy sample spectra are from SDSS-I/II. Funding for SDSS and SDSS-II was provided by the Alfred P. Sloan Foundation, the Participating Institutions, the National Science Foundation, the U.S. Department of Energy, NASA, the Japanese Monbukagakusho, the Max Planck Society, and the Higher Education Funding Council for England.)</p>
@@ -124,7 +140,7 @@ const Q=7; // positions stored in 1/7 Mpc steps
 const canvas=document.getElementById("c");
 const renderer=new THREE.WebGLRenderer({canvas,antialias:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene(); const camera=new THREE.PerspectiveCamera(55,1,0.1,40000);
-const controls=new THREE.OrbitControls(camera,canvas); controls.enableDamping=true; controls.dampingFactor=0.08; controls.zoomSpeed=1.2;
+const controls=new THREE.OrbitControls(camera,canvas); controls.enableDamping=true; controls.dampingFactor=0.08; controls.zoomSpeed=1.2;controls.minDistance=0.002;
 // equatorial (x,y,z) -> three (x, z, -y): celestial north is up
 function dec(b64){const s=atob(b64),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u.buffer;}
 function makeGeom(G){
@@ -151,7 +167,7 @@ const pred=new THREE.Points(segGeom(window.PRED),new THREE.PointsMaterial({color
 const lat=(()=>{const L=600,N=7,a=[];for(let i=-N;i<=N;i++)for(let j=-N;j<=N;j++){a.push(i*L,j*L,-N*L,i*L,j*L,N*L,i*L,-N*L,j*L,i*L,N*L,j*L,-N*L,i*L,j*L,N*L,i*L,j*L);}
  const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.Float32BufferAttribute(a,3));return new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x6070ff,transparent:true,opacity:.12}));})();lat.visible=false;scene.add(lat);
 // Milky Way marker
-scene.add(new THREE.Mesh(new THREE.SphereGeometry(1,12,12),new THREE.MeshBasicMaterial({color:0xffffff})));
+const mwMesh=new THREE.Mesh(new THREE.SphereGeometry(1,12,12),new THREE.MeshBasicMaterial({color:0xffffff}));scene.add(mwMesh);
 // --- UI
 const $=id=>document.getElementById(id);
 $("surveys").innerHTML=SURV.map((s,i)=>`<label><input type="checkbox" data-s="${i}" checked> <i style="background:${s[1]};width:9px;height:9px;border-radius:50%;display:inline-block"></i> ${s[0]}</label>`).join("");
@@ -187,16 +203,16 @@ function fly(){const d=camera.position.distanceTo(controls.target)*0.015,f=new T
 // scale bar
 function scalebar(){const d=camera.position.distanceTo(controls.target),H=innerHeight,wh=2*d*Math.tan(camera.fov*Math.PI/360),ppm=H/wh;
  const want=160/ppm,p=Math.pow(10,Math.floor(Math.log10(want)));let L=[1,2,5,10].map(k=>k*p).filter(v=>v<=want).pop()||p;
- $("bar").style.width=(L*ppm).toFixed(0)+"px";const ly=L*3.2616;$("stxt").textContent=`${L>=1?L:L.toFixed(1)} Mpc  =  ${ly>=1000?(ly/1000).toFixed(ly>=10000?0:1)+" billion":ly.toFixed(ly<10?1:0)+" million"} light-years`;}
+ $("bar").style.width=(L*ppm).toFixed(0)+"px";const ly=L*3.2616;$("stxt").textContent=(L<0.5?`${+(L*1000).toPrecision(3)} kpc`:`${L>=1?L:+L.toPrecision(2)} Mpc`)+"  =  "+(ly<1?`${+(ly*1000).toPrecision(3)} thousand`:ly>=1000?`${(ly/1000).toFixed(ly>=10000?0:1)} billion`:`${ly.toFixed(ly<10?1:0)} million`)+" light-years";}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
 addEventListener("resize",resize);resize();view(5200);
 const tmp=new THREE.Vector3();
-function loop(){requestAnimationFrame(loop);fly();controls.update();renderer.render(scene,camera);scalebar();
+function loop(){requestAnimationFrame(loop);fly();controls.update();{const cd=camera.position.distanceTo(controls.target),cm=camera.position.length();mwMesh.scale.setScalar(Math.min(1,Math.max(0.0004,Math.min(cd,cm)*0.004)));const nr=Math.max(0.00005,Math.min(0.1,cd*0.01));if(Math.abs(camera.near-nr)>nr*0.1){camera.near=nr;camera.updateProjectionMatrix();}}renderer.render(scene,camera);scalebar();
  placeLabels();}
 // ---- label declutter: priority order = array order; try several offsets (with leader line), else hide the text (dot stays)
 function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
 function placeLabels(){const placed=[],W=innerWidth,H=innerHeight;
- for(const id of ["nav","flyto","tog","scale","help"]){const r=$(id).getBoundingClientRect();if(r.width)placed.push({x:r.left-3,y:r.top-3,w:r.width+6,h:r.height+6});}
+ for(const id of ["nav","flyto","tog","scale","help","findb","ver","toast"]){const r=$(id).getBoundingClientRect();if(r.width)placed.push({x:r.left-3,y:r.top-3,w:r.width+6,h:r.height+6});}
  for(const l of labels){tmp.copy(l.v).project(camera);const on=tmp.z<1&&Math.abs(tmp.x)<1.02&&Math.abs(tmp.y)<1.02;
   if(!on){l.el.style.visibility=l.dot.style.visibility="hidden";l.ln.setAttribute("visibility","hidden");continue;}
   const px=(tmp.x+1)/2*W,py=(1-tmp.y)/2*H;l.dot.style.visibility="visible";l.dot.style.transform=`translate(${px}px,${py}px)`;
@@ -216,8 +232,9 @@ $("tog").onclick=()=>setPanel(document.body.classList.contains("collapsed"));
 function zoomBy(f){const off=camera.position.clone().sub(controls.target).multiplyScalar(f);if(off.length()<0.5||off.length()>20000)return;camera.position.copy(controls.target).add(off);}
 $("zin").onclick=()=>zoomBy(0.6);$("zout").onclick=()=>zoomBy(1/0.6);$("rst").onclick=()=>view(5200);
 let anim=null;
-window.flyTo=function(name){const l=labels.find(x=>x.name===name);if(!l)return;const d=name.indexOf("Wall")>=0||name.indexOf("Shapley")>=0?160:(l.id?260:45);
- const t0=controls.target.clone(),p0=camera.position.clone(),t1=l.v.clone(),dir=p0.clone().sub(t0).normalize(),p1=t1.clone().add(dir.multiplyScalar(d));const T0=performance.now();
+window.flyTo=function(name){const l=labels.find(x=>x.name===name);if(!l)return;const d=name.indexOf("Wall")>=0||name.indexOf("Shapley")>=0?160:(l.id?260:45);flyToVec(l.v,d);};
+function flyToVec(tv,d){
+ const t0=controls.target.clone(),p0=camera.position.clone(),t1=tv.clone(),dir=p0.clone().sub(t0).normalize(),p1=t1.clone().add(dir.multiplyScalar(d));const T0=performance.now();
  if(anim)cancelAnimationFrame(anim);(function step(){const k=Math.min(1,(performance.now()-T0)/1600);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;controls.target.lerpVectors(t0,t1,e);
  const lg=Math.exp(Math.log(p0.distanceTo(t0))*(1-e)+Math.log(d)*e);const dd=p0.clone().sub(t0).normalize().lerp(dir,e).normalize();camera.position.copy(controls.target).add(dd.multiplyScalar(lg));
  if(k<1)anim=requestAnimationFrame(step);})();}
@@ -229,5 +246,52 @@ document.addEventListener("mouseover",e=>{const q=e.target.closest&&e.target.clo
 function showHelp(){$("helpov").style.display="flex";}$("helpok").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");};
 $("hlp").onclick=$("helpb").onclick=showHelp;if(!LS.get("umap_help"))showHelp();
 controls.touches={ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN};
+
+// ---- v1.3: galaxy name index (lazy-loaded), search + browse, selected marker
+const GROUPS=[["Local Group","Our own small family of about 80 galaxies within about 1.5 Mpc (5 million light-years). At full map scale they sit inside the Milky Way marker, so the map flies in very close."],
+ ["Messier & famous galaxies","Galaxies with well-known names or Messier numbers, catalogued by Charles Messier in the 1700s."],["Nearby galaxies (Local Volume)","Galaxies within about 11 Mpc (36 million light-years), with distances measured directly, for example from bright stars or Cepheids."],
+ ["Bright NGC/IC galaxies","Bright galaxies from the New General Catalogue and Index Catalogue (1880s-1900s)."],["Galaxy clusters","Groups and clusters held together by gravity: tens to thousands of galaxies."],
+ ["Superclusters","Huge collections of clusters, hundreds of millions of light-years across. Not held together as a single unit."],["Walls & voids","The largest patterns: walls (sheets of galaxies) and voids (almost empty bubbles)."]];
+let GI=null,gsel=-1,gitems=[];
+const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9+\-]/g,"");
+function loadIndex(cb){if(GI)return cb();$("gcount").textContent="Loading index...";const sc=document.createElement("script");sc.src="assets/galaxy_index.js";
+ sc.onload=()=>{GI=window.GINDEX;GI.forEach(e=>{e.k=[e.n].concat(e.a).map(norm);e.v=new THREE.Vector3(e.p[0],e.p[1],e.p[2]);});$("gcount").textContent=GI.length.toLocaleString()+" named objects. Type to search, or browse by group below.";buildBrowse();cb();};
+ sc.onerror=()=>{$("gcount").textContent="Could not load the index file (assets/galaxy_index.js).";};document.body.appendChild(sc);}
+function fmtD(d){if(d===0)return "we are inside it";const ly=d*3.2616;return (d<1?(d*1000).toFixed(0)+" kpc":d<10?d.toFixed(2)+" Mpc":d.toFixed(0)+" Mpc")+" = "+(ly<1?(ly*1000).toFixed(0)+" thousand":ly>=1000?(ly/1000).toFixed(2)+" billion":ly.toFixed(ly<10?1:0)+" million")+" light-years";}
+function row(e){return `<div class="gi" data-i="${GI.indexOf(e)}"><b>${e.n}</b> <small>&middot; ${e.t} &middot; ${e.d? (e.d<10?e.d.toFixed(2):e.d.toFixed(0))+" Mpc":"here"}${e.a.length?" &middot; also: "+e.a.slice(0,3).join(", "):""}</small></div>`;}
+function search(q){const n=norm(q);if(!n){$("gres").innerHTML="";$("gbrowse").style.display="";gitems=[];return;}$("gbrowse").style.display="none";
+ const sc=[];for(const e of GI){let b=1e9;for(const k of e.k){if(k===n){b=0;break;}if(k.startsWith(n))b=Math.min(b,1+k.length/100);else if(k.indexOf(n)>=0)b=Math.min(b,3+k.length/100);}if(b<1e9)sc.push([b+(e.g.startsWith("Bright")||e.g.startsWith("Galaxy cl")?0.5:0),e]);}
+ sc.sort((a,b)=>a[0]-b[0]);gitems=sc.slice(0,40).map(x=>x[1]);gsel=gitems.length?0:-1;$("gres").innerHTML=gitems.length?gitems.map(row).join(""):"<div class='gn'>No match. Try another spelling, e.g. 'M 31', 'NGC 253', 'Abell 3558'.</div>";hl();}
+function hl(){[...$("gres").children].forEach((c,i)=>c.classList.toggle("sel",i===gsel));}
+function buildBrowse(){$("gbrowse").innerHTML=GROUPS.map(([g,txt])=>{const n=GI.filter(e=>e.g===g).length;return `<details data-g="${g}"><summary>${g} (${n.toLocaleString()})</summary><div class="gn">${txt}</div><div class="gl"></div></details>`;}).join("");
+ $("gbrowse").querySelectorAll("details").forEach(d=>d.addEventListener("toggle",()=>{const L=d.querySelector(".gl");if(d.open&&!L.innerHTML){const g=d.dataset.g;L.innerHTML=GI.filter(e=>e.g===g).sort((a,b)=>a.d-b.d).map(row).join("");}}));}
+function openIdx(){$("gidx").style.display="flex";if(innerWidth<=700)setPanel(false);loadIndex(()=>{$("gq").focus();search($("gq").value);});}
+$("findb").onclick=$("findp").onclick=openIdx;$("gclose").onclick=()=>$("gidx").style.display="none";
+$("gq").oninput=e=>search(e.target.value);
+$("gq").onkeydown=e=>{if(e.key==="ArrowDown"){gsel=Math.min(gitems.length-1,gsel+1);hl();e.preventDefault();}else if(e.key==="ArrowUp"){gsel=Math.max(0,gsel-1);hl();e.preventDefault();}else if(e.key==="Enter"&&gsel>=0)pick(gitems[gsel]);else if(e.key==="Escape")$("gidx").style.display="none";};
+$("gidx").addEventListener("click",e=>{const r=e.target.closest(".gi");if(r)pick(GI[+r.dataset.i]);});
+// selected-object marker using the same label machinery (highest priority)
+const SEL={name:"",x:[0,0,0],v:new THREE.Vector3(),sel:true};
+{const e=document.createElement("div");e.className="lab selmk";SEL.el=e;$("labels").appendChild(e);const dt=document.createElement("div");dt.className="ldot selmk";SEL.dot=dt;$("labels").appendChild(dt);
+ const ln=document.createElementNS("http://www.w3.org/2000/svg","line");ln.setAttribute("stroke","#ffd27f");ln.setAttribute("stroke-width","1");SEL.ln=ln;$("leaders").appendChild(ln);e.style.visibility=dt.style.visibility="hidden";}
+function showInfo(o){const I=$("info");I.style.display="block";
+ I.innerHTML=`<b>${o.n}</b><br><small>${o.t} &middot; group: ${o.g}</small><br>${o.note?o.note+"<br>":""}`+
+ (o.d?`<small>Distance &asymp; ${fmtD(o.d)}<span class='q' data-tip='1 Mpc = 3.26 million light-years. kpc = 1/1000 Mpc.'>?</span> &middot; method: ${o.m}<br>${o.z!=null&&o.z>0?`Redshift z = ${o.z}<span class='q' data-tip='How much the light is stretched by cosmic expansion. Bigger z means further away.'>?</span> &middot; `:""}light left it about ${(o.d*3.2616<1000?(o.d*3.2616).toFixed(o.d<1?2:0)+" million":(o.d*3.2616/1000).toFixed(2)+" billion (roughly)")} years ago<br>Sky position: RA ${o.ra}&deg;, Dec ${o.dec}&deg;</small><br>`:"")+
+ (o.a.length?`<small>Also known as: ${o.a.slice(0,8).join(", ")}</small><br>`:"")+
+ (o.d&&o.d<1.6?`<small><i>Very close to us: it sits inside the Milky Way marker at full scale, so we zoom right in.</i></small><br>`:"")+`<button onclick="this.parentNode.style.display='none'">close</button>`;}
+function pick(o){$("gidx").style.display="none";SEL.name=o.n;SEL.v.copy(o.v);SEL.el.textContent=o.n;SEL.w=0;SEL.el.onclick=()=>showInfo(o);
+ if(labels[0]!==SEL)labels.unshift(SEL);const d=o.d===0?0.05:Math.max(0.006,Math.min(300,o.d<2?o.d*0.25+0.004:o.d*0.35));
+ flyToVec(o.v,o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d);showInfo(o);}
+// ---- versioning: tag, What's new, one-time toast
+const NEWS=`<h2>What's new</h2>
+<h3>v1.3 &middot; 14 Oct 2026</h3><ul><li><b>Galaxy name index + search</b>: tap &#128269; Find to search 4,326 named galaxies, clusters, superclusters and voids (Andromeda, M87, Whirlpool, Centaurus A, Coma...). You can also browse by group. Pick one to fly there and see its distance in Mpc and light-years.</li><li>Very close Local Group galaxies (Magellanic Clouds, Andromeda...) get a close-up fly-in and their own marker.</li><li>A version tag and this "What's new" page.</li></ul>
+<h3>v1.2 &middot; 13 Oct 2026</h3><ul><li>Structure labels no longer pile up on phones: they spread out with leader lines, and less important ones hide until you zoom in.</li></ul>
+<h3>v1.1 &middot; 13 Oct 2026</h3><ul><li>Easier navigation: collapsible side panel, zoom/reset/help buttons, a "Fly to" menu, touch and pinch support, and a first-visit help screen.</li><li>Plain-English "?" explanations, with distances in both Mpc and light-years.</li><li>Lighter default of 100,000 galaxies for phones (all 724,000 optional).</li></ul>
+<h3>v1.0 &middot; 13 Oct 2026</h3><ul><li>First release: 724,000 real galaxies from 2MRS, SDSS DR17 and DESI DR1 in 3D, with a lookback-time (4D) slider and colouring, and optional filament, model and concept layers.</li></ul>
+<p><small>Going forward, monthly "living universe" data updates will bump the version number.</small></p><button onclick="document.getElementById('news').style.display='none'">Close</button>`;
+$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.3");};
+$("ver").onclick=$("newsb").onclick=openNews;$("helpnews").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");openNews();};
+if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.3"){const t=$("toast");t.innerHTML="New in v1.3: search 4,000+ named galaxies with &#128269; Find. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.3");},9000);}
+function placeFind(){const f=$("flyto").getBoundingClientRect();$("findb").style.left=(f.right+6)+"px";}placeFind();addEventListener("resize",placeFind);
 loop();$("load").style.display="none";window.MAP_READY=true;window.CAM=camera;window.CTL=controls;
 </script></body></html>
