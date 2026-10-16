@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#05070f"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Universe Map"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>[BETA] Interactive Universe Map - real galaxy surveys</title>
 <style>
 html,body{margin:0;height:100%;background:#000;color:#dde;font:14px/1.4 system-ui,Segoe UI,Arial,sans-serif;overflow:hidden}
@@ -64,17 +65,18 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 #route{left:64px;top:56px;width:310px;max-height:45vh;overflow:auto;display:none;z-index:8;font-size:13px} #route #wpl div{border-bottom:1px solid #223;padding:2px 0}
 #route select{max-width:140px;background:#223;color:#dde;border:1px solid #446}
 @media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:12.5px;padding:6px 8px;white-space:nowrap} #simple{gap:5px;padding:6px}}
+#installb{position:fixed;right:10px;bottom:10px;z-index:60;display:none;font:12px sans-serif;padding:5px 10px;border-radius:14px;border:1px solid #3a4a7a;background:#0e1430cc;color:#cfe0ff;cursor:pointer}#ioshint{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:60;display:none;font:13px sans-serif;padding:7px 12px;border-radius:10px;background:#0e1430ee;color:#dde8ff;border:1px solid #3a4a7a;max-width:90vw}#ioshint b{color:#fff}#ioshint span{margin-left:10px;cursor:pointer;opacity:.7}
 </style></head><body>
 <div id="load">Loading galaxies...</div>
 <canvas id="c"></canvas>
-<div id="beta">BETA (same as stable v1.5.1 - no beta changes yet) <a href="../">back to stable</a></div>
+<div id="beta">BETA v1.6: installable app <a href="../">back to stable</a></div>
 <div id="simple" class="panel"><button class="big on" id="sNames">&#127991; Show names</button><div class="tt">&#9203; Time travel: <span id="sTv"></span><input type="range" id="sT" min="1" max="100" value="100"></div><button class="big" id="sMeas" title="Measure distances between points; build a route">&#128207; Measure</button><button class="big" id="sMW" title="Zoom into our own galaxy: Solar System and known exoplanets">&#127756; Milky Way</button><button class="big" id="sAdv" title="Show all options: layers, surveys, colours, point counts">&#9881; Advanced</button></div>
 <button id="tog" title="Show / hide controls" aria-label="toggle controls">&#10005;</button>
 <select id="flyto" aria-label="Fly to"><option value="">&#9992; Fly to...</option></select>
 <button id="findb" title="Search 4,000+ named galaxies, clusters and superclusters">&#128269; Find</button>
 <div id="gidx"><div style="display:flex;gap:6px"><input id="gq" type="search" placeholder="Type a name: Andromeda, M87, Coma, NGC 253..." autocomplete="off"><button id="gclose" aria-label="close">&#10005;</button></div>
 <div id="gcount" class="gn"></div><div id="gres"></div><div id="gbrowse"></div></div>
-<div id="ver" title="What's new">v1.5-beta</div><div id="toast"></div>
+<div id="ver" title="What's new">v1.6-beta</div><div id="toast"></div>
 <div id="news" class="panel"></div>
 <div id="nav"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="rst" title="Home: glide back to the Milky Way">&#8962;</button><button id="hlp" title="How to use">?</button></div>
 <div id="tip"></div>
@@ -82,7 +84,7 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 <li><b>Rotate:</b> drag with mouse or one finger</li><li><b>Zoom:</b> scroll wheel, pinch, or the + / &minus; buttons</li>
 <li><b>Move sideways:</b> right-drag or two-finger drag</li><li><b>Fly to</b> a famous cluster with the menu at top left, or tap <b>&#128269; Find</b> to search 4,000+ named galaxies</li>
 <li><b>Simple mode</b> (default): names on/off and a time-travel slider at the bottom. Tap <b>&#9881; Advanced</b> for all options (colours, surveys, layers, 724k points)</li><li><b>&#8962; Home</b> glides back to the Milky Way</li><li><b>Tap a dot</b> for that galaxy's facts; <b>&#128207; Measure</b> to measure distances; <b>&#127756; Milky Way</b> for the Solar System and exoplanets</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
-<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.5-beta</button></div></div>
+<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="helpnews">What's new in v1.6-beta</button></div></div>
 <div id="ui" class="panel">
 <h1>Interactive Universe Map</h1><button id="advoff" title="Back to the simple, clean screen">&#8592; Simple mode</button><br>
 <small>Units: Mpc<span class="q" data-tip="Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).">?</span> &middot; redshift z<span class="q" data-tip="Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).">?</span> &middot; comoving distance<span class="q" data-tip="Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.">?</span></small><br><small>Each dot is a <b>real galaxy</b> whose distance was measured from its redshift. You are at the white Milky Way marker.</small>
@@ -108,7 +110,7 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 <label class="conc"><input type="checkbox" id="Llat"> CONCEPTUAL lattice: art, not physics<span class="q" data-tip="An artistic regular grid, included only to illustrate an idea. Real galaxies do not sit on a grid.">?</span></label>
 <label><input type="checkbox" id="Llab" checked> Named structures</label>
 <hr style="border-color:#334">
-<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="measp">&#128207; Measure / route</button><button id="mwp">&#127756; Enter the Milky Way</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.5-beta)</button>
+<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="measp">&#128207; Measure / route</button><button id="mwp">&#127756; Enter the Milky Way</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.6-beta)</button>
 </div>
 <div id="info" class="panel"></div><div id="route" class="panel"></div><button id="mwback">&#9664; Back to universe</button><div id="slegend" class="panel"></div><div id="slabels"></div>
 <div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><span class="q" data-tip="The bar's length on screen equals this distance at the centre of the view. 1 Mpc = 3.26 million light-years.">?</span><br><small>(at centre of view)</small></div>
@@ -327,6 +329,7 @@ function pick(o){$("gidx").style.display="none";SEL.name=o.n;SEL.v.copy(o.v);SEL
  flyToVec(o.v,o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d);showInfo(o);}
 // ---- versioning: tag, What's new, one-time toast
 const NEWS=`<h2>What's new</h2>
+<h3>v1.6-beta &middot; 16 Oct 2026 (BETA - testing before stable)</h3><ul><li><b>Installable app</b>: add Universe Map to your home screen or desktop (look for the small <i>Install app</i> button, or on iPhone/iPad use Share &gt; Add to Home Screen). It opens full-screen, loads faster, and works offline after your first visit. New versions are picked up automatically.</li></ul>
 <h3>v1.5-beta &middot; 14 Oct 2026 (BETA - testing before stable)</h3><ul>
 <li><b>Tap any galaxy dot</b>: it is highlighted, the view glides to it, and an info box shows its survey, redshift, distance (Mpc and light-years), lookback time and sky position, plus the closest named object in the index. (A quick tap selects; dragging still rotates.)</li>
 <li><b>&#127756; Enter the Milky Way</b>: the Sun, 8 planets and dwarf planets Pluto and Ceres at their real positions on 14 Oct 2026 (JPL Horizons), with facts from the NASA Planetary Fact Sheet. Around them, 4,814 real stars hosting 6,417 confirmed exoplanets from the NASA Exoplanet Archive, at their true sky positions and distances. Tap a planet or star for its known facts ('unknown' where not measured). The Solar System is enlarged so you can see it (not to scale).</li>
@@ -340,9 +343,9 @@ const NEWS=`<h2>What's new</h2>
 <h3>v1.1 &middot; 13 Oct 2026</h3><ul><li>Easier navigation: collapsible side panel, zoom/reset/help buttons, a "Fly to" menu, touch and pinch support, and a first-visit help screen.</li><li>Plain-English "?" explanations, with distances in both Mpc and light-years.</li><li>Lighter default of 100,000 galaxies for phones (all 724,000 optional).</li></ul>
 <h3>v1.0 &middot; 13 Oct 2026</h3><ul><li>First release: 724,000 real galaxies from 2MRS, SDSS DR17 and DESI DR1 in 3D, with a lookback-time (4D) slider and colouring, and optional filament, model and concept layers.</li></ul>
 <p><small>Going forward, monthly "living universe" data updates will bump the version number.</small></p><button onclick="document.getElementById('news').style.display='none'">Close</button>`;
-$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.5-beta");};
+$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.6-beta");};
 $("ver").onclick=$("newsb").onclick=openNews;$("helpnews").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");openNews();};
-if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.5-beta"){const t=$("toast");t.innerHTML="BETA v1.5: tap any galaxy, enter the Milky Way (Solar System + 6,400 exoplanets), measure distances. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.5-beta");},9000);}
+if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.6-beta"){const t=$("toast");t.innerHTML="BETA v1.6: install the map as an app (works offline after the first visit). <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.6-beta");},9000);}
 function placeFind(){const f=$("flyto").getBoundingClientRect();$("findb").style.left=(f.right+6)+"px";}placeFind();addEventListener("resize",placeFind);
 // ===================== v1.5-beta: dot picking, Milky Way mode, ruler/waypoints =====================
 const COS={"z": [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012, 0.014, 0.016, 0.018, 0.02, 0.022, 0.024, 0.026, 0.028, 0.03, 0.032, 0.034, 0.036, 0.038, 0.04, 0.042, 0.044, 0.046, 0.048, 0.05, 0.052, 0.054, 0.056, 0.058, 0.06, 0.062, 0.064, 0.066, 0.068, 0.07, 0.072, 0.074, 0.076, 0.078, 0.08, 0.082, 0.084, 0.086, 0.088, 0.09, 0.092, 0.094, 0.096, 0.098, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34, 0.36, 0.38, 0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52, 0.54, 0.56, 0.58, 0.6, 0.62, 0.64, 0.66, 0.68, 0.7, 0.72, 0.74, 0.76, 0.78, 0.8, 0.82, 0.84, 0.86, 0.88, 0.9, 0.92, 0.94, 0.96, 0.98, 1.0, 1.02, 1.04, 1.06, 1.08, 1.1, 1.12, 1.14, 1.16, 1.18, 1.2, 1.22, 1.24, 1.26, 1.28, 1.3, 1.32, 1.34, 1.36, 1.38, 1.4, 1.42, 1.44, 1.46, 1.48, 1.5, 1.52, 1.54, 1.56, 1.58, 1.6, 1.62, 1.64, 1.66, 1.68, 1.7, 1.72, 1.74, 1.76, 1.78, 1.8, 1.82, 1.84, 1.86, 1.88, 1.9, 1.92, 1.94, 1.96, 1.98, 2.0], "d": [0.0, 8.86, 17.71, 26.55, 35.38, 44.21, 53.02, 61.83, 70.63, 79.42, 88.2, 96.98, 105.74, 114.5, 123.25, 131.99, 140.72, 149.45, 158.16, 166.87, 175.57, 184.26, 192.94, 201.61, 210.28, 218.93, 227.58, 236.22, 244.85, 253.47, 262.09, 270.69, 279.29, 287.88, 296.46, 305.03, 313.59, 322.15, 330.69, 339.23, 347.76, 356.28, 364.79, 373.29, 381.78, 390.27, 398.75, 407.21, 415.67, 424.12, 432.57, 516.51, 599.59, 681.79, 763.12, 843.58, 923.16, 1001.86, 1079.68, 1156.63, 1232.71, 1307.91, 1382.26, 1455.74, 1528.36, 1600.13, 1671.05, 1741.14, 1810.39, 1878.81, 1946.42, 2013.21, 2079.2, 2144.39, 2208.8, 2272.43, 2335.28, 2397.38, 2458.73, 2519.33, 2579.2, 2638.34, 2696.77, 2754.5, 2811.53, 2867.87, 2923.54, 2978.54, 3032.88, 3086.57, 3139.62, 3192.05, 3243.85, 3295.05, 3345.64, 3395.63, 3445.05, 3493.89, 3542.16, 3589.87, 3637.04, 3683.66, 3729.75, 3775.32, 3820.37, 3864.92, 3908.96, 3952.51, 3995.58, 4038.16, 4080.28, 4121.94, 4163.14, 4203.9, 4244.21, 4284.09, 4323.54, 4362.57, 4401.18, 4439.39, 4477.2, 4514.61, 4551.63, 4588.27, 4624.53, 4660.42, 4695.94, 4731.1, 4765.91, 4800.37, 4834.48, 4868.26, 4901.7, 4934.81, 4967.6, 5000.07, 5032.22, 5064.06, 5095.6, 5126.84, 5157.78, 5188.43, 5218.79, 5248.87, 5278.67, 5308.19], "t": [0.0, 0.0289, 0.0576, 0.0863, 0.1149, 0.1435, 0.1719, 0.2003, 0.2285, 0.2567, 0.2848, 0.3129, 0.3408, 0.3687, 0.3965, 0.4242, 0.4518, 0.4793, 0.5068, 0.5342, 0.5615, 0.5887, 0.6159, 0.643, 0.6699, 0.6969, 0.7237, 0.7505, 0.7771, 0.8037, 0.8303, 0.8567, 0.8831, 0.9094, 0.9356, 0.9618, 0.9879, 1.0139, 1.0398, 1.0656, 1.0914, 1.1171, 1.1428, 1.1683, 1.1938, 1.2192, 1.2446, 1.2698, 1.295, 1.3201, 1.3452, 1.5919, 1.8317, 2.0648, 2.2916, 2.5121, 2.7266, 2.9353, 3.1383, 3.336, 3.5283, 3.7156, 3.8979, 4.0754, 4.2483, 4.4167, 4.5808, 4.7407, 4.8964, 5.0483, 5.1962, 5.3405, 5.4812, 5.6184, 5.7522, 5.8827, 6.01, 6.1343, 6.2556, 6.3739, 6.4895, 6.6023, 6.7124, 6.82, 6.9251, 7.0278, 7.1281, 7.2261, 7.3219, 7.4156, 7.5071, 7.5967, 7.6842, 7.7698, 7.8536, 7.9355, 8.0157, 8.0942, 8.171, 8.2462, 8.3198, 8.3919, 8.4624, 8.5316, 8.5993, 8.6656, 8.7306, 8.7943, 8.8567, 8.9179, 8.9779, 9.0367, 9.0944, 9.151, 9.2065, 9.2609, 9.3143, 9.3667, 9.4181, 9.4685, 9.518, 9.5667, 9.6144, 9.6612, 9.7073, 9.7525, 9.7969, 9.8405, 9.8833, 9.9254, 9.9668, 10.0074, 10.0474, 10.0866, 10.1252, 10.1632, 10.2005, 10.2372, 10.2733, 10.3088, 10.3437, 10.3781, 10.4119, 10.4451, 10.4779, 10.5101]};
@@ -475,6 +478,17 @@ function sTupd(){const v=+$("sT").value;$("tmin").value=0;$("tmax").value=v;tupd
 $("sT").oninput=sTupd;$("tmax").addEventListener("input",()=>{$("sT").value=Math.max(1,+$("tmax").value);});sTupd();
 setMode(LS.get("umap_mode")==="adv");
 requestAnimationFrame(loop);$("load").style.display="none";window.MAP_READY=true;window.CAM=camera;window.CTL=controls;
+</script><button id="installb" title="Install Universe Map as an app">&#11015; Install app</button><div id="ioshint">Install: tap <b>Share</b> &gt; <b>Add to Home Screen</b><span id="iosx">&#10005;</span></div>
+<script>
+(function(){if("serviceWorker"in navigator){addEventListener("load",()=>{navigator.serviceWorker.register("sw.js",{scope:"./",updateViaCache:"none"}).then(r=>{r.update&&setInterval(()=>r.update(),3600000);}).catch(e=>console.warn("SW registration failed",e));});}
+var dp=null,b=document.getElementById("installb");
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;b.style.display="block";});
+b.onclick=()=>{if(!dp)return;dp.prompt();dp.userChoice.finally(()=>{dp=null;b.style.display="none";});};
+addEventListener("appinstalled",()=>{b.style.display="none";});
+var ua=navigator.userAgent,ios=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),safari=/Safari/.test(ua)&&!/CriOS|FxiOS|EdgiOS|OPiOS|GSA/.test(ua),standalone=navigator.standalone||matchMedia("(display-mode: standalone)").matches;
+var seen=false;try{seen=localStorage.getItem("umap_ioshint")==="1";}catch(e){}
+if(ios&&safari&&!standalone&&!seen){var h=document.getElementById("ioshint");setTimeout(()=>{h.style.display="block";},4000);document.getElementById("iosx").onclick=()=>{h.style.display="none";try{localStorage.setItem("umap_ioshint","1");}catch(e){}};setTimeout(()=>{h.style.display="none";},20000);}
+})();
 </script><script data-goatcounter="https://universemap.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body></html>
