@@ -1,5 +1,5 @@
 // Universe Map BETA service worker. Bump VERSION on every release so old caches are dropped.
-const VERSION = "v1.9-beta-1";
+const VERSION = "v2.0-beta-1";
 const CACHE = "umap-beta-" + VERSION;
 const SHELL = [
   "./", "./index.html", "./manifest.webmanifest", "./solar.js", "./exoplanets.js",

@@ -1,0 +1,31 @@
+{
+  "name": "Universe Map",
+  "short_name": "Universe Map",
+  "description": "Interactive 3D map of the real universe from galaxy surveys, with Chip the alien guide.",
+  "id": "/universe-map/",
+  "start_url": "/universe-map/",
+  "scope": "/universe-map/",
+  "display": "standalone",
+  "background_color": "#05070f",
+  "theme_color": "#05070f",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

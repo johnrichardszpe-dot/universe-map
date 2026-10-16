@@ -1,0 +1,25 @@
+"""Build the stable root (v2.0) from beta/: same app, root paths, no beta banner, own manifest + SW."""
+import re,shutil,os,json
+R='/workspace/pub';B=R+'/beta'
+s=open(B+'/index.html').read()
+s=s.replace('<title>[BETA] ','<title>',1)
+s=re.sub(r'<div id="beta">.*?</div>','',s,count=1)
+s=s.replace('"../assets/','"assets/').replace("'../assets/","'assets/")
+s=s.replace('BETA v2.0: meet Chip','v2.0: meet Chip').replace('v2.0-beta','v2.0').replace(" (BETA - testing before stable)","")
+assert '../' not in s, 'leftover ../'
+open(R+'/index.html','w').write(s)
+for f in ['solar.js','exoplanets.js','chip_match.js','chip_facts.json']:shutil.copy(B+'/'+f,R+'/'+f)
+shutil.copytree(B+'/icons',R+'/icons',dirs_exist_ok=True)
+m=json.load(open(B+'/manifest.webmanifest'))
+m.update(id="/universe-map/",start_url="/universe-map/",scope="/universe-map/",description="Interactive 3D map of the real universe from galaxy surveys, with Chip the alien guide.")
+json.dump(m,open(R+'/manifest.webmanifest','w'),indent=2)
+w=open(B+'/sw.js').read()
+w=w.replace('// Universe Map BETA service worker.','// Universe Map (stable, root) service worker. Never touches /beta/, which has its own.')
+w=re.sub(r'const VERSION = "[^"]*";','const VERSION = "v2.0-1";',w)
+w=w.replace('const CACHE = "umap-beta-" + VERSION;','const CACHE = "umap-" + VERSION;  // e.g. umap-v2.0-1 (beta uses umap-beta-...)')
+w=w.replace('"../assets/','"./assets/')
+w=w.replace('k.startsWith("umap-beta-") && k !== CACHE','/^umap-v/.test(k) && k !== CACHE')
+w=w.replace('if (req.method !== "GET" || url.origin !== location.origin) return;','if (req.method !== "GET" || url.origin !== location.origin) return;\n  if (url.pathname.startsWith("/universe-map/beta/")) return; // beta is a separate app with its own SW')
+w=w.replace('url.pathname.endsWith("/beta/")','url.pathname.endsWith("/universe-map/")')
+open(R+'/sw.js','w').write(w)
+print('root built')

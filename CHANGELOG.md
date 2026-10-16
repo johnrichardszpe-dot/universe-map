@@ -8,6 +8,13 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.0 - 16 Oct 2026: Chip the alien guide + installable app
+Promoted from v1.9-beta (+ suggestion box) after owner approval. Built with `tools/make_root20.py` (beta -> root: `../assets/` -> `assets/`, no BETA badge/title, own manifest and SW).
+- Chip the alien guide: draggable UFO helper; Quick (6) and Full (14) tours; Ask Chip (185 sourced facts in `chip_facts.json`, offline fuzzy matching in `chip_match.js`); highlight ring, tractor beam and edge arrow for on-map targets.
+- Suggest something (Chip's menu and the ? help screen): opens a prefilled GitHub issue (template `.github/ISSUE_TEMPLATE/suggestion.md`, label `suggestion`) or an email to the owner. No backend, no secrets.
+- Installable PWA: root manifest id/start_url/scope `/universe-map/`, service worker cache `umap-v2.0-1`. The root SW ignores `/universe-map/beta/`; beta keeps its own manifest (`/universe-map/beta/`) and SW cache (`umap-beta-...`), so the two apps install and update separately.
+- Beta is now identical to stable plus the BETA badge (v2.0-beta).
+
 ## v1.5.1 - 15 Oct 2026
 - Added privacy-friendly GoatCounter visit counting (no cookies, no personal tracking) to stable and beta. Stats-only change, pushed straight to stable at the owner's request.
 
