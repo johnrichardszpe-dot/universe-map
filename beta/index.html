@@ -82,17 +82,25 @@ body:not(.simple):not(.collapsed) #abub{right:342px}
 #abub ul{margin:4px 0 0;padding-left:18px}#abub li{margin:3px 0}
 #abub .ax{position:absolute;top:4px;right:8px;border:0!important;background:none!important;font-size:16px!important;padding:2px!important;color:#667!important}
 @media (max-width:700px){#alien{width:64px;height:50px;bottom:128px;right:6px} #abub{bottom:186px;font-size:13.5px} body:not(.simple):not(.collapsed) #alien,body:not(.simple):not(.collapsed) #abub{display:none!important}}
+#abub{max-height:min(62vh,520px);overflow:auto;bottom:180px}
+@media (min-width:701px){body.ss #alien{right:292px} body.ss #abub{right:294px}}
+@media (max-width:700px){#abub{bottom:192px;max-height:calc(100vh - 335px)}}
+#abub input#chipin{flex:1;min-width:0;font:16px system-ui,sans-serif;padding:7px 9px;border:1px solid #3a4a7a;border-radius:10px;color:#191930;background:#fff}
+#abub .ans{margin-top:8px;padding:8px 10px;background:#f3f6ff;border-radius:12px;border:1px solid #d5ddf5}
+#abub .src{margin-top:5px;font-size:11.5px;color:#667}
+#abub .sg{margin-top:8px}#abub .chipq{font-size:12px;padding:4px 8px;background:#fff7d6;border-color:#e2c766}
+#abub .lnk{background:none!important;border:0!important;padding:4px 0!important;color:#2b5cff!important;text-decoration:underline}
 </style></head><body>
 <div id="load">Loading galaxies...</div>
 <canvas id="c"></canvas>
-<div id="beta">BETA v1.7: alien guide <a href="../">back to stable</a></div>
+<div id="beta">BETA v1.8: ask Chip <a href="../">back to stable</a></div>
 <div id="simple" class="panel"><button class="big on" id="sNames">&#127991; Show names</button><div class="tt">&#9203; Time travel: <span id="sTv"></span><input type="range" id="sT" min="1" max="100" value="100"></div><button class="big" id="sMeas" title="Measure distances between points; build a route">&#128207; Measure</button><button class="big" id="sMW" title="Zoom into our own galaxy: Solar System and known exoplanets">&#127756; Milky Way</button><button class="big" id="sAdv" title="Show all options: layers, surveys, colours, point counts">&#9881; Advanced</button></div>
 <button id="tog" title="Show / hide controls" aria-label="toggle controls">&#10005;</button>
 <select id="flyto" aria-label="Fly to"><option value="">&#9992; Fly to...</option></select>
 <button id="findb" title="Search 4,000+ named galaxies, clusters and superclusters">&#128269; Find</button>
 <div id="gidx"><div style="display:flex;gap:6px"><input id="gq" type="search" placeholder="Type a name: Andromeda, M87, Coma, NGC 253..." autocomplete="off"><button id="gclose" aria-label="close">&#10005;</button></div>
 <div id="gcount" class="gn"></div><div id="gres"></div><div id="gbrowse"></div></div>
-<div id="ver" title="What's new">v1.7-beta</div><div id="toast"></div>
+<div id="ver" title="What's new">v1.8-beta</div><div id="toast"></div>
 <div id="news" class="panel"></div>
 <div id="nav"><button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="rst" title="Home: glide back to the Milky Way">&#8962;</button><button id="hlp" title="How to use">?</button></div>
 <div id="tip"></div>
@@ -100,7 +108,7 @@ body:not(.simple):not(.collapsed) #abub{right:342px}
 <li><b>Rotate:</b> drag with mouse or one finger</li><li><b>Zoom:</b> scroll wheel, pinch, or the + / &minus; buttons</li>
 <li><b>Move sideways:</b> right-drag or two-finger drag</li><li><b>Fly to</b> a famous cluster with the menu at top left, or tap <b>&#128269; Find</b> to search 4,000+ named galaxies</li>
 <li><b>Simple mode</b> (default): names on/off and a time-travel slider at the bottom. Tap <b>&#9881; Advanced</b> for all options (colours, surveys, layers, 724k points)</li><li><b>&#8962; Home</b> glides back to the Milky Way</li><li><b>Tap a dot</b> for that galaxy's facts; <b>&#128207; Measure</b> to measure distances; <b>&#127756; Milky Way</b> for the Solar System and exoplanets</li><li>Tap any <span class="q">?</span> for a plain-English explanation</li></ul>
-<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="alienback">&#128125; Alien guide</button> <button id="helpnews">What's new in v1.7-beta</button></div></div>
+<button id="helpok" style="font-size:15px;padding:6px 16px">Got it</button> <button id="alienback">&#128125; Alien guide</button> <button id="helpnews">What's new in v1.8-beta</button></div></div>
 <div id="ui" class="panel">
 <h1>Interactive Universe Map</h1><button id="advoff" title="Back to the simple, clean screen">&#8592; Simple mode</button><br>
 <small>Units: Mpc<span class="q" data-tip="Mpc = megaparsec, the astronomers' distance unit. 1 Mpc = 3.26 million light-years (about 3.1&times;10&sup1;&#8313; km).">?</span> &middot; redshift z<span class="q" data-tip="Redshift z: how much a galaxy's light is stretched by the expansion of the universe. Bigger z means further away and further back in time. z = 0.1 is about 420 Mpc (1.4 billion light-years).">?</span> &middot; comoving distance<span class="q" data-tip="Comoving distance: the distance to a galaxy today, measured with the expansion of the universe taken out. This is what the map uses for 3D positions.">?</span></small><br><small>Each dot is a <b>real galaxy</b> whose distance was measured from its redshift. You are at the white Milky Way marker.</small>
@@ -126,7 +134,7 @@ body:not(.simple):not(.collapsed) #abub{right:342px}
 <label class="conc"><input type="checkbox" id="Llat"> CONCEPTUAL lattice: art, not physics<span class="q" data-tip="An artistic regular grid, included only to illustrate an idea. Real galaxies do not sit on a grid.">?</span></label>
 <label><input type="checkbox" id="Llab" checked> Named structures</label>
 <hr style="border-color:#334">
-<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="measp">&#128207; Measure / route</button><button id="mwp">&#127756; Enter the Milky Way</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.7-beta)</button>
+<button id="home">Reset view</button><button id="helpb">How to use</button><button id="local">Zoom to local universe</button><button id="measp">&#128207; Measure / route</button><button id="mwp">&#127756; Enter the Milky Way</button><button id="aboutb">About this map</button><button id="findp">&#128269; Find a galaxy</button><button id="newsb">What's new (v1.8-beta)</button>
 </div>
 <div id="info" class="panel"></div><div id="route" class="panel"></div><button id="mwback">&#9664; Back to universe</button><div id="slegend" class="panel"></div><div id="slabels"></div>
 <div id="scale" class="panel"><div id="bar"></div><span id="stxt"></span><span class="q" data-tip="The bar's length on screen equals this distance at the centre of the view. 1 Mpc = 3.26 million light-years.">?</span><br><small>(at centre of view)</small></div>
@@ -345,7 +353,8 @@ function pick(o){$("gidx").style.display="none";SEL.name=o.n;SEL.v.copy(o.v);SEL
  flyToVec(o.v,o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d);showInfo(o);}
 // ---- versioning: tag, What's new, one-time toast
 const NEWS=`<h2>What's new</h2>
-<h3>v1.7-beta &middot; 16 Oct 2026 (BETA - testing before stable)</h3><ul><li><b>&#128125; Alien guide</b>: a friendly cartoon alien in a UFO bobs in the corner. Tap it for a <b>guided tour</b> (6 real stops: the Milky Way, the Solar System, Andromeda, the Virgo and Coma clusters and the whole cosmic web), quick <b>tips</b>, or <b>Hide me</b>. Bring it back from the <i>?</i> help screen or the Advanced panel. (The alien is a cartoon. The galaxies are real.)</li></ul>
+<h3>v1.8-beta &middot; 16 Oct 2026 (BETA - testing before stable)</h3><ul><li><b>Meet Chip</b>: the alien guide now has a name (his real one is too hard to pronounce).</li><li><b>&#128172; Ask Chip</b>: type a question ("how far is Andromeda?", "how big is Jupiter?") and Chip answers from a fact book of 185 checked facts about the Sun, planets, moons, nearby stars, exoplanets, galaxies, clusters and the cosmic web. Each fact names its source, and where the map's distance differs from the standard one, both are shown. It works offline and copes with typos; tap <i>Fly me there</i> to visit.</li><li><b>Full tour</b>: 14 stops from the Solar System, Proxima Centauri and TRAPPIST-1 out through the Magellanic Clouds, Andromeda, the Local Group, Virgo, the Great Attractor, Coma, the Sloan Great Wall and the Bo&ouml;tes Void to the whole cosmic web. The 6-stop <i>Quick tour</i> is still there.</li></ul>
+<h3>v1.7-beta &middot; 16 Oct 2026</h3><ul><li><b>&#128125; Alien guide</b>: a friendly cartoon alien in a UFO bobs in the corner. Tap it for a <b>guided tour</b> (6 real stops: the Milky Way, the Solar System, Andromeda, the Virgo and Coma clusters and the whole cosmic web), quick <b>tips</b>, or <b>Hide me</b>. Bring it back from the <i>?</i> help screen or the Advanced panel. (The alien is a cartoon. The galaxies are real.)</li></ul>
 <h3>v1.6-beta &middot; 16 Oct 2026</h3><ul><li><b>Installable app</b>: add Universe Map to your home screen or desktop (look for the small <i>Install app</i> button, or on iPhone/iPad use Share &gt; Add to Home Screen). It opens full-screen, loads faster, and works offline after your first visit. New versions are picked up automatically.</li></ul>
 <h3>v1.5-beta &middot; 14 Oct 2026 (BETA - testing before stable)</h3><ul>
 <li><b>Tap any galaxy dot</b>: it is highlighted, the view glides to it, and an info box shows its survey, redshift, distance (Mpc and light-years), lookback time and sky position, plus the closest named object in the index. (A quick tap selects; dragging still rotates.)</li>
@@ -360,9 +369,9 @@ const NEWS=`<h2>What's new</h2>
 <h3>v1.1 &middot; 13 Oct 2026</h3><ul><li>Easier navigation: collapsible side panel, zoom/reset/help buttons, a "Fly to" menu, touch and pinch support, and a first-visit help screen.</li><li>Plain-English "?" explanations, with distances in both Mpc and light-years.</li><li>Lighter default of 100,000 galaxies for phones (all 724,000 optional).</li></ul>
 <h3>v1.0 &middot; 13 Oct 2026</h3><ul><li>First release: 724,000 real galaxies from 2MRS, SDSS DR17 and DESI DR1 in 3D, with a lookback-time (4D) slider and colouring, and optional filament, model and concept layers.</li></ul>
 <p><small>Going forward, monthly "living universe" data updates will bump the version number.</small></p><button onclick="document.getElementById('news').style.display='none'">Close</button>`;
-$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.7-beta");};
+$("news").innerHTML=NEWS;const openNews=()=>{$("news").style.display="block";$("toast").style.display="none";LS.set("umap_seen_ver","v1.8-beta");};
 $("ver").onclick=$("newsb").onclick=openNews;$("helpnews").onclick=()=>{$("helpov").style.display="none";LS.set("umap_help","1");openNews();};
-if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.7-beta"){const t=$("toast");t.innerHTML="BETA v1.7: meet the alien guide! Tap the UFO for a tour of the real universe. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.7-beta");},9000);}
+if(LS.get("umap_help")&&LS.get("umap_seen_ver")!=="v1.8-beta"){const t=$("toast");t.innerHTML="BETA v1.7: meet the alien guide! Tap the UFO for a tour of the real universe. <u style='cursor:pointer'>What's new</u>";t.style.display="block";t.onclick=openNews;setTimeout(()=>{t.style.display="none";LS.set("umap_seen_ver","v1.8-beta");},9000);}
 function placeFind(){const f=$("flyto").getBoundingClientRect();$("findb").style.left=(f.right+6)+"px";}placeFind();addEventListener("resize",placeFind);
 // ===================== v1.5-beta: dot picking, Milky Way mode, ruler/waypoints =====================
 const COS={"z": [0.0, 0.002, 0.004, 0.006, 0.008, 0.01, 0.012, 0.014, 0.016, 0.018, 0.02, 0.022, 0.024, 0.026, 0.028, 0.03, 0.032, 0.034, 0.036, 0.038, 0.04, 0.042, 0.044, 0.046, 0.048, 0.05, 0.052, 0.054, 0.056, 0.058, 0.06, 0.062, 0.064, 0.066, 0.068, 0.07, 0.072, 0.074, 0.076, 0.078, 0.08, 0.082, 0.084, 0.086, 0.088, 0.09, 0.092, 0.094, 0.096, 0.098, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.32, 0.34, 0.36, 0.38, 0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52, 0.54, 0.56, 0.58, 0.6, 0.62, 0.64, 0.66, 0.68, 0.7, 0.72, 0.74, 0.76, 0.78, 0.8, 0.82, 0.84, 0.86, 0.88, 0.9, 0.92, 0.94, 0.96, 0.98, 1.0, 1.02, 1.04, 1.06, 1.08, 1.1, 1.12, 1.14, 1.16, 1.18, 1.2, 1.22, 1.24, 1.26, 1.28, 1.3, 1.32, 1.34, 1.36, 1.38, 1.4, 1.42, 1.44, 1.46, 1.48, 1.5, 1.52, 1.54, 1.56, 1.58, 1.6, 1.62, 1.64, 1.66, 1.68, 1.7, 1.72, 1.74, 1.76, 1.78, 1.8, 1.82, 1.84, 1.86, 1.88, 1.9, 1.92, 1.94, 1.96, 1.98, 2.0], "d": [0.0, 8.86, 17.71, 26.55, 35.38, 44.21, 53.02, 61.83, 70.63, 79.42, 88.2, 96.98, 105.74, 114.5, 123.25, 131.99, 140.72, 149.45, 158.16, 166.87, 175.57, 184.26, 192.94, 201.61, 210.28, 218.93, 227.58, 236.22, 244.85, 253.47, 262.09, 270.69, 279.29, 287.88, 296.46, 305.03, 313.59, 322.15, 330.69, 339.23, 347.76, 356.28, 364.79, 373.29, 381.78, 390.27, 398.75, 407.21, 415.67, 424.12, 432.57, 516.51, 599.59, 681.79, 763.12, 843.58, 923.16, 1001.86, 1079.68, 1156.63, 1232.71, 1307.91, 1382.26, 1455.74, 1528.36, 1600.13, 1671.05, 1741.14, 1810.39, 1878.81, 1946.42, 2013.21, 2079.2, 2144.39, 2208.8, 2272.43, 2335.28, 2397.38, 2458.73, 2519.33, 2579.2, 2638.34, 2696.77, 2754.5, 2811.53, 2867.87, 2923.54, 2978.54, 3032.88, 3086.57, 3139.62, 3192.05, 3243.85, 3295.05, 3345.64, 3395.63, 3445.05, 3493.89, 3542.16, 3589.87, 3637.04, 3683.66, 3729.75, 3775.32, 3820.37, 3864.92, 3908.96, 3952.51, 3995.58, 4038.16, 4080.28, 4121.94, 4163.14, 4203.9, 4244.21, 4284.09, 4323.54, 4362.57, 4401.18, 4439.39, 4477.2, 4514.61, 4551.63, 4588.27, 4624.53, 4660.42, 4695.94, 4731.1, 4765.91, 4800.37, 4834.48, 4868.26, 4901.7, 4934.81, 4967.6, 5000.07, 5032.22, 5064.06, 5095.6, 5126.84, 5157.78, 5188.43, 5218.79, 5248.87, 5278.67, 5308.19], "t": [0.0, 0.0289, 0.0576, 0.0863, 0.1149, 0.1435, 0.1719, 0.2003, 0.2285, 0.2567, 0.2848, 0.3129, 0.3408, 0.3687, 0.3965, 0.4242, 0.4518, 0.4793, 0.5068, 0.5342, 0.5615, 0.5887, 0.6159, 0.643, 0.6699, 0.6969, 0.7237, 0.7505, 0.7771, 0.8037, 0.8303, 0.8567, 0.8831, 0.9094, 0.9356, 0.9618, 0.9879, 1.0139, 1.0398, 1.0656, 1.0914, 1.1171, 1.1428, 1.1683, 1.1938, 1.2192, 1.2446, 1.2698, 1.295, 1.3201, 1.3452, 1.5919, 1.8317, 2.0648, 2.2916, 2.5121, 2.7266, 2.9353, 3.1383, 3.336, 3.5283, 3.7156, 3.8979, 4.0754, 4.2483, 4.4167, 4.5808, 4.7407, 4.8964, 5.0483, 5.1962, 5.3405, 5.4812, 5.6184, 5.7522, 5.8827, 6.01, 6.1343, 6.2556, 6.3739, 6.4895, 6.6023, 6.7124, 6.82, 6.9251, 7.0278, 7.1281, 7.2261, 7.3219, 7.4156, 7.5071, 7.5967, 7.6842, 7.7698, 7.8536, 7.9355, 8.0157, 8.0942, 8.171, 8.2462, 8.3198, 8.3919, 8.4624, 8.5316, 8.5993, 8.6656, 8.7306, 8.7943, 8.8567, 8.9179, 8.9779, 9.0367, 9.0944, 9.151, 9.2065, 9.2609, 9.3143, 9.3667, 9.4181, 9.4685, 9.518, 9.5667, 9.6144, 9.6612, 9.7073, 9.7525, 9.7969, 9.8405, 9.8833, 9.9254, 9.9668, 10.0074, 10.0474, 10.0866, 10.1252, 10.1632, 10.2005, 10.2372, 10.2733, 10.3088, 10.3437, 10.3781, 10.4119, 10.4451, 10.4779, 10.5101]};
@@ -495,43 +504,103 @@ function sTupd(){const v=+$("sT").value;$("tmin").value=0;$("tmax").value=v;tupd
 $("sT").oninput=sTupd;$("tmax").addEventListener("input",()=>{$("sT").value=Math.max(1,+$("tmax").value);});sTupd();
 setMode(LS.get("umap_mode")==="adv");
 requestAnimationFrame(loop);$("load").style.display="none";window.MAP_READY=true;window.CAM=camera;window.CTL=controls;
-</script><button id="alien" aria-label="Alien guide: tap for the tour, tips or to hide me" title="Your alien guide"></button><div id="abub" role="dialog" aria-live="polite"></div>
+</script><button id="alien" aria-label="Chip the alien guide: tap for tours, questions, tips or to hide me" title="Chip, your alien guide"></button><div id="abub" role="dialog" aria-live="polite"></div>
 <script>
 (function(){const $=id=>document.getElementById(id),B=$("abub"),A=$("alien"),body=document.body;
 const LSg=k=>{try{return localStorage.getItem(k)}catch(e){return null}},LSs=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
-const V3=(x,y,z)=>new THREE.Vector3(x,y,z);
-function show(h){B.innerHTML='<button class="ax" aria-label="Close" data-a="close">&#10005;</button>'+h;B.style.display="block";}
+const V3=(x,y,z)=>new THREE.Vector3(x,y,z),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function show(h){if(innerWidth<=700||window.TOURING){const I=$("info");if(I)I.style.display="none";}B.innerHTML='<button class="ax" aria-label="Close" data-a="close">&#10005;</button>'+h;B.style.display="block";B.scrollTop=0;}
 function close(){B.style.display="none";}
-function setOn(on){body.classList.toggle("alienoff",!on);LSs("umap_alien",on?"1":"0");const c=$("alienchk");if(c)c.checked=on;if(!on){close();tourI=-1;window.TOURING=false;}}
-function menu(){show('<b>Hi! I\'m your guide.</b> What shall we do?<div class="ab"><button class="pri" data-a="tour">&#128760; Take the tour</button><button data-a="tips">&#128161; Tips</button><button data-a="hide">&#128584; Hide me</button></div>');}
-function tips(){show('<b>Quick tips</b><ul><li><b>Tap any galaxy dot</b> for its distance, redshift and how long its light took to reach us.</li><li><b>&#128207; Measure</b>: tap points in order to measure distances and routes.</li><li><b>&#127756; Milky Way</b>: the Solar System plus about 4,800 stars with 6,400+ known exoplanets.</li><li><b>&#128269; Find</b>: search 4,300+ named galaxies, clusters and voids.</li><li><b>&#9881; Advanced</b>: colours, surveys, extra layers and all 724,000 galaxies.</li><li>Drag to rotate; pinch or scroll to zoom.</li></ul><div class="ab"><button class="pri" data-a="tour">&#128760; Take the tour</button><button data-a="menu">Back</button></div>');}
+function setOn(on){body.classList.toggle("alienoff",!on);LSs("umap_alien",on?"1":"0");const c=$("alienchk");if(c)c.checked=on;if(!on){close();endTour();}}
+function menu(){endTour();show('<b>Hi! I\'m Chip.</b> What shall we do?<div class="ab"><button class="pri" data-a="quick">&#128760; Quick tour (6)</button><button class="pri" data-a="full">&#127756; Full tour ('+FULL.length+')</button><button data-a="ask">&#128172; Ask Chip</button><button data-a="tips">&#128161; Tips</button><button data-a="hide">&#128584; Hide me</button></div>');}
+function tips(){show('<b>Quick tips</b><ul><li><b>Tap any galaxy dot</b> for its distance, redshift and how long its light took to reach us.</li><li><b>&#128207; Measure</b>: tap points in order to measure distances and routes.</li><li><b>&#127756; Milky Way</b>: the Solar System plus about 4,800 stars with 6,400+ known exoplanets.</li><li><b>&#128269; Find</b>: search 4,300+ named galaxies, clusters and voids.</li><li><b>&#9881; Advanced</b>: colours, surveys, extra layers and all 724,000 galaxies.</li><li><b>&#128172; Ask Chip</b> anything about space (works offline).</li></ul><div class="ab"><button class="pri" data-a="ask">&#128172; Ask Chip</button><button data-a="menu">Back</button></div>');}
+// ---------- camera targets (shared by tours and Ask Chip)
 const lab=n=>(window.STRUCT||[]).find(s=>s.name.startsWith(n));
 const lv=n=>{const s=lab(n);return s?V3(s.x[0],s.x[2],-s.x[1]):V3(0,0,0);};
 const DIR=V3(0.6,0.45,0.66);
-function inU(cb){if(window.MODE_IS_S&&window.MODE_IS_S())exitMW();cb();}
-const STOPS=[
- {t:"Earthlings live <b>HERE</b> &darr; This is the Milky Way, our home galaxy: about 100,000 light-years across, with a few hundred billion stars.",l:"Milky Way &middot; you live here",go(){inU(()=>glide(V3(0,0,0),0.12,DIR,2200));}},
- {t:"Zooming right in: the Sun, its 8 planets and little blue Earth (the planets are drawn bigger than real so you can see them). Sunlight takes about 8 minutes to reach you.",l:"Solar System &middot; home of Earth",go(){enterMW();}},
- {t:"This one's 2.5 million light-years away. Don't wave. It's the nearest big galaxy to ours.",l:"Andromeda Galaxy &middot; 2.5 million ly",go(){inU(()=>{const f=()=>{const a=typeof GI!=="undefined"&&GI&&GI.find(e=>/^Andromeda/.test(e.n));glide(a?a.v.clone():V3(0,0,0),1.8,null,2600);};(typeof GI!=="undefined"&&GI)?f():loadIndex(f);});}},
- {t:"Over a thousand galaxies in one cluster. Busy neighbourhood!",l:"Virgo Cluster &middot; about 54 million ly",go(){inU(()=>glide(lv("Virgo"),45,null,2600));}},
- {t:"Light from here left before the dinosaurs existed. Seriously.",l:"Coma Cluster &middot; about 330 million ly",go(){inU(()=>glide(lv("Coma"),260,null,2600));}},
- {t:"Every dot is a real galaxy. 724,000 of them! Together they trace the cosmic web: walls and filaments around huge empty voids.",l:"The cosmic web &middot; 724,000 galaxies",go(){inU(()=>{const m=$("more");if(m&&!m.checked){m.checked=true;m.dispatchEvent(new Event("change"));}glide(V3(0,0,0),5200*1.0524,null,3000);});}}];
-let tourI=-1;
-function stop(i){tourI=i;window.TOURING=true;$("toast").style.display="none";const s=STOPS[i];if(!body.classList.contains("simple"))setPanel(false);
- show(s.t+'<br><span class="al">'+s.l+'</span><div class="ab"><button data-a="back"'+(i?'':' disabled')+'>&larr; Back</button><button class="pri" data-a="next">'+(i<STOPS.length-1?'Next &rarr;':'Finish')+'</button><button data-a="exit">Exit</button><span style="margin-left:auto;font-size:12px;color:#667;align-self:center">'+(i+1)+'/'+STOPS.length+'</span></div>');
- try{s.go();}catch(e){console.warn(e);}}
-function finish(){tourI=-1;window.TOURING=false;show("That's the tour! Every dot is real data (2MRS, SDSS, DESI). Go explore. Tap me any time.<div class='ab'><button data-a='tips'>&#128161; Tips</button><button data-a='close'>Close</button></div>");}
-B.addEventListener("click",e=>{const b=e.target.closest("button[data-a]");if(!b)return;const a=b.dataset.a;
- if(a==="close")close();else if(a==="menu")menu();else if(a==="tips")tips();else if(a==="hide")setOn(false);
- else if(a==="tour")stop(0);else if(a==="next")(tourI<STOPS.length-1?stop(tourI+1):finish());else if(a==="back"&&tourI>0)stop(tourI-1);else if(a==="exit"){tourI=-1;window.TOURING=false;close();}});
+const isS=()=>window.MODE_IS_S&&window.MODE_IS_S();
+function inU(cb){if(isS())exitMW();cb();}
+function withGI(cb){(typeof GI!=="undefined"&&GI)?cb():loadIndex(cb);}
+function giDist(o){const d=o.d===0?0.05:Math.max(0.006,Math.min(300,o.d<2?o.d*0.25+0.004:o.d*0.35));return o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d;}
+function starIdx(h){return (window.EXO||[]).findIndex(e=>e.h===h);}
+// info=true shows the map's own info panel (Ask Chip); tours keep the screen clean
+function flyTo2(t,info){if(!t)return;const [k,v]=t.includes(":")?[t.slice(0,t.indexOf(":")),t.slice(t.indexOf(":")+1)]:[t,""];
+ if(k==="gi")return inU(()=>withGI(()=>{const o=GI.find(e=>e.n===v);if(!o)return;if(info)pick(o);else glide(o.v.clone(),giDist(o),null,2600);}));
+ if(k==="lab")return inU(()=>{const L=lab(v);glide(lv(v),/Wall|Shapley/.test(v)?160:45,null,2600);if(info&&L&&window.flyTo){}});
+ if(k==="mw")return inU(()=>glide(V3(0,0,0),0.12,DIR,2200));
+ if(k==="lg")return inU(()=>glide(V3(0,0,0),2.6,DIR,2600));
+ if(k==="home")return inU(()=>{const m=$("more");if(m&&!m.checked){m.checked=true;m.dispatchEvent(new Event("change"));}glide(V3(0,0,0),5200*1.0524,null,3000);});
+ if(k==="body")return enterMW(()=>setTimeout(()=>{const b=SS.bod&&SS.bod.find(x=>x.n===v);if(!b)return;if(info&&SS.info)SS.info(b);glide(b.v.clone(),b.n==="Sun"?1.4:0.5,V3(0.4,0.6,1.2),1800);},isS()?0:1900));
+ if(k==="star")return enterMW(()=>setTimeout(()=>{const i=starIdx(v);if(i<0)return;if(info)return SS.star(i);const p=V3(SS.hp[3*i],SS.hp[3*i+1],SS.hp[3*i+2]);glide(p,Math.max(0.3,window.EXO[i].d*0.12),null,2400);},isS()?0:1900));
+ if(k==="mwfield")return enterMW(()=>setTimeout(()=>glide(V3(0,0,0),700,V3(0.5,0.6,0.62),2600),isS()?0:1900));}
+// ---------- tours
+const T=(t,l,go)=>({t,l,go});
+const QUICK=[
+ T("Earthlings live <b>HERE</b> &darr; This is the Milky Way, our home galaxy: about 100,000 light-years across, with a few hundred billion stars.","Milky Way &middot; you live here","mw"),
+ T("Zooming right in: the Sun, its 8 planets and little blue Earth (the planets are drawn bigger than real so you can see them). Sunlight takes about 8 minutes to reach you.","Solar System &middot; home of Earth","body:Sun"),
+ T("This one's 2.5 million light-years away. Don't wave. It's the nearest big galaxy to ours.","Andromeda Galaxy &middot; 2.5 million ly","gi:Andromeda Galaxy (M31)"),
+ T("Over a thousand galaxies in one cluster. Busy neighbourhood!","Virgo Cluster &middot; about 54 million ly","lab:Virgo Cluster"),
+ T("Light from here left before the dinosaurs existed. Seriously.","Coma Cluster &middot; about 330 million ly","lab:Coma Cluster"),
+ T("Every dot is a real galaxy. 724,000 of them! Together they trace the cosmic web: walls and filaments around huge empty voids.","The cosmic web &middot; 724,000 galaxies","home")];
+const FULL=[
+ T("Home sweet home: the Sun and its 8 planets (drawn bigger than real so you can spot them). Sunlight takes about 8 minutes 20 seconds to reach Earth.","Solar System","body:Sun"),
+ T("Proxima Centauri, the closest star to the Sun: 4.24 light-years away. At Voyager 1's speed you'd need about 75,000 years to get here. Pack snacks.","Proxima Centauri &middot; 4.24 ly","star:Proxima Cen"),
+ T("TRAPPIST-1: a tiny red star with SEVEN Earth-sized planets, all closer to it than Mercury is to the Sun. Three are in the habitable zone.","TRAPPIST-1 &middot; 40.5 ly","star:TRAPPIST-1"),
+ T("Every dot here is a real star with known planets: about 4,800 stars hosting 6,400+ confirmed exoplanets (NASA Exoplanet Archive).","The exoplanet neighbourhood","mwfield"),
+ T("Back out to the whole Milky Way: about 100,000 light-years across. The Sun is about 26,000 light-years from the centre.","Milky Way &middot; you live here","mw"),
+ T("The Large and Small Magellanic Clouds: two little galaxies orbiting ours, about 160,000 and 200,000 light-years away. From Perth you can see them with your own eyes!","Magellanic Clouds &middot; 160,000-200,000 ly","gi:Large Magellanic Cloud"),
+ T("This one's 2.5 million light-years away. Don't wave. Andromeda is the nearest big galaxy, with roughly a trillion stars.","Andromeda Galaxy &middot; 2.5 million ly","gi:Andromeda Galaxy (M31)"),
+ T("The Local Group: the Milky Way, Andromeda, Triangulum and dozens of dwarf galaxies, in a patch roughly 10 million light-years across.","The Local Group","lg"),
+ T("Over a thousand galaxies in one cluster. Busy neighbourhood! At its heart, M87's black hole was the first ever photographed (2019).","Virgo Cluster &middot; about 54 million ly","lab:Virgo Cluster"),
+ T("The Great Attractor region: we and thousands of galaxies are drifting this way. It's near the heart of Laniakea, our home supercluster, about 520 million light-years across.","Great Attractor &middot; Laniakea","gi:Great Attractor (Norma Cluster, Abell 3627)"),
+ T("Light from here left before the dinosaurs existed. Seriously. Coma's galaxies move so fast they gave the first clue to dark matter (1933).","Coma Cluster &middot; about 330 million ly","lab:Coma Cluster"),
+ T("The Sloan Great Wall: a wall of galaxies about 1.4 billion light-years long, around 1 billion light-years away.","Sloan Great Wall","lab:Sloan Great Wall"),
+ T("The Bo&ouml;tes Void: a giant bubble about 330 million light-years across, with only about 60 known galaxies inside. Spooky quiet.","Bo&ouml;tes Void &middot; about 700 million ly","gi:Boötes Void"),
+ T("Every dot is a real galaxy. 724,000 of them! Together they trace the cosmic web: walls and filaments around huge empty voids.","The cosmic web &middot; 724,000 galaxies","home")];
+let TOUR=null,tourI=-1;
+function endTour(){TOUR=null;tourI=-1;window.TOURING=false;}
+function stop(i){tourI=i;window.TOURING=true;$("info").style.display="none";$("toast").style.display="none";const s=TOUR[i];if(!body.classList.contains("simple"))setPanel(false);
+ show(s.t+'<br><span class="al">'+s.l+'</span><div class="ab"><button data-a="back"'+(i?'':' disabled')+'>&larr; Back</button><button class="pri" data-a="next">'+(i<TOUR.length-1?'Next &rarr;':'Finish')+'</button><button data-a="exit">Exit</button><span style="margin-left:auto;font-size:12px;color:#667;align-self:center">'+(i+1)+'/'+TOUR.length+'</span></div>');
+ try{flyTo2(s.go,false);}catch(e){console.warn(e);}}
+function startTour(t){TOUR=t;stop(0);}
+function finish(){endTour();show("That's the tour! Every dot is real data (2MRS, SDSS, DESI). Go explore. Tap me any time.<div class='ab'><button data-a='ask'>&#128172; Ask Chip</button><button data-a='tips'>&#128161; Tips</button><button data-a='close'>Close</button></div>");}
+// ---------- Ask Chip (offline; facts lazily loaded)
+let FACTS=null,LOADING=null,LAST=null;
+function loadFacts(){if(FACTS)return Promise.resolve();if(LOADING)return LOADING;
+ LOADING=new Promise((res,rej)=>{const go=()=>fetch("chip_facts.json").then(r=>r.json()).then(j=>{FACTS=j;res();}).catch(rej);
+  if(window.CHIPM)go();else{const s=document.createElement("script");s.src="chip_match.js";s.onload=go;s.onerror=rej;document.body.appendChild(s);}});
+ LOADING.catch(()=>{LOADING=null;});return LOADING;}
+const SUG=["What's your name?","How far is Andromeda?","How big is Jupiter?","Closest star?","TRAPPIST-1","What is a light-year?","What is dark matter?","Laniakea"];
+function askUI(out){endTour();const sg=SUG.map(q=>'<button class="chipq" data-q="'+esc(q)+'">'+esc(q)+'</button>').join("");
+ show('<b>Ask Chip</b> <small style="color:#667">(works offline)</small><form id="chipf" class="ab" autocomplete="off"><input id="chipin" type="text" enterkeyhint="send" maxlength="120" placeholder="e.g. how far is Andromeda?" aria-label="Ask Chip a question"><button class="pri" type="submit">Ask</button></form><div id="chipout">'+(out||"")+'</div><div class="ab sg">'+sg+'</div><div class="ab"><button data-a="menu">&larr; Menu</button></div>');
+ $("chipf").onsubmit=e=>{e.preventDefault();doAsk($("chipin").value);};
+ if(!out&&matchMedia("(pointer:fine)").matches)setTimeout(()=>{const i=$("chipin");i&&i.focus();},50);}
+function factHTML(e,intent){const t=CHIPM.answerText(e,intent);const extra=(intent&&e.i&&e.i[intent])?'<div class="more"><button class="lnk" data-more="'+esc(e.id)+'">More about '+esc(e.n)+'</button></div>':'';
+ return '<div class="ans"><b>'+esc(e.n)+'</b><br>'+esc(t)+'<div class="src">Source: '+esc(e.s)+(e.dist&&e.dist.std&&e.dist.map&&e.dist.std!==e.dist.map?' &middot; standard distance '+esc(e.dist.std)+', map '+esc(e.dist.map):'')+'</div>'+extra+(e.fly&&e.fly!=="chip"?'<div class="ab"><button class="pri" data-fly="'+esc(e.id)+'">&#128760; Fly me there</button></div>':'')+'</div>';}
+function doAsk(q){q=(q||"").trim();if(!q)return;const out=$("chipout");if(out)out.innerHTML='<div class="ans">Thinking... &#129300;</div>';
+ loadFacts().then(()=>{const r=CHIPM.ask(q,FACTS);LAST=r;let h;
+  if(r.kind==="answer")h=factHTML(r.e,r.intent);
+  else if(r.kind==="maybe")h='<div class="ans">Hmm, did you mean...?<div class="ab">'+r.sugg.map(e=>'<button data-pick="'+esc(e.id)+'">'+esc(e.n)+'</button>').join("")+'</div></div>';
+  else h='<div class="ans">I don\'t know that one yet! &#128125; I know about planets, moons, the Sun, nearby stars, exoplanets, galaxies, clusters and the cosmic web.'+(r.sugg&&r.sugg.length?' Maybe one of these?<div class="ab">'+r.sugg.map(e=>'<button data-pick="'+esc(e.id)+'">'+esc(e.n)+'</button>').join("")+'</div>':'')+'</div>';
+  askUI(h);const i=$("chipin");if(i)i.value=q;}).catch(()=>{if(out)out.innerHTML='<div class="ans">Oops, I couldn\'t load my fact book. Check your connection and try again.</div>';});}
+const byId=id=>FACTS&&FACTS.find(e=>e.id===id);
+B.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.q){doAsk(t.dataset.q);return;}
+ if(t.dataset.pick){const f=byId(t.dataset.pick);if(f)askUI(factHTML(f,LAST&&LAST.intent));return;}
+ if(t.dataset.more){const f=byId(t.dataset.more);if(f)askUI(factHTML(f,null));return;}
+ if(t.dataset.fly){const f=byId(t.dataset.fly);if(f){close();flyTo2(f.fly,true);}return;}
+ const a=t.dataset.a;if(!a)return;
+ if(a==="close"){close();endTour();}else if(a==="menu")menu();else if(a==="tips")tips();else if(a==="hide")setOn(false);else if(a==="ask")askUI();
+ else if(a==="quick")startTour(QUICK);else if(a==="full")startTour(FULL);else if(a==="tour")startTour(QUICK);
+ else if(a==="next")(tourI<TOUR.length-1?stop(tourI+1):finish());else if(a==="back"&&tourI>0)stop(tourI-1);else if(a==="exit"){endTour();close();}});
 A.onclick=()=>{if(B.style.display==="block"&&tourI<0)close();else if(tourI<0)menu();};
 $("alienchk")&&($("alienchk").onchange=e=>setOn(e.target.checked));
 $("alienback").onclick=()=>{$("helpov").style.display="none";LSs("umap_help","1");setOn(true);menu();};
 setOn(LSg("umap_alien")!=="0");
-window.ALIEN={menu,tips,stop,close,setOn};
+window.ALIEN={menu,tips,stop,close,setOn,askUI,doAsk,startTour,QUICK,FULL,flyTo2};
 // one-time greeting, after the help screen is closed
 if(!LSg("umap_alien_greeted")&&LSg("umap_alien")!=="0"){const t=setInterval(()=>{if($("helpov").style.display==="flex"||!window.MAP_READY)return;clearInterval(t);setTimeout(()=>{if(B.style.display==="block")return;LSs("umap_alien_greeted","1");
- show("<b>G'day Earthling!</b> &#128075; Want a tour of the real universe?<div class='ab'><button class='pri' data-a='tour'>&#128760; Yes, take the tour</button><button data-a='tips'>Tips</button><button data-a='close'>Maybe later</button></div>");},1200);},500);}
+ show("<b>G'day Earthling! I'm Chip.</b> &#128075; Want a tour of the real universe, or got a question?<div class='ab'><button class='pri' data-a='quick'>&#128760; Quick tour</button><button data-a='full'>&#127756; Full tour</button><button data-a='ask'>&#128172; Ask Chip</button><button data-a='close'>Maybe later</button></div>");},1200);},500);}
 })();
 </script><button id="installb" title="Install Universe Map as an app">&#11015; Install app</button><div id="ioshint">Install: tap <b>Share</b> &gt; <b>Add to Home Screen</b><span id="iosx">&#10005;</span></div>
 <script>
