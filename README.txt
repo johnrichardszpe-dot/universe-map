@@ -21,3 +21,5 @@ NASA Planetary Fact Sheet (nssdc.gsfc.nasa.gov/planetary/factsheet/); JPL Horizo
 
 VISIT COUNTING
 The site uses GoatCounter (https://www.goatcounter.com), a privacy-friendly open-source visit counter: no cookies, no personal tracking. Dashboard: https://universemap.goatcounter.com
+
+Licence: Released under the MIT Licence (see LICENSE). Free for anyone, anywhere, to use, change and share. Copyright (c) 2026 John Richards.
