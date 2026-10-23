@@ -8,6 +8,13 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.1 - 23 Oct 2026 (stable)
+Promoted from beta (v2.0-beta-2 to beta-4), approved by the owner after testing on his Galaxy S9.
+- Fixed the oversized map canvas on high-resolution phones, which put labels, the Chip ring and taps away from their targets.
+- Solar System labels sit beside bodies; the Sun glows; the target is lifted above the info panel on phones.
+- Chip fact corrections, GJ 411 distance fix, wrong Milky Way toast removed, Install button moved clear of the Time-travel panel, one tap on Chip opens the menu.
+- New: if the map is installed or already open when an update arrives, it now shows "Universe Map was just updated. Tap to reload."
+
 ## v2.0-beta-4 - 23 Oct 2026 (beta only, not yet in stable)
 - Fixed a display bug on high-resolution phones: the map canvas was drawn about 1.5 times bigger than the screen and cropped, so labels, the Chip ring and tap targets sat away from their stars and planets. The canvas now fills the screen exactly. (The same bug is in the stable map until this is promoted.)
 

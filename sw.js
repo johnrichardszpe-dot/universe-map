@@ -1,5 +1,5 @@
 // Universe Map (stable, root) service worker. Never touches /beta/, which has its own. Bump VERSION on every release so old caches are dropped.
-const VERSION = "v2.0-1";
+const VERSION = "v2.1-1";
 const CACHE = "umap-" + VERSION;  // e.g. umap-v2.0-1 (beta uses umap-beta-...)
 const SHELL = [
   "./", "./index.html", "./manifest.webmanifest", "./solar.js", "./exoplanets.js",
