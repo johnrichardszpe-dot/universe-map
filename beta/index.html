@@ -65,7 +65,8 @@ body.ss #simple{display:flex;width:auto} #mwback,#slegend,#slabels{display:none}
 #route{left:64px;top:56px;width:310px;max-height:45vh;overflow:auto;display:none;z-index:8;font-size:13px} #route #wpl div{border-bottom:1px solid #223;padding:2px 0}
 #route select{max-width:140px;background:#223;color:#dde;border:1px solid #446}
 @media (max-width:700px){#route{left:8px;right:8px;width:auto;top:128px;max-height:30vh} #slegend{display:none!important} #simple .big{font-size:12.5px;padding:6px 8px;white-space:nowrap} #simple{gap:5px;padding:6px}}
-#installb{position:fixed;right:10px;bottom:10px;z-index:60;display:none;font:12px sans-serif;padding:5px 10px;border-radius:14px;border:1px solid #3a4a7a;background:#0e1430cc;color:#cfe0ff;cursor:pointer}#ioshint{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:60;display:none;font:13px sans-serif;padding:7px 12px;border-radius:10px;background:#0e1430ee;color:#dde8ff;border:1px solid #3a4a7a;max-width:90vw}#ioshint b{color:#fff}#ioshint span{margin-left:10px;cursor:pointer;opacity:.7}
+#installb{position:fixed;right:10px;bottom:10px;z-index:60;display:none;font:12px sans-serif;padding:5px 10px;border-radius:14px;border:1px solid #3a4a7a;background:#0e1430cc;color:#cfe0ff;cursor:pointer}
+@media (max-width:700px){#installb{right:auto;left:10px;bottom:106px}}#ioshint{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:60;display:none;font:13px sans-serif;padding:7px 12px;border-radius:10px;background:#0e1430ee;color:#dde8ff;border:1px solid #3a4a7a;max-width:90vw}#ioshint b{color:#fff}#ioshint span{margin-left:10px;cursor:pointer;opacity:.7}
 #alien{position:fixed;right:10px;bottom:96px;z-index:7;width:84px;height:66px;padding:0;border:0;background:url(icons/alien.png) center/contain no-repeat;cursor:pointer;animation:abob 3.2s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(120,230,140,.35))}
 #alien:focus-visible{outline:2px solid #ffd23f;border-radius:10px}
 @keyframes abob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
@@ -520,7 +521,7 @@ $("sMW").onclick=$("mwp").onclick=()=>enterMW();$("mwback").onclick=()=>exitMW()
 labels.forEach(l=>{const o=l.el.onclick;l.el.onclick=ev=>{o&&o(ev);if(l.id==="mw")$("info").insertAdjacentHTML("beforeend","<br><button class='big' onclick='enterMW()'>&#127756; Enter the Milky Way</button>");if(MEAS)addWP({n:l.name,v:l.v.clone(),sc:"U"});};});
 {const so=showInfo;showInfo=function(o){so(o);if(o.d===0)$("info").insertAdjacentHTML("beforeend","<br><button onclick='enterMW()'>&#127756; Enter the Milky Way</button>");if(MEAS)addWP({n:o.n,v:o.v.clone(),sc:"U"});};}
 // prompt when zooming very close to the Milky Way
-let mwPrompted=false;setInterval(()=>{if(MODE!=="U"||window.TOURING)return;const c=camera.position.length();if(c<0.03&&controls.target.length()<0.05&&!mwPrompted){mwPrompted=true;const t=$("toast");t.innerHTML="You're at the Milky Way. <u style='cursor:pointer'>&#127756; Enter the Milky Way</u> to see the Solar System and exoplanets.";t.style.display="block";t.onclick=()=>{t.style.display="none";enterMW();};setTimeout(()=>t.style.display="none",8000);}if(c>0.2)mwPrompted=false;},500);
+let mwPrompted=false;setInterval(()=>{if(MODE!=="U"||window.TOURING||anim||window.CHIP_HL)return;const c=camera.position.length();if(c<0.03&&controls.target.length()<0.05&&!mwPrompted){mwPrompted=true;const t=$("toast");t.innerHTML="You're at the Milky Way. <u style='cursor:pointer'>&#127756; Enter the Milky Way</u> to see the Solar System and exoplanets.";t.style.display="block";t.onclick=()=>{t.style.display="none";enterMW();};setTimeout(()=>t.style.display="none",8000);}if(c>0.2)mwPrompted=false;},500);
 
 if(innerWidth<=700){$('sAdv').innerHTML='&#9881;';$('sAdv').setAttribute('aria-label','Advanced options');}
 
@@ -538,10 +539,10 @@ requestAnimationFrame(loop);$("load").style.display="none";window.MAP_READY=true
 (function(){const $=id=>document.getElementById(id),B=$("abub"),A=$("alien"),body=document.body;
 const LSg=k=>{try{return localStorage.getItem(k)}catch(e){return null}},LSs=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 const V3=(x,y,z)=>new THREE.Vector3(x,y,z),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function show(h){if(innerWidth<=700||window.TOURING){const I=$("info");if(I)I.style.display="none";}B.innerHTML='<button class="ax" aria-label="Close" data-a="close">&#10005;</button>'+h;B.style.display="block";B.scrollTop=0;clearHL();placeB();}
+function show(h){if(innerWidth<=700||window.TOURING){const I=$("info");if(I)I.style.display="none";}B.dataset.menu="";B.innerHTML='<button class="ax" aria-label="Close" data-a="close">&#10005;</button>'+h;B.style.display="block";B.scrollTop=0;clearHL();placeB();}
 function close(){B.style.display="none";clearHL();}
 function setOn(on){body.classList.toggle("alienoff",!on);LSs("umap_alien",on?"1":"0");const c=$("alienchk");if(c)c.checked=on;if(!on){close();endTour();}}
-function menu(){endTour();show('<b>Hi! I\'m Chip.</b> What shall we do?<div class="ab"><button class="pri" data-a="quick">&#128760; Quick tour (6)</button><button class="pri" data-a="full">&#127756; Full tour ('+FULL.length+')</button><button data-a="ask">&#128172; Ask Chip</button><button data-a="tips">&#128161; Tips</button><button data-a="suggest">&#128221; Suggest something</button><button data-a="hide">&#128584; Hide me</button></div>');}
+function menu(){endTour();show('<b>Hi! I\'m Chip.</b> What shall we do?<div class="ab"><button class="pri" data-a="quick">&#128760; Quick tour (6)</button><button class="pri" data-a="full">&#127756; Full tour ('+FULL.length+')</button><button data-a="ask">&#128172; Ask Chip</button><button data-a="tips">&#128161; Tips</button><button data-a="suggest">&#128221; Suggest something</button><button data-a="hide">&#128584; Hide me</button></div>');B.dataset.menu="1";}
 function tips(){show('<b>Quick tips</b><ul><li><b>Tap any galaxy dot</b> for its distance, redshift and how long its light took to reach us.</li><li><b>&#128207; Measure</b>: tap points in order to measure distances and routes.</li><li><b>&#127756; Milky Way</b>: the Solar System plus about 4,800 stars with 6,400+ known exoplanets.</li><li><b>&#128269; Find</b>: search 4,300+ named galaxies, clusters and voids.</li><li><b>&#9881; Advanced</b>: colours, surveys, extra layers and all 724,000 galaxies.</li><li><b>&#128172; Ask Chip</b> anything about space (works offline).</li></ul><div class="ab"><button class="pri" data-a="ask">&#128172; Ask Chip</button><button data-a="menu">Back</button></div>');}
 // ---------- camera targets (shared by tours and Ask Chip)
 const lab=n=>(window.STRUCT||[]).find(s=>s.name.startsWith(n));
@@ -622,7 +623,7 @@ B.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
  if(a==="close"){close();endTour();}else if(a==="menu")menu();else if(a==="tips")tips();else if(a==="hide")setOn(false);else if(a==="ask")askUI();else if(a==="suggest")suggestUI();else if(a==="sgh")sendSug("gh");else if(a==="sgm")sendSug("mail");
  else if(a==="quick")startTour(QUICK);else if(a==="full")startTour(FULL);else if(a==="tour")startTour(QUICK);
  else if(a==="next")(tourI<TOUR.length-1?stop(tourI+1):finish());else if(a==="back"&&tourI>0)stop(tourI-1);else if(a==="exit"){endTour();close();}});
-A.onclick=()=>{if(DRAG.moved){DRAG.moved=false;return;}if(B.style.display==="block"&&tourI<0)close();else if(tourI<0)menu();};
+A.onclick=()=>{if(DRAG.moved){DRAG.moved=false;return;}if(B.style.display==="block"&&tourI<0&&B.dataset.menu==="1")close();else if(tourI<0)menu();};
 $("alienchk")&&($("alienchk").onchange=e=>setOn(e.target.checked));
 $("alienback").onclick=()=>{$("helpov").style.display="none";LSs("umap_help","1");setOn(true);menu();};
 
