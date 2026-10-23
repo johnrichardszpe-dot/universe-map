@@ -258,6 +258,8 @@ let anim=null;const _a=new THREE.Vector3(),_b=new THREE.Vector3(),_c=new THREE.V
 const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
 // glide camera to target tv at distance d along direction dir (default: keep current viewing direction)
 function glide(tv,d,dir,ms){const t0=controls.target.clone(),p0=camera.position.clone(),d0=Math.max(1e-6,p0.distanceTo(t0)),u0=p0.clone().sub(t0).normalize(),t1=tv.clone(),u1=(dir||u0).clone().normalize();
+ // phone: when an info panel covers the lower screen, park the target in the free area above it so it is never hidden behind the panel
+ try{const inf=$("info");if(MODE==="S"&&innerWidth<=700&&inf&&inf.style.display==="block"){const top=inf.getBoundingClientRect().top;if(top>0){const yObj=Math.max(90,top/2),k=(innerHeight/2-yObj)/(innerHeight/2);if(k>0.05){const up=camera.up.clone().sub(u1.clone().multiplyScalar(camera.up.dot(u1))).normalize();t1.addScaledVector(up,-k*d*Math.tan(camera.fov*Math.PI/360));}}}}catch(e){}
  const T0=performance.now();ms=ms||1500;anim={step(now){const k=Math.min(1,(now-T0)/ms),e=ease(k);controls.target.lerpVectors(t0,t1,e);
   const lg=Math.exp(Math.log(d0)*(1-e)+Math.log(d)*e);_a.copy(u0).lerp(u1,e);if(_a.lengthSq()<1e-8)_a.copy(u1);_a.normalize();camera.position.copy(controls.target).addScaledVector(_a,lg);if(k>=1)anim=null;}};}
 function goHome(){if(MODE==='S')return glide(_e.set(0,0,0),1.4,new THREE.Vector3(0.4,0.6,1.2),1500);glide(_e.set(0,0,0),5200*1.0524,HOMEDIR,1500);}
@@ -452,6 +454,7 @@ const OBL=0;// Horizons vectors already in ICRF (equatorial) frame
 function e2t(x,y,z,s){return new THREE.Vector3(x*s,z*s,-y*s);}
 function buildSS(){if(SS.ready)return;SS.ready=true;const S=SS.scene;const AU=1/206264.8;
  const sun=new THREE.Mesh(new THREE.SphereGeometry(0.018,20,14),new THREE.MeshBasicMaterial({color:0xffdd55}));S.add(sun);
+ {const g=new THREE.Mesh(new THREE.SphereGeometry(0.03,20,14),new THREE.MeshBasicMaterial({color:0xffcc33,transparent:true,opacity:0.22,depthWrite:false}));S.add(g);}
  SS.bod=[{n:"Sun",v:new THREE.Vector3(),t:new THREE.Vector3(),sun:1}];
  const cols={Mercury:0xb0a090,Venus:0xf0d090,Earth:0x4f9cff,Mars:0xff6a3d,Jupiter:0xe0b080,Saturn:0xf0d8a0,Uranus:0x9fe8ff,Neptune:0x5a7dff,Pluto:0xd8c0a8,Ceres:0xa0a0a0};
  // orbit circles in the ecliptic plane (equatorial frame tilt 23.44 deg), compressed radius
@@ -473,8 +476,15 @@ function buildSS(){if(SS.ready)return;SS.ready=true;const S=SS.scene;const AU=1/
  SS.sel=document.createElement("div");SS.sel.className="lab slab selmk";SS.sel.style.visibility="hidden";$("slabels").appendChild(SS.sel);
  $("slegend").innerHTML="<b>Exoplanet host stars</b> <small>(colour = largest known planet)</small>"+CL.map(x=>`<div><i style="background:${x[1]}"></i>${x[0]}</div>`).join("")+
   `<small>${E.length.toLocaleString()} stars with ${E.reduce((s,h)=>s+h.p.length,0).toLocaleString()} confirmed planets, real positions (NASA Exoplanet Archive). The Solar System in the middle is <b>not to scale</b>: planet sizes and orbits are enlarged (square-root scale) so you can see them.</small>`;}
-SS.labels=function(){const W=innerWidth,H=innerHeight,cd=camera.position.length();const showP=cd<4;for(const b of SS.bod){tmp.copy(b.v).project(camera);const on=showP&&tmp.z<1&&Math.abs(tmp.x)<1&&Math.abs(tmp.y)<1;b.el.style.visibility=on?"visible":"hidden";if(on)b.el.style.transform=`translate(${((tmp.x+1)/2*W+6)|0}px,${((1-tmp.y)/2*H-8)|0}px)`;}
- if(SS.sv){tmp.copy(SS.sv).project(camera);const on=tmp.z<1&&Math.abs(tmp.x)<1&&Math.abs(tmp.y)<1;SS.sel.style.visibility=on?"visible":"hidden";if(on)SS.sel.style.transform=`translate(${((tmp.x+1)/2*W+6)|0}px,${((1-tmp.y)/2*H-8)|0}px)`;}};
+SS.labels=function(){const W=innerWidth,H=innerHeight,cd=camera.position.length();const showP=cd<4;
+ const pxPer=H/(2*Math.tan(camera.fov*Math.PI/360));
+ // label sits just beside the body's edge (never on top of it); the selected body shows only the single "target" label
+ const place=(el,b,rad)=>{tmp.copy(b.v).project(camera);const on=tmp.z<1&&Math.abs(tmp.x)<1&&Math.abs(tmp.y)<1;if(!on)return false;
+  const d=Math.max(1e-6,camera.position.distanceTo(b.v)),rpx=Math.min(60,rad/d*pxPer);
+  el.style.transform=`translate(${((tmp.x+1)/2*W+Math.max(8,rpx+6))|0}px,${((1-tmp.y)/2*H-8)|0}px)`;return true;};
+ for(const b of SS.bod){const sel=SS.sv&&SS.sv===b.v;const on=showP&&!sel&&place(b.el,b,b.sun?0.018:(b.f&&b.f.dia?Math.max(0.0035,0.0035*Math.log10(b.f.dia/300)*2):0.004));b.el.style.visibility=on?"visible":"hidden";}
+ if(SS.sv){const sb=SS.bod.find(x=>x.v===SS.sv);const rad=sb?(sb.sun?0.018:(sb.f&&sb.f.dia?Math.max(0.0035,0.0035*Math.log10(sb.f.dia/300)*2):0.004)):0.002;
+  const on=place(SS.sel,{v:SS.sv},rad);SS.sel.style.visibility=on?"visible":"hidden";}};
 const fmtN=(v,u,dg)=>v==null?"unknown":(+v).toLocaleString(undefined,{maximumFractionDigits:dg==null?2:dg})+(u?" "+u:"");
 SS.info=function(b){const I=$("info");I.style.display="block";if(MEAS){addWP({n:b.n,v:b.v.clone(),t:b.t.clone(),sc:"S"});}
  SS.sv=b.v;SS.sel.textContent="\u25CE "+b.n;DIRTY=2;

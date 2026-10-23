@@ -8,6 +8,11 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.0-beta-2 - 23 Oct 2026 (beta only, not yet in stable)
+- Solar System labels now sit beside each body instead of on top of it, and the selected body shows a single target label (no more doubled "Sun" text over the Sun).
+- The Sun has a soft glow so Chip's ring and beam clearly point at the real Sun, not the word.
+- On phones, when Chip or a tap flies to a planet or star and the info panel opens, the target is parked in the free area above the panel so it is never hidden behind it.
+
 ## v2.0 - 16 Oct 2026: Chip the alien guide + installable app
 Promoted from v1.9-beta (+ suggestion box) after owner approval. Built with `tools/make_root20.py` (beta -> root: `../assets/` -> `assets/`, no BETA badge/title, own manifest and SW).
 - Chip the alien guide: draggable UFO helper; Quick (6) and Full (14) tours; Ask Chip (185 sourced facts in `chip_facts.json`, offline fuzzy matching in `chip_match.js`); highlight ring, tractor beam and edge arrow for on-map targets.
