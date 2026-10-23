@@ -8,6 +8,9 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.0-beta-4 - 23 Oct 2026 (beta only, not yet in stable)
+- Fixed a display bug on high-resolution phones: the map canvas was drawn about 1.5 times bigger than the screen and cropped, so labels, the Chip ring and tap targets sat away from their stars and planets. The canvas now fills the screen exactly. (The same bug is in the stable map until this is promoted.)
+
 ## v2.0-beta-3 - 23 Oct 2026 (beta only, not yet in stable)
 - Chip facts corrected: Lalande 21185 and M32 distances, Voyager, Io, Kepler, Polaris wording; Jupiter, Saturn and Uranus moon counts now say "at least N" until checked against NASA.
 - GJ 411 exoplanet distance fixed (was a bad catalogue value of 5.68 pc, now 2.55 pc).
