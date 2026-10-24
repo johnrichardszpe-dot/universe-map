@@ -8,6 +8,9 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.1-beta-2 - 24 Oct 2026 (beta only, not yet in stable)
+- Added Voyager 1 (172 AU) and Voyager 2 (144 AU) to the Solar System view at their real directions (JPL Horizons, 14 Oct 2026), on the same squeezed distance scale as the planets, with a dashed line from the Sun and an info card. Chip's Voyager answer now flies to Voyager 1.
+
 ## v2.1 - 23 Oct 2026 (stable)
 Promoted from beta (v2.0-beta-2 to beta-4), approved by the owner after testing on his Galaxy S9.
 - Fixed the oversized map canvas on high-resolution phones, which put labels, the Chip ring and taps away from their targets.

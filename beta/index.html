@@ -373,6 +373,7 @@ function pick(o){$("gidx").style.display="none";SEL.name=o.n;SEL.v.copy(o.v);SEL
  flyToVec(o.v,o.g==="Superclusters"||o.g==="Walls & voids"?Math.max(d,120):d);showInfo(o);}
 // ---- versioning: tag, What's new, one-time toast
 const NEWS=`<h2>What's new</h2>
+<h3>v2.1-beta &middot; 24 Oct 2026: Voyager</h3><ul><li><b>Voyager 1 and 2</b>, the farthest human-made objects, are now in the Solar System view at their real directions (JPL Horizons). Tap one for its card, or ask Chip about Voyager.</li></ul>
 <h3>v2.1-beta &middot; 23 Oct 2026: fixes</h3><ul><li><b>Labels and the guide ring now line up on every phone.</b> On some sharp-screen phones the map was drawn too big and cropped, so names, the Chip ring and taps landed away from their targets.</li><li>Solar System names sit beside each planet instead of on top of it; the Sun has a soft glow.</li><li>Chip: one tap always opens his menu; several facts corrected (Lalande 21185, M32, Voyager, Io, Kepler, Polaris; moon counts now say "at least"); GJ 411 distance fixed.</li><li>The Install app button no longer covers the Time-travel panel.</li></ul>
 <h3>v2.0-beta &middot; 16 Oct 2026: Chip the alien guide + installable app</h3><ul><li><b>&#128125; Chip the alien guide</b>: tap the UFO for a Quick (6-stop) or Full (14-stop) tour, ask him space questions (185 sourced facts, works offline, copes with typos), and watch his tractor beam point out real objects on the map. Drag him anywhere.</li><li><b>&#128221; Suggest something</b>: from Chip's menu or the ? help screen. It opens a ready-made GitHub issue, or an email if you prefer.</li><li><b>Installable app</b>: add Universe Map to your home screen; it loads fast and works offline after your first visit.</li></ul>
 <h3>v1.9-beta &middot; 16 Oct 2026</h3><ul><li><b>Drag Chip anywhere</b> with your finger or mouse; he remembers his spot, and his speech bubble follows him and stays on screen.</li><li><b>Chip points things out</b>: on tour stops and Ask Chip answers a glowing ring marks the real object on the map, with a tractor beam from his UFO. If it's off screen, an arrow at the edge shows which way to look.</li></ul>
@@ -454,6 +455,7 @@ function setMeas(on){MEAS=on;$("sMeas").classList.toggle("on",on);if(!on){}drawR
 const SS={scene:new THREE.Scene(),ready:false,lab:[]};let saveU=null;
 const OBL=0;// Horizons vectors already in ICRF (equatorial) frame
 function e2t(x,y,z,s){return new THREE.Vector3(x*s,z*s,-y*s);}
+window.CRAFT=[{n:"Voyager 1",au:[-32.1786,-165.0353,36.4277],launch:"5 Sep 1977",ism:"August 2012",spd:"about 17 km/s",note:"the farthest human-made object"},{n:"Voyager 2",au:[39.9218,-61.1103,-124.3583],launch:"20 Aug 1977",ism:"November 2018",spd:"about 15 km/s",note:"the only spacecraft to visit Uranus and Neptune"}];
 function buildSS(){if(SS.ready)return;SS.ready=true;const S=SS.scene;const AU=1/206264.8;
  const sun=new THREE.Mesh(new THREE.SphereGeometry(0.018,20,14),new THREE.MeshBasicMaterial({color:0xffdd55}));S.add(sun);
  {const g=new THREE.Mesh(new THREE.SphereGeometry(0.03,20,14),new THREE.MeshBasicMaterial({color:0xffcc33,transparent:true,opacity:0.22,depthWrite:false}));S.add(g);}
@@ -466,6 +468,11 @@ function buildSS(){if(SS.ready)return;SS.ready=true;const S=SS.scene;const AU=1/
   const pts=[];for(let k=0;k<=96;k++){const a=k/96*2*Math.PI,x=Math.cos(a),yE=Math.sin(a);pts.push(e2t(x*cr,yE*cr*Math.cos(ob),yE*cr*Math.sin(ob),1));}
   S.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x334466,transparent:true,opacity:.6})));
   SS.bod.push({n,v,t:e2t(p.au[0],p.au[1],p.au[2],AU),f:p});}
+ // spacecraft: Voyager 1 and 2 (JPL Horizons, 14 Oct 2026), same compressed distance scale as the planets
+ for(const c of window.CRAFT){const r=Math.hypot(...c.au),cr=0.1*Math.sqrt(r),s=cr/r;const v=e2t(c.au[0],c.au[1],c.au[2],s);
+  const m=new THREE.Mesh(new THREE.OctahedronGeometry(0.006),new THREE.MeshBasicMaterial({color:0xffffff}));m.position.copy(v);S.add(m);
+  S.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),v]),new THREE.LineDashedMaterial({color:0x8899bb,dashSize:0.03,gapSize:0.03,transparent:true,opacity:.6})).computeLineDistances());
+  SS.bod.push({n:c.n,v,t:e2t(c.au[0],c.au[1],c.au[2],AU),craft:c});}
  // exoplanet host stars
  const E=window.EXO,a=new Float32Array(E.length*3),c=new Float32Array(E.length*3);
  const CL=[["rocky (under 1.6 Earth radii)","#ff9a5a"],["super-Earth / sub-Neptune (1.6-4)","#7dff8a"],["Neptune-size (4-10)","#59c8ff"],["giant (over 10 Earth radii)","#ff6be0"],["size unknown","#9999aa"]];SS.CL=CL;
@@ -490,6 +497,7 @@ SS.labels=function(){const W=innerWidth,H=innerHeight,cd=camera.position.length(
 const fmtN=(v,u,dg)=>v==null?"unknown":(+v).toLocaleString(undefined,{maximumFractionDigits:dg==null?2:dg})+(u?" "+u:"");
 SS.info=function(b){const I=$("info");I.style.display="block";if(MEAS){addWP({n:b.n,v:b.v.clone(),t:b.t.clone(),sc:"S"});}
  SS.sv=b.v;SS.sel.textContent="\u25CE "+b.n;DIRTY=2;
+ if(b.craft){const c=b.craft,au=Math.hypot(...c.au),h=au*8.317/60;I.innerHTML=`<b>${b.n}</b> <small>(spacecraft)</small><br><small>NASA probe launched ${c.launch}, ${c.note}. It left the Sun's bubble (the heliosphere) and entered interstellar space in ${c.ism}. Speed: ${c.spd} away from the Sun.<br>Distance from the Sun on 14 Oct 2026: ${Math.round(au)} AU<span class='q' data-tip='AU = astronomical unit, the average Earth-Sun distance, 149.6 million km.'>?</span> (about ${(au*0.1496).toFixed(1)} billion km). Radio signals take about ${Math.round(h)} hours to cross that distance.<br>Drawn on the same squeezed scale as the planets, in its real direction.</small><br><small style="color:#778">Source: position JPL Horizons; mission facts NASA JPL Voyager.</small><br><button onclick="this.parentNode.style.display='none'">close</button>`;return;}
  if(b.sun){I.innerHTML=`<b>The Sun</b><br><small>Our star. Diameter 1,392,700 km (109 Earths); mass 1.989&times;10<sup>30</sup> kg (NASA Sun Fact Sheet). Light takes 8.3 minutes to reach Earth.</small><br><button onclick="this.parentNode.style.display='none'">close</button>`;return;}
  const f=b.f,au=Math.hypot(...f.au);
  I.innerHTML=`<b>${b.n}</b>${f.dwarf?" <small>(dwarf planet)</small>":""}<br><small>`+
