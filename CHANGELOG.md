@@ -8,6 +8,10 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.3 - 6 Nov 2026
+
+Promoted from tested beta v2.2-beta-3 after owner approval ("Upload when up to standard"). Legal/privacy wording, complete citations and credits, original Chip and app artwork, local-storage and on-device disclosure, and science corrections including Sagittarius Dwarf distance. Stable now includes all fixes; independent checks are not a legal guarantee.
+
 ## v2.2-beta-3 - 6 Nov 2026 (beta only, stable untouched)
 Legal, privacy, credits, rights and science-wording fixes after Aussie Legal review and the science audit. Stable remains v2.2 until separately approved.
 - Privacy: clearer GoatCounter disclosure (page/referrer/browser/system/screen/country; no cookies; no stored IP/full IDs; temporary IP+browser in memory up to 8 hours; aggregate stats); GitHub Pages and suggestion (GitHub/email) called out as separate services; localStorage prefs and on-device Ask Chip noted.
