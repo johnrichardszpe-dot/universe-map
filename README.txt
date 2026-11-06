@@ -1,12 +1,11 @@
-Interactive Universe Map - by John Richards, Manjimup WA ()
+Interactive Universe Map - by John Richards, Western Australia
 Open index.html in any modern browser (Chrome, Edge, Firefox, Safari). It works offline; keep the "assets" folder next to index.html.
 Real galaxy data: 2MRS (Huchra et al. 2012), SDSS DR17, DESI DR1 (CC BY 4.0). See "About this map" inside for credits and accuracy notes.
 tools/build_data.py rebuilds the data files; tools/verification.json lists the coordinate and structure checks.
 
-Version: v1.3 (see CHANGELOG.md, the in-map "What's new" page, and GitHub releases/tags v1.0 to v1.3).
-Monthly "living universe" data updates will bump the version going forward.
+Version: v2.2 stable (see CHANGELOG.md, the in-map "What's new" page, and GitHub releases). Beta at beta/ currently v2.2-beta-3 (legal/privacy/credits/science wording). Stable root is only updated after the owner approves beta.
 
-Galaxy name index (v1.3, assets/galaxy_index.js, 4,326 entries):
+Galaxy name index (v1.3+, assets/galaxy_index.js, 4,326 entries; beta may ship a corrected beta/galaxy_index.js):
 - Updated Nearby Galaxy Catalog, Karachentsev, Makarov & Kaisina 2013, AJ 145, 101 (VizieR J/AJ/145/101): Local Group and Local Volume galaxies with measured distances.
 - SIMBAD astronomical database (CDS, Strasbourg; Wenger et al. 2000, A&AS 143, 9), queried October 2026 via TAP: common names, Messier and bright (B<13) NGC/IC galaxies, Abell and named clusters and groups, and published distance measurements (median of non-redshift distances, used when cz < 3000 km/s).
 - Beyond that, distances come from redshift (Planck18 comoving). Several superclusters, walls and voids use approximate literature positions (marked "approx.").
@@ -14,12 +13,12 @@ Galaxy name index (v1.3, assets/galaxy_index.js, 4,326 entries):
 
 
 BETA WORKFLOW
-All changes are published first at https://johnrichardszpe-dot.github.io/universe-map/beta/ (folder beta/, shares ../assets/). The stable map at the site root is only updated after the owner approves the beta. See CHANGELOG.md for the promotion steps.
+All changes are published first at https://johnrichardszpe-dot.github.io/universe-map/beta/ (folder beta/, shares ../assets/ for survey data; beta may override galaxy_index.js locally). The stable map at the site root is only updated after the owner approves the beta. See CHANGELOG.md for the promotion steps.
 
 v1.5-beta MILKY WAY VIEW SOURCES
-NASA Planetary Fact Sheet (nssdc.gsfc.nasa.gov/planetary/factsheet/); JPL Horizons (ssd.jpl.nasa.gov/horizons) planet positions for 2026-10-14; Ceres: NASA Dawn / JPL Horizons; Mora et al. 2011 PLoS Biology 9(8): e1001127 (8.7 million species); NASA Exoplanet Archive pscomppars (exoplanetarchive.ipac.caltech.edu), 6,445 planets / 6,417 with distance / 4,814 hosts, downloaded 2026-10-14. This research has made use of the NASA Exoplanet Archive, operated by Caltech under contract with NASA under the Exoplanet Exploration Program.
+NASA Planetary Fact Sheet (nssdc.gsfc.nasa.gov/planetary/factsheet/); JPL Horizons (ssd.jpl.nasa.gov/horizons) planet positions for a fixed snapshot 2026-10-14 (not live); Ceres: NASA Dawn / JPL Horizons; Mora et al. 2011 PLoS Biology 9(8): e1001127 (8.7 million species); NASA Exoplanet Archive pscomppars (exoplanetarchive.ipac.caltech.edu), 6,445 planets / 6,417 with distance / 4,814 hosts, downloaded 2026-10-14. This research has made use of the NASA Exoplanet Archive, operated by Caltech under contract with NASA under the Exoplanet Exploration Program.
 
-VISIT COUNTING
-The site uses GoatCounter (https://www.goatcounter.com), a privacy-friendly open-source visit counter: no cookies, no personal tracking. Dashboard: https://universemap.goatcounter.com
+PRIVACY AND VISIT COUNTING
+The map sends a page view to GoatCounter (https://www.goatcounter.com), a separate privacy-friendly open-source counter. It records page, referrer, browser/system, screen width and country. It does not use cookies and does not store IP addresses or full browser identification in its database; temporary IP and browser information is used in memory for up to 8 hours for repeat visits. Aggregate visit statistics only (not names). See https://www.goatcounter.com/help/privacy. GitHub Pages serves the site (separate privacy terms). Opening a suggestion uses GitHub or email (those services see what you send). Map preferences are saved in this browser's local storage; Ask Chip questions are matched on-device in this version. Dashboard: https://universemap.goatcounter.com
 
-Licence: Released under the MIT Licence (see LICENSE). Free for anyone, anywhere, to use, change and share. Copyright (c) 2026 John Richards.
+Licence: Original map code, design and text © 2026 John Richards, released under the MIT Licence (see LICENSE). Third-party datasets, software, images and other credited material remain under their own terms. This map is not affiliated with or endorsed by DESI, SDSS, NASA or JPL. Free for anyone, anywhere, to use, change and share the original map materials under MIT.

@@ -1,0 +1,25 @@
+<!-- Original artwork created 2026 for John Richards' Universe Map; released with map under MIT. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 132" role="img" aria-label="Chip the alien guide">
+  <!-- saucer dome -->
+  <ellipse cx="84" cy="58" rx="28" ry="26" fill="#7ee89a" stroke="#1a3d28" stroke-width="3"/>
+  <!-- face -->
+  <ellipse cx="74" cy="56" rx="6" ry="9" fill="#142018"/>
+  <ellipse cx="94" cy="56" rx="6" ry="9" fill="#142018"/>
+  <ellipse cx="72.5" cy="53" rx="2" ry="2.5" fill="#c8ffd8"/>
+  <ellipse cx="92.5" cy="53" rx="2" ry="2.5" fill="#c8ffd8"/>
+  <path d="M76 70 Q84 76 92 70" fill="none" stroke="#1a3d28" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- antennae -->
+  <line x1="70" y1="36" x2="62" y2="18" stroke="#1a3d28" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="62" cy="16" r="4" fill="#9dff7a" stroke="#1a3d28" stroke-width="2"/>
+  <line x1="98" y1="36" x2="106" y2="18" stroke="#1a3d28" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="106" cy="16" r="4" fill="#9dff7a" stroke="#1a3d28" stroke-width="2"/>
+  <!-- saucer rim -->
+  <ellipse cx="84" cy="82" rx="62" ry="16" fill="#5bbf78" stroke="#1a3d28" stroke-width="3"/>
+  <ellipse cx="84" cy="78" rx="40" ry="8" fill="#8ef0a8" stroke="#1a3d28" stroke-width="2"/>
+  <!-- lights -->
+  <circle cx="48" cy="84" r="4" fill="#ffe66d" stroke="#1a3d28" stroke-width="1.5"/>
+  <circle cx="84" cy="88" r="4" fill="#ffe66d" stroke="#1a3d28" stroke-width="1.5"/>
+  <circle cx="120" cy="84" r="4" fill="#ffe66d" stroke="#1a3d28" stroke-width="1.5"/>
+  <!-- tractor beam hint -->
+  <path d="M70 96 L60 124 L108 124 L98 96" fill="rgba(120,230,140,0.18)" stroke="#7ee89a" stroke-width="1.5" stroke-dasharray="4 3"/>
+</svg>

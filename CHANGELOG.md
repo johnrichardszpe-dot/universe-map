@@ -8,6 +8,16 @@ Every change goes to the **beta** copy first: https://johnrichardszpe-dot.github
 The stable map (`index.html` at the site root) is only updated after the owner OKs the beta. To promote: copy `beta/index.html` to `index.html`, change `../assets/` back to `assets/`, remove the BETA badge/title, set the version, keep the GoatCounter `<script data-goatcounter=...>` snippet just before `</body>` (both pages), tag `vX.Y`, publish a GitHub release.
 (`tools/make_beta.py` builds the v1.4 beta page from the stable page.)
 
+## v2.2-beta-3 - 6 Nov 2026 (beta only, stable untouched)
+Legal, privacy, credits, rights and science-wording fixes after Aussie Legal review and the science audit. Stable remains v2.2 until separately approved.
+- Privacy: clearer GoatCounter disclosure (page/referrer/browser/system/screen/country; no cookies; no stored IP/full IDs; temporary IP+browser in memory up to 8 hours; aggregate stats); GitHub Pages and suggestion (GitHub/email) called out as separate services; localStorage prefs and on-device Ask Chip noted.
+- Suggest: "John reads them all"; warning before send buttons (no private/sensitive info; GitHub issues public + username; email exposes address; adult help for children).
+- Author: John Richards, Western Australia (no Manjimup / Bradley in public beta wording).
+- Credits: DESI DR1 source + CC BY 4.0 links and full AJ 2026 citation/DOI; map MIT link separate from three.js MIT; no DESI/SDSS/NASA/JPL affiliation or endorsement; Gaia credit; original Chip and app icons (new SVG artwork) under MIT.
+- Accuracy: independent visualisation / not a research or navigation tool; PREDICTED layer described as a statistical mock (not "fractal").
+- Science (beta): Sagittarius Dwarf index/Chip ~0.0265 Mpc (~86k ly); NGC 1300 Hubble ~69 Mly note + literature spread; Exclamation Mark Galaxy clarified; Voyager/planet distances marked as 14 Oct 2026 JPL snapshot (not live); Voyager 2 second-farthest. Beta loads `beta/galaxy_index.js` (shared `assets/galaxy_index.js` unchanged for stable).
+- Icons: replaced unknown-provenance PNGs in `beta/icons/` with original SVG Chip/UFO and galaxy icons; new self-made apple-touch PNG. Stable `icons/` untouched.
+
 ## v2.2 - 24 Oct 2026 (stable)
 - Promoted v2.1-beta-2 (Voyager 1 and 2) to stable, approved by the owner.
 

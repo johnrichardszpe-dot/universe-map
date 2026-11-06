@@ -1,9 +1,9 @@
 // Universe Map BETA service worker. Bump VERSION on every release so old caches are dropped.
-const VERSION = "v2.1-beta-2";
+const VERSION = "v2.2-beta-3";
 const CACHE = "umap-beta-" + VERSION;
 const SHELL = [
   "./", "./index.html", "./manifest.webmanifest", "./solar.js", "./exoplanets.js",
-  "./icons/icon-192.png", "./icons/icon-512.png", "./icons/maskable-512.png", "./icons/apple-touch-icon.png", "./icons/alien.png", "./chip_match.js", "./chip_facts.json",
+  "./icons/icon-192.svg", "./icons/icon-512.svg", "./icons/maskable-512.svg", "./icons/apple-touch-icon.png", "./icons/alien.svg", "./chip_match.js", "./chip_facts.json",
   "../assets/three.min.js", "../assets/OrbitControls.js", "../assets/data_core.js",
   "../assets/layers.js", "../assets/structures.js"
 ];
